@@ -1,0 +1,38 @@
+EXECUTION TIME: 1.874521255493164
+RIGHT NAMES:
+Yang Cai
+Peter Eisert
+Frederic Fol Leymarie
+Aggelos K. Katsaggelos
+Yvonne R. Masakowski
+Todd Waist
+Brenda Wiederhold
+Qianni Zhang
+Samantha Stevick
+Yingzhen Yang
+
+WRONG NAMES:
+Multimedia Workshop
+Firenze
+Congressi
+Piazza Adua 1
+Queen Mary
+Manuel
+Richard
+�
+Queen Mary
+Queen Mary
+
+MISSING NAMES:
+Ebroul Izquierdo
+Xavier Alamán
+Tamy Boubekeur
+Petros Daras
+Manuel García-Herranz del Olmo
+Noel O’Connor
+Dimitris Protopsaltou
+Gaël Richard
+Isidro Laso Ballesteros
+Anil Aksay
+Karthike Vaiapury
+Vlado Kitanovski

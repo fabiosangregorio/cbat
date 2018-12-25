@@ -1,0 +1,19 @@
+http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040&copyownerid=12184
+
+SM:
+EXECUTION TIME: 1.874521255493164
+- right:   10
+- wrong:   10
+- missing: 12
+
+MD:
+EXECUTION TIME: 21.99466896057129
+- right:   17
+- wrong:   11
+- missing: 5
+
+XX:
+EXECUTION TIME: 6.290821552276611
+- right:   16
+- wrong:   13
+- missing: 6

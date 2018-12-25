@@ -1,0 +1,77 @@
+EXECUTION TIME: 2.037717342376709
+RIGHT NAMES:
+Robert Deng
+Liang Gu
+Xiaodong Lin
+Aziz Mohaisen
+Danfeng Yao
+Cong Wang
+Guofei Gu
+Peng Liu
+Yinzhi Cao
+Yier Jin
+Yingjiu Li
+Zhiqiang Lin
+Yao Liu
+Long Lu
+Aziz Mohaisen
+Seungwon Shin
+Kun Sun
+Eugene Vasserman
+Shobha Venkataraman
+Cong Wang
+Qian Wang
+Nicholas Weaver
+Danfeng Yao
+Fareed Zaffar
+Bingsheng Zhang
+Junjie Zhang
+Yinqian Zhang
+Yongbin Zhou
+
+WRONG NAMES:
+Sensor
+Scopus
+Crossref
+Google Scholar
+LNCS
+Moorthy Sivalingam
+Milano
+Mary
+- Sheng Zhong
+
+MISSING NAMES:
+Jian Weng
+Kui Ren
+Vinod Yegneswaran
+Songqing Chen
+Roberto Di Pietro
+Weili Han
+Rongxing Lu
+Marina Blanton
+Ruggero Donida Labati
+Yongdong Wu
+Anna Horvathova
+Imrich Chlamtac
+Krishna Moorthy Sivalingam
+Elisa Bertino
+Kai Chen
+Sherman S. M. Chow
+Jun Dai
+Mohan Dhawan
+Birhanu Eshete
+Debin Gao
+Ryan Gerdes
+Murat Kantarcioglu
+Xiaodong Lin
+Rongxing Lu
+Goutam Paul
+Pierangela Samarati
+Kapil Singh
+Anna Squicciarini
+Haining Wang
+Mengjun Xie
+Kehuan Zhang
+Sheng Zhong
+Sencun Zhu
+Cliff Zou
