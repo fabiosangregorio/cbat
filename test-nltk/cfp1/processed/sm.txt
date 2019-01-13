@@ -7,7 +7,6 @@ Robert Deng
 Liang Gu
 Xiaodong Lin
 Aziz Mohaisen
-Danfeng Yao
 Cong Wang
 Guofei Gu
 Moorthy Sivalingam

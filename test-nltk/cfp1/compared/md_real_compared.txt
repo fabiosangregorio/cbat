@@ -1,5 +1,11 @@
-EXECUTION TIME: 18.21268939971924
+EXECUTION TIME: 22.746272802352905
 RIGHT NAMES:
+
+
+WRONG NAMES:
+
+
+MISSING NAMES:
 Robert Deng
 Jian Weng
 Kui Ren
@@ -9,10 +15,16 @@ Xiaodong Lin
 Aziz Mohaisen
 Songqing Chen
 Danfeng Yao
+Roberto Di Pietro
+Weili Han
 Rongxing Lu
+Marina Blanton
+Ruggero Donida Labati
 Cong Wang
 Yongdong Wu
 Anna Horvathova
+Imrich Chlamtac
+Guofei Gu
 Krishna Moorthy Sivalingam
 Peng Liu
 Elisa Bertino
@@ -21,6 +33,7 @@ Kai Chen
 Sherman S. M. Chow
 Jun Dai
 Mohan Dhawan
+Birhanu Eshete
 Debin Gao
 Ryan Gerdes
 Yier Jin
@@ -37,7 +50,9 @@ Pierangela Samarati
 Seungwon Shin
 Kapil Singh
 Anna Squicciarini
+Kun Sun
 Eugene Vasserman
+Shobha Venkataraman
 Cong Wang
 Haining Wang
 Qian Wang
@@ -52,28 +67,4 @@ Yinqian Zhang
 Sheng Zhong
 Yongbin Zhou
 Sencun Zhu
-
-WRONG NAMES:
-Springer
-Elsevier
-Scopus
-Crossref
-SPRINGER
-George Mason University
-Publicity
-Fudan University
-Donida Labati
-KAIST
-Mary
-
-MISSING NAMES:
-Roberto Di Pietro
-Weili Han
-Marina Blanton
-Ruggero Donida Labati
-Imrich Chlamtac
-Guofei Gu
-Birhanu Eshete
-Kun Sun
-Shobha Venkataraman
 Cliff Zou
