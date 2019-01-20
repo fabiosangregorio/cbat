@@ -29,4 +29,5 @@ def get_CFP(url):
     with open('dump.txt', 'w') as f:
         f.write("".join([tag.getText() for tag in html.select('table .cfp')]))
 
+
 get_CFP("http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345&copyownerid=75434")

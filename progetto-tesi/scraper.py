@@ -3,6 +3,8 @@ from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
 import sys
+import os
+import time
 
 
 def get_page(url):
@@ -19,10 +21,21 @@ def get_page(url):
 
 
 def get_CFP(url):
+    start_time = time.time()
+
     response = get_page(url)
 
     if response is None:
         raise Exception(f'Error retrieving contents at {url}')
 
     html = BeautifulSoup(response, 'html.parser')
-    return "".join([tag.getText() for tag in html.select('table .cfp')])
+
+    print('Download of paper: ', time.time() - start_time)
+    return polish_html("".join([tag.getText() for tag in html.select('table .cfp')]))
+
+
+def polish_html(html):
+    html = html.replace('\r', '\n')
+    # strips whitespaces and only gets lines with text
+    html = os.linesep.join([s for s in html.splitlines() if len(s.strip()) >= 4])
+    return html
