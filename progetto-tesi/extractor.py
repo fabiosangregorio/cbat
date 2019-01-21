@@ -38,15 +38,13 @@ def ner(text):
         # run NER every `step` lines and check if the result set is significantly reduced.
         while True:
             start_time = time.time()
-            people = list()
+            people = 0
             # NER multiprocessing on single lines
             lines = [l for i, l in enumerate(program_committee.splitlines()) if len(l) >= 4 and i % (step + 1) == 0]
             for doc in nlp.pipe(lines, n_threads=16, batch_size=10000):
-                results = [ee.text for ee in doc.ents if ee.label_ == 'PERSON']
-                if len(results):
-                    people.append("".join(results))
+                people = people + 1 if len([ee.text for ee in doc.ents if ee.label_ == 'PERSON']) else people
 
-            ner_results.append(len(people))
+            ner_results.append(people)
             print('NER results with step', step + 1, ': ', ner_results[step], time.time() - start_time)
             # 10%: threshold over which we can say the NER lost a significant amount of names
             if(ner_results[step]) < 0.9 * max(ner_results):
@@ -55,6 +53,6 @@ def ner(text):
 
         # run regex on the right `step` set
         regex = re.compile(r"^\W*([\w\. '’-]+)", re.MULTILINE)
-        results.append([m.groups(0) for m in regex.finditer("\n".join(program_committee.splitlines()[::step]))])
+        results.append([m.group() for m in regex.finditer("\n".join(program_committee.splitlines()[::step]))])
 
-    return results
+    return [res_item.strip() for result in results for res_item in result]
