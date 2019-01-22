@@ -58,9 +58,16 @@ def search_dblp(name):
         exact_message = "none"
         name_urls = None 
     
-    return { is_exact: exact_message, name_urls: name_urls[0] }
-
     print('Search of name in dblp: ', time.time() - start_time)
+    return { "is_exact": exact_message, "name_urls": name_urls[0]['href'] }
+
 
 def get_papers_from_dblp(url):
     start_time = time.time()
+
+    response = get_page(url)
+    html = BeautifulSoup(response, 'html.parser')
+    publ_url = html.select('.export a[href*="https://dblp.org/pers/xx/a/"')[0]['href']
+    response = get_page(publ_url)
+
+    print('Search of papers in dblp: ', time.time() - start_time)

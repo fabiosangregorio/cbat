@@ -6,7 +6,7 @@ import scraper
 import re 
 
 
-def extract_program_committee(text):
+def extract_program_committees(text):
     start_time = time.time()
     
     program_headings = ["program committee", "program chair", "program commission"]
