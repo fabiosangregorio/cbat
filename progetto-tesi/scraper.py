@@ -40,26 +40,28 @@ def get_wikiCFP(url):
     return polish_html("".join([tag.getText() for tag in html.select('table .cfp')]))
 
 
-def search_dblp(name):
+def search_dblp(person):
     start_time = time.time()
 
-    base_url = "https://dblp.org/search?"
-    response = get_page(base_url + urllib.parse.urlencode({"q": name}))
+    base_url = "https://dblp.org/search/author?"
+    response = get_page(base_url + urllib.parse.urlencode({"q": person.name}))
     html = BeautifulSoup(response, 'html.parser')
-    name_urls = html.select("#completesearch-authors > .body ul a")
-    
-    if(html.select("#completesearch-authors > .body p")[0].getText().lower() == "exact matches"):
-        exact_message = "exact"
-    elif(len(name_urls) == 1 and not is_exact):
-        exact_message = "only_likely"
-    elif(len(name_urls) > 1):
-        exact_message = "first_likely"
-    else:
-        exact_message = "none"
-        name_urls = None 
+
+    is_exact = html.select("#completesearch-authors > .body p:first-child")[0].getText().lower() == "exact matches"
+
+    # first ul, either contains the exact matches or likely matches
+    for li in html.select("#completesearch-authors > .body ul")[0].select('li'):
+        result = { 
+            name: " ".join(li.select('a mark').getText()),
+            affiliation: li.select('small')[0].getText(),
+            url: li.select('a')[0]['href']
+        }
+        # TODO: implementare la distanza di levestein per prendere l'affiliazione giusta
+        # in poche parole devo ciclare su tutti gli li, vedere se il nome e' uguale e se l'affiliazione e' uguale, rispetto alla distanza
+
     
     print('Search of name in dblp: ', time.time() - start_time)
-    return { "is_exact": exact_message, "name_urls": name_urls[0]['href'] }
+    return None
 
 
 def get_papers_from_dblp(url):

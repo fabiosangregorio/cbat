@@ -1,15 +1,21 @@
 import scraper
 import extractor
+from person import Person
 
-url = "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040&copyownerid=12184"
+# # url con due righe
+# # url = "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040&copyownerid=12184"
 
-html = scraper.get_wikiCFP(url)
-program_committee_html = extractor.extract_program_committees(html)
+# # url con una riga
+# url = "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345&copyownerid=75434"
 
-program_committee = extractor.ner(program_committee_html)
+# html = scraper.get_wikiCFP(url)
+# program_committee_html = extractor.extract_program_committees(html)
 
-# program_committee = ['Xavier Alamán']
+# program_committee = extractor.ner(program_committee_html)
 
-# for name in program_committee:
-#     search_result = scraper.search_dblp(name)
-#     papers = scraper.get_papers_from_dblp(search_result.name_url)
+# program_committee = program_committee[0:0]
+program_committee = [Person('Kai Chen', 'Chinese Academy of Sciences, China')]
+
+for person in program_committee:
+    search_result = scraper.search_dblp(person)
+    papers = scraper.get_papers_from_dblp(search_result.name_url)
