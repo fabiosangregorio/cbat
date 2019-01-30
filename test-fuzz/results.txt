@@ -1,0 +1,1686 @@
+
+
+================================
+name: Elisa Bertino, affiliation: Purdue University, USA
+================================
+
+
+ratio
+87: Purdue University
+
+partial_ratio
+100: Purdue University
+
+token_sort_ratio
+89: Purdue University
+
+partial_token_sort_ratio
+100: Purdue University
+
+token_set_ratio
+100: Purdue University
+
+partial_token_set_ratio
+100: Purdue University
+
+qratio
+87: Purdue University
+
+wratio
+95: Purdue University
+
+================================
+name: Yinzhi Cao, affiliation: Lehigh University, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Kai Chen, affiliation: Chinese Academy of Sciences, China
+================================
+
+
+ratio
+55: Chinese Academy of Sciences, Institute for Information Engineering, SKLOIS, Beijing, China
+48: Xiamen University, China
+41: University of Science and Technology of China, Department of Electronics Science and Technology, Hefei, China
+41: University of Science and Technology of China, Department of Computer Science
+41: Wuhan University of Technology, Laboratory of Intelligent Manufacture and Control, China
+40: University of Science and Technology of China, Department of Modern Physics
+40: BUPT, Key Laboratory of Universal Wireless Communications
+40: China University of Geosciences, School of Geophysics and Information Technology, Beijing, China
+38: Shanghai Jiatong University, Institute of Image Communication and Network Engineering, China
+38: Cisco Systems
+38: University of Fribourg, Switzerland
+38: University of Southern California, Dept. of Industrial and Systems Engineering
+38: University of Electronic Science and Technology of China, Chengdu, School of Automation Engineering
+37: University of Arizona, Department of Electrical and Computer Engineering, Tucson, AZ, USA
+35: University of California at Berkeley, EECS Department, CA, USA
+33: Xi'an Jiaotong University, School of Electronic and Information Engineering
+33: National University of Defense Technology, National Laboratory for Parallel and Distributed Processing, Changsha, China
+30: Zhejiang University
+29: Huazhong University of Science and Technology, School of Automation, National Key Laboratory of Science and Technology on Multi-spectral Information Processing, Wuhan, China
+28: Huazhong University of Science and Technology, School of Computer Science and Technology, Services Computing Technology and System Lab / Cluster and Grid Computing Lab, China
+
+partial_ratio
+91: Chinese Academy of Sciences, Institute for Information Engineering, SKLOIS, Beijing, China
+62: China University of Geosciences, School of Geophysics and Information Technology, Beijing, China
+59: University of Science and Technology of China, Department of Electronics Science and Technology, Hefei, China
+59: University of Science and Technology of China, Department of Modern Physics
+59: University of Science and Technology of China, Department of Computer Science
+59: Huazhong University of Science and Technology, School of Computer Science and Technology, Services Computing Technology and System Lab / Cluster and Grid Computing Lab, China
+59: University of Electronic Science and Technology of China, Chengdu, School of Automation Engineering
+59: Huazhong University of Science and Technology, School of Automation, National Key Laboratory of Science and Technology on Multi-spectral Information Processing, Wuhan, China
+54: Xiamen University, China
+53: Shanghai Jiatong University, Institute of Image Communication and Network Engineering, China
+50: National University of Defense Technology, National Laboratory for Parallel and Distributed Processing, Changsha, China
+47: University of Southern California, Dept. of Industrial and Systems Engineering
+47: Wuhan University of Technology, Laboratory of Intelligent Manufacture and Control, China
+44: University of Arizona, Department of Electrical and Computer Engineering, Tucson, AZ, USA
+41: Xi'an Jiaotong University, School of Electronic and Information Engineering
+41: BUPT, Key Laboratory of Universal Wireless Communications
+40: HKUST
+38: University of California at Berkeley, EECS Department, CA, USA
+38: Cisco Systems
+38: University of Fribourg, Switzerland
+
+token_sort_ratio
+55: Chinese Academy of Sciences, Institute for Information Engineering, SKLOIS, Beijing, China
+46: Xiamen University, China
+44: University of Science and Technology of China, Department of Computer Science
+43: University of Science and Technology of China, Department of Modern Physics
+43: China University of Geosciences, School of Geophysics and Information Technology, Beijing, China
+42: University of Science and Technology of China, Department of Electronics Science and Technology, Hefei, China
+42: University of Electronic Science and Technology of China, Chengdu, School of Automation Engineering
+41: University of California at Berkeley, EECS Department, CA, USA
+39: Shanghai Jiatong University, Institute of Image Communication and Network Engineering, China
+39: University of Southern California, Dept. of Industrial and Systems Engineering
+38: BUPT, Key Laboratory of Universal Wireless Communications
+37: Xi'an Jiaotong University, School of Electronic and Information Engineering
+37: Wuhan University of Technology, Laboratory of Intelligent Manufacture and Control, China
+37: University of Arizona, Department of Electrical and Computer Engineering, Tucson, AZ, USA
+35: Cisco Systems
+34: National University of Defense Technology, National Laboratory for Parallel and Distributed Processing, Changsha, China
+33: University of Fribourg, Switzerland
+27: Huazhong University of Science and Technology, School of Computer Science and Technology, Services Computing Technology and System Lab / Cluster and Grid Computing Lab, China
+27: Zhejiang University
+27: Huazhong University of Science and Technology, School of Automation, National Key Laboratory of Science and Technology on Multi-spectral Information Processing, Wuhan, China
+
+partial_token_sort_ratio
+73: Chinese Academy of Sciences, Institute for Information Engineering, SKLOIS, Beijing, China
+64: China University of Geosciences, School of Geophysics and Information Technology, Beijing, China
+57: Xiamen University, China
+55: University of Science and Technology of China, Department of Electronics Science and Technology, Hefei, China
+55: National University of Defense Technology, National Laboratory for Parallel and Distributed Processing, Changsha, China
+52: University of Science and Technology of China, Department of Computer Science
+52: Huazhong University of Science and Technology, School of Computer Science and Technology, Services Computing Technology and System Lab / Cluster and Grid Computing Lab, China
+52: Huazhong University of Science and Technology, School of Automation, National Key Laboratory of Science and Technology on Multi-spectral Information Processing, Wuhan, China
+48: Shanghai Jiatong University, Institute of Image Communication and Network Engineering, China
+48: University of Electronic Science and Technology of China, Chengdu, School of Automation Engineering
+48: Wuhan University of Technology, Laboratory of Intelligent Manufacture and Control, China
+45: University of California at Berkeley, EECS Department, CA, USA
+45: Xi'an Jiaotong University, School of Electronic and Information Engineering
+45: University of Science and Technology of China, Department of Modern Physics
+45: University of Southern California, Dept. of Industrial and Systems Engineering
+45: University of Arizona, Department of Electrical and Computer Engineering, Tucson, AZ, USA
+39: BUPT, Key Laboratory of Universal Wireless Communications
+38: Cisco Systems
+37: Zhejiang University
+33: University of Fribourg, Switzerland
+
+token_set_ratio
+100: Chinese Academy of Sciences, Institute for Information Engineering, SKLOIS, Beijing, China
+52: University of Science and Technology of China, Department of Electronics Science and Technology, Hefei, China
+51: University of Science and Technology of China, Department of Modern Physics
+51: University of Science and Technology of China, Department of Computer Science
+46: Xiamen University, China
+45: University of Electronic Science and Technology of China, Chengdu, School of Automation Engineering
+44: China University of Geosciences, School of Geophysics and Information Technology, Beijing, China
+43: University of California at Berkeley, EECS Department, CA, USA
+42: University of Southern California, Dept. of Industrial and Systems Engineering
+41: Shanghai Jiatong University, Institute of Image Communication and Network Engineering, China
+40: BUPT, Key Laboratory of Universal Wireless Communications
+40: Wuhan University of Technology, Laboratory of Intelligent Manufacture and Control, China
+39: Huazhong University of Science and Technology, School of Computer Science and Technology, Services Computing Technology and System Lab / Cluster and Grid Computing Lab, China
+39: National University of Defense Technology, National Laboratory for Parallel and Distributed Processing, Changsha, China
+39: Huazhong University of Science and Technology, School of Automation, National Key Laboratory of Science and Technology on Multi-spectral Information Processing, Wuhan, China
+38: University of Arizona, Department of Electrical and Computer Engineering, Tucson, AZ, USA
+37: Xi'an Jiaotong University, School of Electronic and Information Engineering
+35: Cisco Systems
+33: University of Fribourg, Switzerland
+27: Zhejiang University
+
+partial_token_set_ratio
+100: University of Science and Technology of China, Department of Electronics Science and Technology, Hefei, China
+100: University of California at Berkeley, EECS Department, CA, USA
+100: Xi'an Jiaotong University, School of Electronic and Information Engineering
+100: Shanghai Jiatong University, Institute of Image Communication and Network Engineering, China
+100: University of Science and Technology of China, Department of Modern Physics
+100: University of Science and Technology of China, Department of Computer Science
+100: University of Fribourg, Switzerland
+100: Chinese Academy of Sciences, Institute for Information Engineering, SKLOIS, Beijing, China
+100: BUPT, Key Laboratory of Universal Wireless Communications
+100: China University of Geosciences, School of Geophysics and Information Technology, Beijing, China
+100: University of Southern California, Dept. of Industrial and Systems Engineering
+100: Huazhong University of Science and Technology, School of Computer Science and Technology, Services Computing Technology and System Lab / Cluster and Grid Computing Lab, China
+100: University of Electronic Science and Technology of China, Chengdu, School of Automation Engineering
+100: Xiamen University, China
+100: National University of Defense Technology, National Laboratory for Parallel and Distributed Processing, Changsha, China
+100: Wuhan University of Technology, Laboratory of Intelligent Manufacture and Control, China
+100: University of Arizona, Department of Electrical and Computer Engineering, Tucson, AZ, USA
+100: Huazhong University of Science and Technology, School of Automation, National Key Laboratory of Science and Technology on Multi-spectral Information Processing, Wuhan, China
+38: Cisco Systems
+37: Zhejiang University
+
+qratio
+55: Chinese Academy of Sciences, Institute for Information Engineering, SKLOIS, Beijing, China
+48: Xiamen University, China
+41: University of Science and Technology of China, Department of Electronics Science and Technology, Hefei, China
+41: University of Science and Technology of China, Department of Computer Science
+41: Wuhan University of Technology, Laboratory of Intelligent Manufacture and Control, China
+40: University of Science and Technology of China, Department of Modern Physics
+40: BUPT, Key Laboratory of Universal Wireless Communications
+40: China University of Geosciences, School of Geophysics and Information Technology, Beijing, China
+38: Shanghai Jiatong University, Institute of Image Communication and Network Engineering, China
+38: Cisco Systems
+38: University of Fribourg, Switzerland
+38: University of Southern California, Dept. of Industrial and Systems Engineering
+38: University of Electronic Science and Technology of China, Chengdu, School of Automation Engineering
+37: University of Arizona, Department of Electrical and Computer Engineering, Tucson, AZ, USA
+35: University of California at Berkeley, EECS Department, CA, USA
+33: Xi'an Jiaotong University, School of Electronic and Information Engineering
+33: National University of Defense Technology, National Laboratory for Parallel and Distributed Processing, Changsha, China
+30: Zhejiang University
+29: Huazhong University of Science and Technology, School of Automation, National Key Laboratory of Science and Technology on Multi-spectral Information Processing, Wuhan, China
+28: Huazhong University of Science and Technology, School of Computer Science and Technology, Services Computing Technology and System Lab / Cluster and Grid Computing Lab, China
+
+wratio
+86: University of Science and Technology of China, Department of Electronics Science and Technology, Hefei, China
+86: University of California at Berkeley, EECS Department, CA, USA
+86: Xi'an Jiaotong University, School of Electronic and Information Engineering
+86: Shanghai Jiatong University, Institute of Image Communication and Network Engineering, China
+86: University of Science and Technology of China, Department of Modern Physics
+86: University of Science and Technology of China, Department of Computer Science
+86: Chinese Academy of Sciences, Institute for Information Engineering, SKLOIS, Beijing, China
+86: BUPT, Key Laboratory of Universal Wireless Communications
+86: China University of Geosciences, School of Geophysics and Information Technology, Beijing, China
+86: University of Southern California, Dept. of Industrial and Systems Engineering
+86: Huazhong University of Science and Technology, School of Computer Science and Technology, Services Computing Technology and System Lab / Cluster and Grid Computing Lab, China
+86: University of Electronic Science and Technology of China, Chengdu, School of Automation Engineering
+86: National University of Defense Technology, National Laboratory for Parallel and Distributed Processing, Changsha, China
+86: Wuhan University of Technology, Laboratory of Intelligent Manufacture and Control, China
+86: University of Arizona, Department of Electrical and Computer Engineering, Tucson, AZ, USA
+86: Huazhong University of Science and Technology, School of Automation, National Key Laboratory of Science and Technology on Multi-spectral Information Processing, Wuhan, China
+48: Xiamen University, China
+38: Cisco Systems
+38: University of Fribourg, Switzerland
+36: HKUST
+
+================================
+name: Sherman S. M. Chow, affiliation: Chinese University of Hong Kong, HK
+================================
+
+
+ratio
+78: The Chinese University of Hong Kong, Sha Tin, Hong Kong
+
+partial_ratio
+97: The Chinese University of Hong Kong, Sha Tin, Hong Kong
+
+token_sort_ratio
+76: The Chinese University of Hong Kong, Sha Tin, Hong Kong
+
+partial_token_sort_ratio
+71: The Chinese University of Hong Kong, Sha Tin, Hong Kong
+
+token_set_ratio
+95: The Chinese University of Hong Kong, Sha Tin, Hong Kong
+
+partial_token_set_ratio
+100: The Chinese University of Hong Kong, Sha Tin, Hong Kong
+
+qratio
+78: The Chinese University of Hong Kong, Sha Tin, Hong Kong
+
+wratio
+87: The Chinese University of Hong Kong, Sha Tin, Hong Kong
+
+================================
+name: Jun Dai, affiliation: California State University, Sacramento, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Mohan Dhawan, affiliation: IBM Research, India
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Birhanu Eshete, affiliation: University of Illinois at Chicago, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Debin Gao, affiliation: Singapore Management University, Singapore
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Ryan Gerdes, affiliation: Utah State University, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Yier Jin, affiliation: The University of Central Florida, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Murat Kantarcioglu, affiliation: University of Texas at Dallas, USA
+================================
+
+
+ratio
+100: University of Texas at Dallas, USA
+
+partial_ratio
+100: University of Texas at Dallas, USA
+
+token_sort_ratio
+100: University of Texas at Dallas, USA
+
+partial_token_sort_ratio
+100: University of Texas at Dallas, USA
+
+token_set_ratio
+100: University of Texas at Dallas, USA
+
+partial_token_set_ratio
+100: University of Texas at Dallas, USA
+
+qratio
+100: University of Texas at Dallas, USA
+
+wratio
+100: University of Texas at Dallas, USA
+
+================================
+name: Yingjiu Li, affiliation: Singapore Management University, Singapore
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Xiaodong Lin, affiliation: University of Ontario Institute of Technology, Canada
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Zhiqiang Lin, affiliation: University of Texas at Dallas, USA
+================================
+
+
+ratio
+0: 
+0: 
+
+partial_ratio
+0: 
+0: 
+
+token_sort_ratio
+0: 
+0: 
+
+partial_token_sort_ratio
+0: 
+0: 
+
+token_set_ratio
+0: 
+0: 
+
+partial_token_set_ratio
+0: 
+0: 
+
+qratio
+0: 
+0: 
+
+wratio
+0: 
+0: 
+
+================================
+name: Yao Liu, affiliation: University of South Florida, USA
+================================
+
+
+ratio
+53: National University of Singapore
+52: University of South Florida, Department of Computer Science and Engineering, Tampa, FL, USA
+51: Binghamton University, Department of Computer Science, NY, USA
+46: Delft University of Technology, Biomedical Electronics Group, The Netherlands
+46: Wuhan University, School of Remote Sensing Information Engineering, China
+44: City University of Hong Kong, Department of Electronic Engineering, Hong Kong
+40: Central South University, School of Information Science and Engineering, Changsha, China
+0: 
+
+partial_ratio
+91: University of South Florida, Department of Computer Science and Engineering, Tampa, FL, USA
+62: National University of Singapore
+62: Delft University of Technology, Biomedical Electronics Group, The Netherlands
+62: City University of Hong Kong, Department of Electronic Engineering, Hong Kong
+59: Wuhan University, School of Remote Sensing Information Engineering, China
+59: Central South University, School of Information Science and Engineering, Changsha, China
+53: Binghamton University, Department of Computer Science, NY, USA
+0: 
+
+token_sort_ratio
+60: National University of Singapore
+53: Binghamton University, Department of Computer Science, NY, USA
+53: University of South Florida, Department of Computer Science and Engineering, Tampa, FL, USA
+49: Wuhan University, School of Remote Sensing Information Engineering, China
+43: Delft University of Technology, Biomedical Electronics Group, The Netherlands
+41: Central South University, School of Information Science and Engineering, Changsha, China
+38: City University of Hong Kong, Department of Electronic Engineering, Hong Kong
+0: 
+
+partial_token_sort_ratio
+68: University of South Florida, Department of Computer Science and Engineering, Tampa, FL, USA
+66: Central South University, School of Information Science and Engineering, Changsha, China
+65: Binghamton University, Department of Computer Science, NY, USA
+62: National University of Singapore
+61: Delft University of Technology, Biomedical Electronics Group, The Netherlands
+59: City University of Hong Kong, Department of Electronic Engineering, Hong Kong
+58: Wuhan University, School of Remote Sensing Information Engineering, China
+0: 
+
+token_set_ratio
+100: University of South Florida, Department of Computer Science and Engineering, Tampa, FL, USA
+76: Central South University, School of Information Science and Engineering, Changsha, China
+71: Binghamton University, Department of Computer Science, NY, USA
+60: National University of Singapore
+59: Delft University of Technology, Biomedical Electronics Group, The Netherlands
+59: Wuhan University, School of Remote Sensing Information Engineering, China
+59: City University of Hong Kong, Department of Electronic Engineering, Hong Kong
+0: 
+
+partial_token_set_ratio
+100: Binghamton University, Department of Computer Science, NY, USA
+100: National University of Singapore
+100: Delft University of Technology, Biomedical Electronics Group, The Netherlands
+100: Wuhan University, School of Remote Sensing Information Engineering, China
+100: Central South University, School of Information Science and Engineering, Changsha, China
+100: City University of Hong Kong, Department of Electronic Engineering, Hong Kong
+100: University of South Florida, Department of Computer Science and Engineering, Tampa, FL, USA
+0: 
+
+qratio
+53: National University of Singapore
+52: University of South Florida, Department of Computer Science and Engineering, Tampa, FL, USA
+51: Binghamton University, Department of Computer Science, NY, USA
+46: Delft University of Technology, Biomedical Electronics Group, The Netherlands
+46: Wuhan University, School of Remote Sensing Information Engineering, China
+44: City University of Hong Kong, Department of Electronic Engineering, Hong Kong
+40: Central South University, School of Information Science and Engineering, Changsha, China
+0: 
+
+wratio
+86: Binghamton University, Department of Computer Science, NY, USA
+86: Delft University of Technology, Biomedical Electronics Group, The Netherlands
+86: Wuhan University, School of Remote Sensing Information Engineering, China
+86: Central South University, School of Information Science and Engineering, Changsha, China
+86: City University of Hong Kong, Department of Electronic Engineering, Hong Kong
+86: University of South Florida, Department of Computer Science and Engineering, Tampa, FL, USA
+57: National University of Singapore
+0: 
+
+================================
+name: Long Lu, affiliation: Stony Brook University, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Rongxing Lu, affiliation: Nanyang Technological University, Singapore
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Aziz Mohaisen, affiliation: SUNY Buffalo, USA
+================================
+
+
+ratio
+24: aka: Abedelaziz Mohaisen
+
+partial_ratio
+24: aka: Abedelaziz Mohaisen
+
+token_sort_ratio
+26: aka: Abedelaziz Mohaisen
+
+partial_token_sort_ratio
+25: aka: Abedelaziz Mohaisen
+
+token_set_ratio
+26: aka: Abedelaziz Mohaisen
+
+partial_token_set_ratio
+25: aka: Abedelaziz Mohaisen
+
+qratio
+24: aka: Abedelaziz Mohaisen
+
+wratio
+25: aka: Abedelaziz Mohaisen
+
+================================
+name: Goutam Paul, affiliation: Indian Statistical Institute, India
+================================
+
+
+ratio
+59: Indian Statistical Institute, Cryptology and Security Research Unit, Kolkata, India
+45: MCKV Institute of Engineering, West Bengal, India
+
+partial_ratio
+86: Indian Statistical Institute, Cryptology and Security Research Unit, Kolkata, India
+46: MCKV Institute of Engineering, West Bengal, India
+
+token_sort_ratio
+60: Indian Statistical Institute, Cryptology and Security Research Unit, Kolkata, India
+54: MCKV Institute of Engineering, West Bengal, India
+
+partial_token_sort_ratio
+76: Indian Statistical Institute, Cryptology and Security Research Unit, Kolkata, India
+62: MCKV Institute of Engineering, West Bengal, India
+
+token_set_ratio
+100: Indian Statistical Institute, Cryptology and Security Research Unit, Kolkata, India
+61: MCKV Institute of Engineering, West Bengal, India
+
+partial_token_set_ratio
+100: Indian Statistical Institute, Cryptology and Security Research Unit, Kolkata, India
+100: MCKV Institute of Engineering, West Bengal, India
+
+qratio
+59: Indian Statistical Institute, Cryptology and Security Research Unit, Kolkata, India
+45: MCKV Institute of Engineering, West Bengal, India
+
+wratio
+86: Indian Statistical Institute, Cryptology and Security Research Unit, Kolkata, India
+58: MCKV Institute of Engineering, West Bengal, India
+
+================================
+name: Pierangela Samarati, affiliation: Universitï¿½ degli Studi di Milano, Italy
+================================
+
+
+ratio
+69: University of Milan, Italy
+
+partial_ratio
+65: University of Milan, Italy
+
+token_sort_ratio
+71: University of Milan, Italy
+
+partial_token_sort_ratio
+76: University of Milan, Italy
+
+token_set_ratio
+71: University of Milan, Italy
+
+partial_token_set_ratio
+100: University of Milan, Italy
+
+qratio
+71: University of Milan, Italy
+
+wratio
+86: University of Milan, Italy
+
+================================
+name: Seungwon Shin, affiliation: KAIST, Korea
+================================
+
+
+ratio
+0: 
+0: 
+
+partial_ratio
+0: 
+0: 
+
+token_sort_ratio
+0: 
+0: 
+
+partial_token_sort_ratio
+0: 
+0: 
+
+token_set_ratio
+0: 
+0: 
+
+partial_token_set_ratio
+0: 
+0: 
+
+qratio
+0: 
+0: 
+
+wratio
+0: 
+0: 
+
+================================
+name: Kapil Singh, affiliation: IBM T.J. Watson Research Center, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Anna Squicciarini, affiliation: The Pennsylvania State University, USA
+================================
+
+
+ratio
+49: Pennsylvania State University, College of Information Sciences and Technology, State College, PA, USA
+
+partial_ratio
+82: Pennsylvania State University, College of Information Sciences and Technology, State College, PA, USA
+
+token_sort_ratio
+54: Pennsylvania State University, College of Information Sciences and Technology, State College, PA, USA
+
+partial_token_sort_ratio
+70: Pennsylvania State University, College of Information Sciences and Technology, State College, PA, USA
+
+token_set_ratio
+94: Pennsylvania State University, College of Information Sciences and Technology, State College, PA, USA
+
+partial_token_set_ratio
+100: Pennsylvania State University, College of Information Sciences and Technology, State College, PA, USA
+
+qratio
+49: Pennsylvania State University, College of Information Sciences and Technology, State College, PA, USA
+
+wratio
+86: Pennsylvania State University, College of Information Sciences and Technology, State College, PA, USA
+
+================================
+name: Kun Sun, affiliation: College of William and Mary, USA
+================================
+
+
+ratio
+35: George Mason University, Department of Information Sciences and Technology, Fairfax, VA, USA
+28: Chinese University of Hong Kong, Li Ka Shing Institute of Health Sciences, Hong Kong
+26: China University of Geosciences, School of Computer Science, Hubei Key Laboratory of Intelligent Geo-Information Processing, Wuhan, China
+25: Wuhan University, State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing, China
+0: 
+
+partial_ratio
+50: George Mason University, Department of Information Sciences and Technology, Fairfax, VA, USA
+44: China University of Geosciences, School of Computer Science, Hubei Key Laboratory of Intelligent Geo-Information Processing, Wuhan, China
+41: Wuhan University, State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing, China
+38: Chinese University of Hong Kong, Li Ka Shing Institute of Health Sciences, Hong Kong
+0: 
+
+token_sort_ratio
+33: Wuhan University, State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing, China
+32: George Mason University, Department of Information Sciences and Technology, Fairfax, VA, USA
+28: Chinese University of Hong Kong, Li Ka Shing Institute of Health Sciences, Hong Kong
+27: China University of Geosciences, School of Computer Science, Hubei Key Laboratory of Intelligent Geo-Information Processing, Wuhan, China
+0: 
+
+partial_token_sort_ratio
+45: George Mason University, Department of Information Sciences and Technology, Fairfax, VA, USA
+42: Wuhan University, State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing, China
+39: China University of Geosciences, School of Computer Science, Hubei Key Laboratory of Intelligent Geo-Information Processing, Wuhan, China
+39: Chinese University of Hong Kong, Li Ka Shing Institute of Health Sciences, Hong Kong
+0: 
+
+token_set_ratio
+49: George Mason University, Department of Information Sciences and Technology, Fairfax, VA, USA
+33: Wuhan University, State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing, China
+30: Chinese University of Hong Kong, Li Ka Shing Institute of Health Sciences, Hong Kong
+28: China University of Geosciences, School of Computer Science, Hubei Key Laboratory of Intelligent Geo-Information Processing, Wuhan, China
+0: 
+
+partial_token_set_ratio
+100: George Mason University, Department of Information Sciences and Technology, Fairfax, VA, USA
+100: China University of Geosciences, School of Computer Science, Hubei Key Laboratory of Intelligent Geo-Information Processing, Wuhan, China
+100: Chinese University of Hong Kong, Li Ka Shing Institute of Health Sciences, Hong Kong
+100: Wuhan University, State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing, China
+0: 
+
+qratio
+35: George Mason University, Department of Information Sciences and Technology, Fairfax, VA, USA
+28: Chinese University of Hong Kong, Li Ka Shing Institute of Health Sciences, Hong Kong
+26: China University of Geosciences, School of Computer Science, Hubei Key Laboratory of Intelligent Geo-Information Processing, Wuhan, China
+25: Wuhan University, State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing, China
+0: 
+
+wratio
+86: George Mason University, Department of Information Sciences and Technology, Fairfax, VA, USA
+86: China University of Geosciences, School of Computer Science, Hubei Key Laboratory of Intelligent Geo-Information Processing, Wuhan, China
+86: Chinese University of Hong Kong, Li Ka Shing Institute of Health Sciences, Hong Kong
+86: Wuhan University, State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing, China
+0: 
+
+================================
+name: Eugene Vasserman, affiliation: Kansas State University, USA
+================================
+
+
+ratio
+100: Kansas State University, USA
+
+partial_ratio
+100: Kansas State University, USA
+
+token_sort_ratio
+100: Kansas State University, USA
+
+partial_token_sort_ratio
+100: Kansas State University, USA
+
+token_set_ratio
+100: Kansas State University, USA
+
+partial_token_set_ratio
+100: Kansas State University, USA
+
+qratio
+100: Kansas State University, USA
+
+wratio
+100: Kansas State University, USA
+
+================================
+name: Shobha Venkataraman, affiliation: AT&T Labs Research, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Cong Wang, affiliation: City University of Hong Kong, HK
+================================
+
+
+ratio
+62: City University of Hong Kong, Department of Computer Science, Hong Kong
+50: South China University of Technology, School of Automation, Guangzhou, China
+48: Tianjin University, School of Computer Science and Technology, China
+44: Simon Fraser University
+42: Stony Brook University, Department of Electrical and Computer Engineering, NY, USA
+41: Beijing University of Posts and Telecommunications, School of Software Engineering, China
+41: Army Engineering University of PLA, College of Communications Engineering, Nanjing, China
+41: Southeast University, National Mobile Commutation Research Laboratory, Nanjing, China
+40: Kwangwoon University, Radio Frequency Integrated Circuit Center, Seoul, South Korea
+39: Northeastern University at Qinhuangdao, School of Computer and Communication Engineering, China
+28: École Polytechnique Fédérale de Lausanne, Switzerland
+0: 
+
+partial_ratio
+94: City University of Hong Kong, Department of Computer Science, Hong Kong
+72: South China University of Technology, School of Automation, Guangzhou, China
+62: Beijing University of Posts and Telecommunications, School of Software Engineering, China
+62: Army Engineering University of PLA, College of Communications Engineering, Nanjing, China
+62: Northeastern University at Qinhuangdao, School of Computer and Communication Engineering, China
+59: Tianjin University, School of Computer Science and Technology, China
+56: Southeast University, National Mobile Commutation Research Laboratory, Nanjing, China
+53: Stony Brook University, Department of Electrical and Computer Engineering, NY, USA
+52: Simon Fraser University
+50: Kwangwoon University, Radio Frequency Integrated Circuit Center, Seoul, South Korea
+31: École Polytechnique Fédérale de Lausanne, Switzerland
+0: 
+
+token_sort_ratio
+60: City University of Hong Kong, Department of Computer Science, Hong Kong
+52: Simon Fraser University
+47: Tianjin University, School of Computer Science and Technology, China
+45: Kwangwoon University, Radio Frequency Integrated Circuit Center, Seoul, South Korea
+44: South China University of Technology, School of Automation, Guangzhou, China
+42: Southeast University, National Mobile Commutation Research Laboratory, Nanjing, China
+41: Army Engineering University of PLA, College of Communications Engineering, Nanjing, China
+40: Stony Brook University, Department of Electrical and Computer Engineering, NY, USA
+39: Northeastern University at Qinhuangdao, School of Computer and Communication Engineering, China
+37: Beijing University of Posts and Telecommunications, School of Software Engineering, China
+32: École Polytechnique Fédérale de Lausanne, Switzerland
+0: 
+
+partial_token_sort_ratio
+68: City University of Hong Kong, Department of Computer Science, Hong Kong
+61: Simon Fraser University
+61: Stony Brook University, Department of Electrical and Computer Engineering, NY, USA
+61: Army Engineering University of PLA, College of Communications Engineering, Nanjing, China
+58: South China University of Technology, School of Automation, Guangzhou, China
+58: Northeastern University at Qinhuangdao, School of Computer and Communication Engineering, China
+55: Tianjin University, School of Computer Science and Technology, China
+55: Kwangwoon University, Radio Frequency Integrated Circuit Center, Seoul, South Korea
+52: Beijing University of Posts and Telecommunications, School of Software Engineering, China
+48: Southeast University, National Mobile Commutation Research Laboratory, Nanjing, China
+35: École Polytechnique Fédérale de Lausanne, Switzerland
+0: 
+
+token_set_ratio
+95: City University of Hong Kong, Department of Computer Science, Hong Kong
+61: Simon Fraser University
+59: Beijing University of Posts and Telecommunications, School of Software Engineering, China
+59: Tianjin University, School of Computer Science and Technology, China
+59: Stony Brook University, Department of Electrical and Computer Engineering, NY, USA
+59: South China University of Technology, School of Automation, Guangzhou, China
+59: Army Engineering University of PLA, College of Communications Engineering, Nanjing, China
+59: Northeastern University at Qinhuangdao, School of Computer and Communication Engineering, China
+49: Kwangwoon University, Radio Frequency Integrated Circuit Center, Seoul, South Korea
+49: Southeast University, National Mobile Commutation Research Laboratory, Nanjing, China
+32: École Polytechnique Fédérale de Lausanne, Switzerland
+0: 
+
+partial_token_set_ratio
+100: City University of Hong Kong, Department of Computer Science, Hong Kong
+100: Simon Fraser University
+100: Beijing University of Posts and Telecommunications, School of Software Engineering, China
+100: Tianjin University, School of Computer Science and Technology, China
+100: Kwangwoon University, Radio Frequency Integrated Circuit Center, Seoul, South Korea
+100: Stony Brook University, Department of Electrical and Computer Engineering, NY, USA
+100: South China University of Technology, School of Automation, Guangzhou, China
+100: Army Engineering University of PLA, College of Communications Engineering, Nanjing, China
+100: Northeastern University at Qinhuangdao, School of Computer and Communication Engineering, China
+100: Southeast University, National Mobile Commutation Research Laboratory, Nanjing, China
+35: École Polytechnique Fédérale de Lausanne, Switzerland
+0: 
+
+qratio
+62: City University of Hong Kong, Department of Computer Science, Hong Kong
+50: South China University of Technology, School of Automation, Guangzhou, China
+48: Tianjin University, School of Computer Science and Technology, China
+44: Simon Fraser University
+42: Stony Brook University, Department of Electrical and Computer Engineering, NY, USA
+41: Beijing University of Posts and Telecommunications, School of Software Engineering, China
+41: Army Engineering University of PLA, College of Communications Engineering, Nanjing, China
+41: Southeast University, National Mobile Commutation Research Laboratory, Nanjing, China
+40: Kwangwoon University, Radio Frequency Integrated Circuit Center, Seoul, South Korea
+39: Northeastern University at Qinhuangdao, School of Computer and Communication Engineering, China
+29: École Polytechnique Fédérale de Lausanne, Switzerland
+0: 
+
+wratio
+86: City University of Hong Kong, Department of Computer Science, Hong Kong
+86: Beijing University of Posts and Telecommunications, School of Software Engineering, China
+86: Tianjin University, School of Computer Science and Technology, China
+86: Kwangwoon University, Radio Frequency Integrated Circuit Center, Seoul, South Korea
+86: Stony Brook University, Department of Electrical and Computer Engineering, NY, USA
+86: South China University of Technology, School of Automation, Guangzhou, China
+86: Army Engineering University of PLA, College of Communications Engineering, Nanjing, China
+86: Northeastern University at Qinhuangdao, School of Computer and Communication Engineering, China
+86: Southeast University, National Mobile Commutation Research Laboratory, Nanjing, China
+58: Simon Fraser University
+31: École Polytechnique Fédérale de Lausanne, Switzerland
+0: 
+
+================================
+name: Haining Wang, affiliation: University of Delaware, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Qian Wang, affiliation: Wuhan University, China
+================================
+
+
+ratio
+45: University of Alberta, Edmonton, AB, Canada
+45: Hangzhou Dianzi University, Institute of Information and Control, China
+43: Xi'an Jiaotong University, School of Mathematics and Statistics, China
+43: Aalborg University, Department of Energy Technology, Denmark
+38: Wuhan University, State Key Laboratory of Software Engineering, School of Computer Science, China
+38: Yanshan University, College of Information Science and Engineering, Qianhuangdao, China
+36: Beijing University of Posts and Telecommunications, Network Management Center, China
+35: Shanghai Jiao Tong University, Med-X Research Institute, School of Biomedical Engineering, China
+35: Information Science and Technology Institute, Zhengzhou, China
+34: Zhongnan University of Economics and Law, School of Information and Safety Engineering, Wuhan, China
+30: Texas A&M University, Department of Electrical and Computer Engineering, College Station, TX, USA
+30: University of South Carolina, Department of Chemistry and Biochemistry, Columbia, SC, USA
+30: The Hong Kong University of Science and Technology, Department of Civil and Environmental Engineering, Hong Kong
+26: Clemson University, International Center for Automotive Research, Applied Dynamics and Control Group, Greenville, SC, USA
+24: Southeast University, School of Computer Science and Engineering, MOE, Key Laboratory of Computer Network and Information Integration, Nanjing, China
+23: University of Electronic Science and Technology of China, National Key Laboratory of Science and Technology on Communications, Chengdu, China
+0: 
+
+partial_ratio
+83: Wuhan University, State Key Laboratory of Software Engineering, School of Computer Science, China
+78: Southeast University, School of Computer Science and Engineering, MOE, Key Laboratory of Computer Network and Information Integration, Nanjing, China
+74: The Hong Kong University of Science and Technology, Department of Civil and Environmental Engineering, Hong Kong
+74: Yanshan University, College of Information Science and Engineering, Qianhuangdao, China
+74: Hangzhou Dianzi University, Institute of Information and Control, China
+70: Xi'an Jiaotong University, School of Mathematics and Statistics, China
+70: Clemson University, International Center for Automotive Research, Applied Dynamics and Control Group, Greenville, SC, USA
+70: Zhongnan University of Economics and Law, School of Information and Safety Engineering, Wuhan, China
+65: Texas A&M University, Department of Electrical and Computer Engineering, College Station, TX, USA
+61: Shanghai Jiao Tong University, Med-X Research Institute, School of Biomedical Engineering, China
+61: Beijing University of Posts and Telecommunications, Network Management Center, China
+61: Aalborg University, Department of Energy Technology, Denmark
+48: University of Electronic Science and Technology of China, National Key Laboratory of Science and Technology on Communications, Chengdu, China
+48: University of South Carolina, Department of Chemistry and Biochemistry, Columbia, SC, USA
+48: Information Science and Technology Institute, Zhengzhou, China
+39: University of Alberta, Edmonton, AB, Canada
+0: 
+
+token_sort_ratio
+45: University of Alberta, Edmonton, AB, Canada
+39: Information Science and Technology Institute, Zhengzhou, China
+38: Wuhan University, State Key Laboratory of Software Engineering, School of Computer Science, China
+38: Xi'an Jiaotong University, School of Mathematics and Statistics, China
+38: Yanshan University, College of Information Science and Engineering, Qianhuangdao, China
+37: Zhongnan University of Economics and Law, School of Information and Safety Engineering, Wuhan, China
+36: University of South Carolina, Department of Chemistry and Biochemistry, Columbia, SC, USA
+35: Hangzhou Dianzi University, Institute of Information and Control, China
+35: Aalborg University, Department of Energy Technology, Denmark
+31: Texas A&M University, Department of Electrical and Computer Engineering, College Station, TX, USA
+31: Beijing University of Posts and Telecommunications, Network Management Center, China
+30: Shanghai Jiao Tong University, Med-X Research Institute, School of Biomedical Engineering, China
+26: Clemson University, International Center for Automotive Research, Applied Dynamics and Control Group, Greenville, SC, USA
+24: Southeast University, School of Computer Science and Engineering, MOE, Key Laboratory of Computer Network and Information Integration, Nanjing, China
+23: The Hong Kong University of Science and Technology, Department of Civil and Environmental Engineering, Hong Kong
+22: University of Electronic Science and Technology of China, National Key Laboratory of Science and Technology on Communications, Chengdu, China
+0: 
+
+partial_token_sort_ratio
+86: Zhongnan University of Economics and Law, School of Information and Safety Engineering, Wuhan, China
+82: Wuhan University, State Key Laboratory of Software Engineering, School of Computer Science, China
+76: Clemson University, International Center for Automotive Research, Applied Dynamics and Control Group, Greenville, SC, USA
+73: University of South Carolina, Department of Chemistry and Biochemistry, Columbia, SC, USA
+73: Yanshan University, College of Information Science and Engineering, Qianhuangdao, China
+71: Texas A&M University, Department of Electrical and Computer Engineering, College Station, TX, USA
+68: Shanghai Jiao Tong University, Med-X Research Institute, School of Biomedical Engineering, China
+64: University of Electronic Science and Technology of China, National Key Laboratory of Science and Technology on Communications, Chengdu, China
+64: Beijing University of Posts and Telecommunications, Network Management Center, China
+64: Aalborg University, Department of Energy Technology, Denmark
+63: Xi'an Jiaotong University, School of Mathematics and Statistics, China
+59: The Hong Kong University of Science and Technology, Department of Civil and Environmental Engineering, Hong Kong
+59: Southeast University, School of Computer Science and Engineering, MOE, Key Laboratory of Computer Network and Information Integration, Nanjing, China
+55: University of Alberta, Edmonton, AB, Canada
+55: Hangzhou Dianzi University, Institute of Information and Control, China
+50: Information Science and Technology Institute, Zhengzhou, China
+0: 
+
+token_set_ratio
+100: Wuhan University, State Key Laboratory of Software Engineering, School of Computer Science, China
+100: Zhongnan University of Economics and Law, School of Information and Safety Engineering, Wuhan, China
+84: Shanghai Jiao Tong University, Med-X Research Institute, School of Biomedical Engineering, China
+84: University of Electronic Science and Technology of China, National Key Laboratory of Science and Technology on Communications, Chengdu, China
+84: Xi'an Jiaotong University, School of Mathematics and Statistics, China
+84: Yanshan University, College of Information Science and Engineering, Qianhuangdao, China
+84: Southeast University, School of Computer Science and Engineering, MOE, Key Laboratory of Computer Network and Information Integration, Nanjing, China
+84: Hangzhou Dianzi University, Institute of Information and Control, China
+84: Beijing University of Posts and Telecommunications, Network Management Center, China
+62: Texas A&M University, Department of Electrical and Computer Engineering, College Station, TX, USA
+62: University of South Carolina, Department of Chemistry and Biochemistry, Columbia, SC, USA
+62: The Hong Kong University of Science and Technology, Department of Civil and Environmental Engineering, Hong Kong
+62: University of Alberta, Edmonton, AB, Canada
+62: Clemson University, International Center for Automotive Research, Applied Dynamics and Control Group, Greenville, SC, USA
+62: Aalborg University, Department of Energy Technology, Denmark
+39: Information Science and Technology Institute, Zhengzhou, China
+0: 
+
+partial_token_set_ratio
+100: Shanghai Jiao Tong University, Med-X Research Institute, School of Biomedical Engineering, China
+100: Wuhan University, State Key Laboratory of Software Engineering, School of Computer Science, China
+100: Texas A&M University, Department of Electrical and Computer Engineering, College Station, TX, USA
+100: University of Electronic Science and Technology of China, National Key Laboratory of Science and Technology on Communications, Chengdu, China
+100: Xi'an Jiaotong University, School of Mathematics and Statistics, China
+100: University of South Carolina, Department of Chemistry and Biochemistry, Columbia, SC, USA
+100: The Hong Kong University of Science and Technology, Department of Civil and Environmental Engineering, Hong Kong
+100: University of Alberta, Edmonton, AB, Canada
+100: Yanshan University, College of Information Science and Engineering, Qianhuangdao, China
+100: Clemson University, International Center for Automotive Research, Applied Dynamics and Control Group, Greenville, SC, USA
+100: Southeast University, School of Computer Science and Engineering, MOE, Key Laboratory of Computer Network and Information Integration, Nanjing, China
+100: Hangzhou Dianzi University, Institute of Information and Control, China
+100: Information Science and Technology Institute, Zhengzhou, China
+100: Zhongnan University of Economics and Law, School of Information and Safety Engineering, Wuhan, China
+100: Beijing University of Posts and Telecommunications, Network Management Center, China
+100: Aalborg University, Department of Energy Technology, Denmark
+0: 
+
+qratio
+45: University of Alberta, Edmonton, AB, Canada
+45: Hangzhou Dianzi University, Institute of Information and Control, China
+43: Xi'an Jiaotong University, School of Mathematics and Statistics, China
+43: Aalborg University, Department of Energy Technology, Denmark
+38: Wuhan University, State Key Laboratory of Software Engineering, School of Computer Science, China
+38: Yanshan University, College of Information Science and Engineering, Qianhuangdao, China
+36: Beijing University of Posts and Telecommunications, Network Management Center, China
+35: Shanghai Jiao Tong University, Med-X Research Institute, School of Biomedical Engineering, China
+35: Information Science and Technology Institute, Zhengzhou, China
+34: Zhongnan University of Economics and Law, School of Information and Safety Engineering, Wuhan, China
+30: Texas A&M University, Department of Electrical and Computer Engineering, College Station, TX, USA
+30: University of South Carolina, Department of Chemistry and Biochemistry, Columbia, SC, USA
+30: The Hong Kong University of Science and Technology, Department of Civil and Environmental Engineering, Hong Kong
+26: Clemson University, International Center for Automotive Research, Applied Dynamics and Control Group, Greenville, SC, USA
+24: Southeast University, School of Computer Science and Engineering, MOE, Key Laboratory of Computer Network and Information Integration, Nanjing, China
+23: University of Electronic Science and Technology of China, National Key Laboratory of Science and Technology on Communications, Chengdu, China
+0: 
+
+wratio
+86: Shanghai Jiao Tong University, Med-X Research Institute, School of Biomedical Engineering, China
+86: Wuhan University, State Key Laboratory of Software Engineering, School of Computer Science, China
+86: Texas A&M University, Department of Electrical and Computer Engineering, College Station, TX, USA
+86: University of Electronic Science and Technology of China, National Key Laboratory of Science and Technology on Communications, Chengdu, China
+86: Xi'an Jiaotong University, School of Mathematics and Statistics, China
+86: University of South Carolina, Department of Chemistry and Biochemistry, Columbia, SC, USA
+86: The Hong Kong University of Science and Technology, Department of Civil and Environmental Engineering, Hong Kong
+86: University of Alberta, Edmonton, AB, Canada
+86: Yanshan University, College of Information Science and Engineering, Qianhuangdao, China
+86: Clemson University, International Center for Automotive Research, Applied Dynamics and Control Group, Greenville, SC, USA
+86: Southeast University, School of Computer Science and Engineering, MOE, Key Laboratory of Computer Network and Information Integration, Nanjing, China
+86: Hangzhou Dianzi University, Institute of Information and Control, China
+86: Information Science and Technology Institute, Zhengzhou, China
+86: Zhongnan University of Economics and Law, School of Information and Safety Engineering, Wuhan, China
+86: Beijing University of Posts and Telecommunications, Network Management Center, China
+86: Aalborg University, Department of Energy Technology, Denmark
+0: 
+
+================================
+name: Nicholas Weaver, affiliation: International Computer Science Institute, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Mengjun Xie, affiliation: University of Arkansas at Little Rock, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Danfeng Yao, affiliation: Virginia Tech, USA
+================================
+
+
+ratio
+34: aka: Danfeng (Daphne) Yao, Danfeng Daphne YaoVirginia Tech
+
+partial_ratio
+72: aka: Danfeng (Daphne) Yao, Danfeng Daphne YaoVirginia Tech
+
+token_sort_ratio
+42: aka: Danfeng (Daphne) Yao, Danfeng Daphne YaoVirginia Tech
+
+partial_token_sort_ratio
+71: aka: Danfeng (Daphne) Yao, Danfeng Daphne YaoVirginia Tech
+
+token_set_ratio
+54: aka: Danfeng (Daphne) Yao, Danfeng Daphne YaoVirginia Tech
+
+partial_token_set_ratio
+100: aka: Danfeng (Daphne) Yao, Danfeng Daphne YaoVirginia Tech
+
+qratio
+34: aka: Danfeng (Daphne) Yao, Danfeng Daphne YaoVirginia Tech
+
+wratio
+86: aka: Danfeng (Daphne) Yao, Danfeng Daphne YaoVirginia Tech
+
+================================
+name: Fareed Zaffar, affiliation: Lahore University of Management Sciences, Pakistan
+================================
+
+
+ratio
+31: aka: Muhammad Fareed Zaffar
+
+partial_ratio
+33: aka: Muhammad Fareed Zaffar
+
+token_sort_ratio
+29: aka: Muhammad Fareed Zaffar
+
+partial_token_sort_ratio
+38: aka: Muhammad Fareed Zaffar
+
+token_set_ratio
+29: aka: Muhammad Fareed Zaffar
+
+partial_token_set_ratio
+38: aka: Muhammad Fareed Zaffar
+
+qratio
+31: aka: Muhammad Fareed Zaffar
+
+wratio
+32: aka: Muhammad Fareed Zaffar
+
+================================
+name: Bingsheng Zhang, affiliation: University of Lancaster, UK
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Junjie Zhang, affiliation: Wright State University, USA
+================================
+
+
+ratio
+0: 
+0: 
+
+partial_ratio
+0: 
+0: 
+
+token_sort_ratio
+0: 
+0: 
+
+partial_token_sort_ratio
+0: 
+0: 
+
+token_set_ratio
+0: 
+0: 
+
+partial_token_set_ratio
+0: 
+0: 
+
+qratio
+0: 
+0: 
+
+wratio
+0: 
+0: 
+
+================================
+name: Kehuan Zhang, affiliation: Chinese University of Hong Kong, HK
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Yinqian Zhang, affiliation: The Ohio State University, USA
+================================
+
+
+ratio
+0: 
+0: 
+
+partial_ratio
+0: 
+0: 
+
+token_sort_ratio
+0: 
+0: 
+
+partial_token_sort_ratio
+0: 
+0: 
+
+token_set_ratio
+0: 
+0: 
+
+partial_token_set_ratio
+0: 
+0: 
+
+qratio
+0: 
+0: 
+
+wratio
+0: 
+0: 
+
+================================
+name: Sheng Zhong, affiliation: Nanjing University, China
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Yongbin Zhou, affiliation: Chinese Academy of Sciences, China
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 
+
+================================
+name: Sencun Zhu, affiliation: The Pennsylvania State University, USA
+================================
+
+
+ratio
+76: Pennsylvania State University, University Park, USA
+
+partial_ratio
+87: Pennsylvania State University, University Park, USA
+
+token_sort_ratio
+81: Pennsylvania State University, University Park, USA
+
+partial_token_sort_ratio
+86: Pennsylvania State University, University Park, USA
+
+token_set_ratio
+94: Pennsylvania State University, University Park, USA
+
+partial_token_set_ratio
+100: Pennsylvania State University, University Park, USA
+
+qratio
+76: Pennsylvania State University, University Park, USA
+
+wratio
+89: Pennsylvania State University, University Park, USA
+
+================================
+name: Cliff Zou, affiliation: University of Central Florida, USA
+================================
+
+
+ratio
+0: 
+
+partial_ratio
+0: 
+
+token_sort_ratio
+0: 
+
+partial_token_sort_ratio
+0: 
+
+token_set_ratio
+0: 
+
+partial_token_set_ratio
+0: 
+
+qratio
+0: 
+
+wratio
+0: 

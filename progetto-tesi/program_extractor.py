@@ -7,10 +7,10 @@ import spacy
 from spacy import displacy
 from person import Person
 
-import scraper
+import webutil
 
 
-def extract_program_committees(text):
+def extract_program_sections(text):
     start_time = time.time()
     
     program_headings = ["program committee", "program chair", "program commission"]
@@ -24,20 +24,22 @@ def extract_program_committees(text):
         next_title = min(next_programs) if len(next_programs) else len(text)
         end = text.rfind("\n", 0, next_title)
         # re-polish html to avoid misprints from the substring process
-        program_committees.append(scraper.polish_html(text[start:start+end]))
+        program_committees.append(webutil.polish_html(text[start:start+end]))
 
     print('Extraction of program committee: ', time.time() - start_time)
     return program_committees
 
 
-def ner(text):
+def extract_program_committee(text):
+    program_sections = extract_program_sections(text)
+
     start_time = time.time()
     nlp = en_core_web_md.load()
     print('Loading NER: ', time.time() - start_time)
 
     results = list()
     
-    for program_committee in text:
+    for program_committee in program_sections:
         ner_results = []
         step = 0
         text_lines = program_committee.splitlines()
@@ -69,4 +71,4 @@ def ner(text):
                 affiliation = ', '.join(lines[(i + 1):(i + 1 + step - 1)])
             results.append(Person(name, affiliation))
 
-    return [res_item for res_item in results]
+    return results
