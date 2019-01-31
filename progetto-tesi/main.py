@@ -6,27 +6,29 @@ from person import Person
 # # url = "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040&copyownerid=12184"
 
 # # url con una riga
-url = "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345&copyownerid=75434"
-html = scraper.get_wikiCFP(url)
+# url = "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345&copyownerid=75434"
+# html = scraper.get_wikiCFP(url)
 
-program_committee = program_extractor.extract_program_committee(html)
+# program_committee = program_extractor.extract_program_committee(html)
  
 
 # program_committee = [Person('Kai Chen', 'Chinese Academy of Sciences, China')]
 
-# with open('progetto-tesi/program_test.txt', 'r') as f:
-#     data = f.read()
+with open('progetto-tesi/program_test.txt', 'r') as f:
+    data = f.read()
 
-# program_committee = [Person(p.split('#')[0], p.split('#')[1]) for p in data.splitlines()]
-# people = list()
+program_committee = [Person(p.split('#')[0], p.split('#')[1]) for p in data.splitlines()]
+people = list()
 
-# for person in program_committee:
-#     people.append({
-#         "person_name": person.name,
-#         "person_affiliation": person.affiliation,
-#         "results": scraper.search_dblp(person)
-#     })
+for person in program_committee:
+    # scraper.search_dblp(person)
+    people.append({
+        "person_name": person.name,
+        "person_affiliation": person.affiliation,
+        "result": scraper.search_dblp(person)['result'] if scraper.search_dblp(person)['status'] != 'error' else None
+    })
 
+print('xd')
 
 # with open('progetto-tesi/results.txt', 'w') as f:
 #     for person in people:
