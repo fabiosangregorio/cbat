@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
+from multiprocessing import Pool
+import time
+
 import scraper
 import program_extractor
 from person import Person
 
 if __name__ == "__main__":
     # # url con due righe
-    # # url = "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040&copyownerid=12184"
+    # # url = "http://www.wikicfp.com/c2fp/servlet/event.showcfp?eventid=10040&copyownerid=12184"
 
     # # url con una riga
     # url = "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345&copyownerid=75434"
@@ -22,13 +25,20 @@ if __name__ == "__main__":
     program_committee = [Person(p.split('#')[0], p.split('#')[1]) for p in data.splitlines()]
     people = list()
 
-    for person in program_committee:
-        # scraper.search_dblp(person)
-        people.append({
-            "person_name": person.name,
-            "person_affiliation": person.affiliation,
-            "result": scraper.search_dblp(person)['result'] if scraper.search_dblp(person)['status'] != 'error' else None
-        })
+    start_time = time.time()
+
+    with Pool(5) as p:
+        people = p.map(scraper.search_dblp, program_committee)
+
+    print('Total search of name in dblp: ', time.time() - start_time)
+
+    # for person in program_committee:
+    #     scraper.search_dblp(person)
+        # people.append({
+        #     "person_name": person.name,
+        #     "person_affiliation": person.affiliation,
+        #     "result": scraper.search_dblp(person)['result'] if scraper.search_dblp(person)['status'] != 'error' else None
+        # })
 
 
     # with open('progetto-tesi/results.txt', 'w') as f:

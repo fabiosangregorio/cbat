@@ -18,16 +18,16 @@ def extract_program_sections(text):
 
     # gets all the sections referring to a program committee
     program_indexes = [text.lower().find(p) + len(p) for p in program_headings if text.lower().find(p) > -1]
-    program_committees = list()
+    sections = list()
     for start in program_indexes:
-        next_programs = [text[start:].lower().find(p) for p in headings if text[start:].lower().find(p) > -1]
-        next_title = min(next_programs) if len(next_programs) else len(text)
-        end = text.rfind("\n", 0, next_title)
+        next_headings = [text[start:].lower().find(p) for p in headings if text[start:].lower().find(p) > -1]
+        next_heading = min(next_headings) if len(next_headings) else len(text)
+        end = text.rfind("\n", 0, next_heading)
         # re-polish html to avoid misprints from the substring process
-        program_committees.append(webutil.polish_html(text[start:start+end]))
+        sections.append(webutil.polish_html(text[start:start+end]))
 
     print('Extraction of program committee: ', time.time() - start_time)
-    return program_committees
+    return sections
 
 
 def extract_program_committee(text):
@@ -39,17 +39,17 @@ def extract_program_committee(text):
 
     results = list()
     
-    for program_committee in program_sections:
+    for section in program_sections:
         ner_results = []
         step = 0
-        text_lines = program_committee.splitlines()
+        text_lines = section.splitlines()
         # run NER every `step` lines and check if the result set is significantly reduced.
         while True:
             start_time = time.time()
             people = 0
             # NER multiprocessing on single lines
-            lines = [l for i, l in enumerate(text_lines) if len(l) >= 4 and i % (step + 1) == 0]
-            for doc in nlp.pipe(lines, n_threads=16, batch_size=10000):
+            step_lines = [l for i, l in enumerate(text_lines) if len(l) >= 4 and i % (step + 1) == 0]
+            for doc in nlp.pipe(step_lines, n_threads=16, batch_size=10000):
                 people = people + 1 if len([ee.text for ee in doc.ents if ee.label_ == 'PERSON']) else people
 
             ner_results.append(people)
@@ -61,7 +61,6 @@ def extract_program_committee(text):
 
         # run regex on the right `step` set
         regex = re.compile(r"^\W*([\w\. '’-]+)", re.MULTILINE)
-        # results.append([m.group() for m in regex.finditer("\n".join(program_committee.splitlines()[::step]))])
 
         for i in range(0, len(text_lines), step):
             name = regex.search(text_lines[i]).group(1).strip()

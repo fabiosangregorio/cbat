@@ -3,12 +3,12 @@ import time
 import urllib
 
 from bs4 import BeautifulSoup
-
 from fuzzywuzzy import process
 from fuzzywuzzy import fuzz
 
 from person import Person
 import webutil
+
 
 score_threshold = 70
 
@@ -39,14 +39,15 @@ def search_dblp(person_to_find):
     is_exact = html.select("#completesearch-authors > .body p")[0].getText().lower() == "exact matches"
 
     # first ul, either contains the exact matches or likely matches
-    search_results = list()
+    possible_people = list()
     for li in html.select("#completesearch-authors > .body ul")[0].select('li'):
-        search_results.append(Person(
+        people_results.append(Person(
             name="".join([m.getText() for m in li.select('a mark')]),
             affiliation=li.select('small')[0].getText() if li.select('small') else "",
             dblp_url=li.select('a')[0]['href']
         ))
-    results = find_right_person(person_to_find, search_results, is_exact)
+    results = find_right_person(person_to_find, possible_people, is_exact)
+
     print('Search of name in dblp: ', time.time() - start_time)
     return results
 
@@ -54,25 +55,26 @@ def search_dblp(person_to_find):
 def find_right_person(person_to_find, people_list, is_exact):
     result_message = {
         "status": "ok",
-        "is_exact": is_exact
+        "is_exact": is_exact # True if exact match, False if likely match
     }
 
-    affiliations = {idx: r.affiliation for idx, r in enumerate(people_list)}
+    affiliations = {i: r.affiliation for i, r in enumerate(people_list)}
+
+    # more than one person with the same name, without affiliation. I can't be sure of which name is the right one.
     if len([a[0] for a in affiliations.items() if not len(a[1])]) > 1:
-        # more than one person with the same name, without affiliation. I can't be sure of which name is the right one.
-        # TODO: gestire il caso likely_match
         return {
             "status": "error",
             "err": "multiple_no_affiliation",
             "is_exact": is_exact
         }
+        # TODO: gestire il caso likely_match
 
-    _, score, best_index = process.extractOne(person_to_find.affiliation, affiliations, scorer=fuzz.token_set_ratio)
+    _, fuzz_score, best_index = process.extractOne(person_to_find.affiliation, affiliations, scorer=fuzz.token_set_ratio)
     
-    if score > score_threshold or (len(affiliations) == 1 and score == 0):
+    if fuzz_score > score_threshold or (len(affiliations) == 1 and fuzz_score == 0):
         # regular best match or only one match (no affiliation)
         result_message["result"] = people_list[best_index]
-    elif score <= score_threshold:
+    elif fuzz_score <= score_threshold:
         # no matches with affiliation, could be either another affiliation or an AKA (another name)
         _, name_score, best_name_index = process.extractOne(person_to_find.name, affiliations, scorer=fuzz.token_set_ratio)
         if name_score > score_threshold:    
@@ -105,12 +107,12 @@ def is_previous_affiliation(person, affiliation):
     return score > score_threshold
 
 
-    # def get_papers_from_dblp(url):
-    #     start_time = time.time()
+# def get_papers_from_dblp(url):
+#     start_time = time.time()
 
-    #     response = get_page(url)
-    #     html = BeautifulSoup(response, 'html.parser')
-    #     publ_url = html.select('.export a[href*="https://dblp.org/pers/xx/a/"')[0]['href']
-    #     response = get_page(publ_url)
+#     response = get_page(url)
+#     html = BeautifulSoup(response, 'html.parser')
+#     publ_url = html.select('.export a[href*="https://dblp.org/pers/xx/a/"')[0]['href']
+#     response = get_page(publ_url)
 
-    #     print('Search of papers in dblp: ', time.time() - start_time)
+#     print('Search of papers in dblp: ', time.time() - start_time)
