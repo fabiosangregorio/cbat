@@ -3,7 +3,11 @@
 from multiprocessing import Pool
 import time
 
-import scraper
+from bs4 import BeautifulSoup
+
+import webutil
+
+import dblp
 import program_extractor
 from person import Person
 
@@ -13,7 +17,7 @@ if __name__ == "__main__":
 
     # # url con una riga
     # url = "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345&copyownerid=75434"
-    # html = scraper.get_wikiCFP(url)
+    # html = dblp.get_wikiCFP(url)
 
     # program_committee = program_extractor.extract_program_committee(html)
     
@@ -28,16 +32,17 @@ if __name__ == "__main__":
     start_time = time.time()
 
     with Pool(5) as p:
-        people = p.map(scraper.search_dblp, program_committee)
+        people = p.map(dblp.find_author, program_committee)
 
     print('Total search of name in dblp: ', time.time() - start_time)
 
+
     # for person in program_committee:
-    #     scraper.search_dblp(person)
+    #     dblp.find_author(person)
         # people.append({
         #     "person_name": person.name,
         #     "person_affiliation": person.affiliation,
-        #     "result": scraper.search_dblp(person)['result'] if scraper.search_dblp(person)['status'] != 'error' else None
+        #     "result": dblp.find_author(person)['result'] if dblp.find_author(person)['status'] != 'error' else None
         # })
 
 
@@ -50,4 +55,4 @@ if __name__ == "__main__":
     #             f.write("\n".join([": ".join(reversed([str(r) for r in list(res)])) for res in ratio["results"]]))
 
 
-        # papers = scraper.get_papers_from_dblp(search_result.name_url)
+        # papers = dblp.get_papers_from_dblp(search_result.name_url)

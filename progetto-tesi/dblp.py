@@ -12,18 +12,7 @@ import webutil
 
 score_threshold = 70
 
-# gets the whole CFP from wikiCFP
-def get_wikiCFP(url):
-    start_time = time.time()
-
-    response = webutil.get_page(url)
-    html = BeautifulSoup(response["html"], 'html.parser')
-
-    print('Download of paper: ', time.time() - start_time)
-    return webutil.polish_html("".join([tag.getText() for tag in html.select('table .cfp')]))
-
-
-def search_dblp(person_to_find):
+def find_author(person_to_find):
     start_time = time.time()
 
     base_url = "https://dblp.org/search"
@@ -41,7 +30,7 @@ def search_dblp(person_to_find):
     # first ul, either contains the exact matches or likely matches
     possible_people = list()
     for li in html.select("#completesearch-authors > .body ul")[0].select('li'):
-        people_results.append(Person(
+        possible_people.append(Person(
             name="".join([m.getText() for m in li.select('a mark')]),
             affiliation=li.select('small')[0].getText() if li.select('small') else "",
             dblp_url=li.select('a')[0]['href']
@@ -105,14 +94,3 @@ def is_previous_affiliation(person, affiliation):
         return False
     _, score = process.extractOne(affiliation, affiliations, scorer=fuzz.token_set_ratio)
     return score > score_threshold
-
-
-# def get_papers_from_dblp(url):
-#     start_time = time.time()
-
-#     response = get_page(url)
-#     html = BeautifulSoup(response, 'html.parser')
-#     publ_url = html.select('.export a[href*="https://dblp.org/pers/xx/a/"')[0]['href']
-#     response = get_page(publ_url)
-
-#     print('Search of papers in dblp: ', time.time() - start_time)

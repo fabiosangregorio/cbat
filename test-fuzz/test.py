@@ -1,6 +1,6 @@
 # NOT WORKING, it's just an explanation of how I chose the scorer for fuzzywuzzy
 
-def search_dblp(person):
+def find_author(person):
     start_time = time.time()
 
     base_url = "https://dblp.org/search"
@@ -46,7 +46,7 @@ for person in program_committee:
     people.append({
         "person_name": person.name,
         "person_affiliation": person.affiliation,
-        "results": scraper.search_dblp(person)
+        "results": dblp.find_author(person)
     })
 
 
