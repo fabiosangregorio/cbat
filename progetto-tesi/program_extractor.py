@@ -1,6 +1,7 @@
 import re
 import time
 import string
+import probablepeople as pp
 
 import en_core_web_md
 import spacy
@@ -68,6 +69,20 @@ def extract_program_committee(text):
                 affiliation = text_lines[i].replace(name, "").strip(string.punctuation + " ")            
             else:
                 affiliation = ', '.join(lines[(i + 1):(i + 1 + step - 1)])
-            results.append(Person(name, affiliation))
+
+            pp_result = pp.tag(name)
+
+            if(pp_result[1] == "Person"):
+                person = pp_result[0]
+                results.append(
+                    Person(
+                        name,
+                        firstname=person.get('GivenName'),
+                        middlename=" ".join([person.get('MiddleName'), person.get('MiddleInitial')]),
+                        lastname=person.get('LastName'),
+                        affiliation)
+                )
+            else:
+                results.append(Person(name, affiliation))
 
     return results
