@@ -80,9 +80,9 @@ def extract_program_committee(text):
                         firstname=person.get('GivenName'),
                         middlename=" ".join([person.get('MiddleName'), person.get('MiddleInitial')]),
                         lastname=person.get('LastName'),
-                        affiliation)
+                        affiliation=affiliation)
                 )
             else:
-                results.append(Person(name, affiliation))
+                results.append(Person(name, affiliation=affiliation))
 
     return results

@@ -1,9 +1,9 @@
 from scopus import AuthorSearch, ScopusSearch, AbstractRetrieval
-import probablepeople
 from fuzzywuzzy import process, fuzz
 
-from author import Author
-from conference import Conference
+from classes.author import Author
+from classes.conference import Conference
+from classes.paper import Paper, Reference
 
 
 # ENHANCE: use API 'field' attribute to only return used fileds
@@ -40,22 +40,21 @@ def find_conference_papers(conference):
     query = f"SRCTITLE({conference.getattr('name')}) AND PUBYEAR = {conference.getattr('year')}"
 
     documents = ScopusSearch(query, view="STANDARD")
-    return documents.get_eids()
-    #TODO: should return a list of Paper objects
+    conference.papers = [Paper(sid) for sid in documents.get_eids()]
 
 
 # FIXME: implement references view
-def extract_references_from_paper(paper_id):
-    references = AbstractRetrieval(paper_id, view="FULL", refresh=True)
-    #NOTE: returns authors' ids
-
+def extract_references_from_paper(paper):
+    references = AbstractRetrieval(paper.scopus_id, view="FULL", refresh=True).references
+    paper.references = [Reference(r.id, r.authors) for r in references]
 
 
 
 
 # a = find_author(Person("Xiaodong Lin", firstname="Xiaodong", lastname="Lin", affiliation="University of Ontario Institute of Technology, Canada"))
 # a = find_conference_papers(Conference('Journal of Computer Security, 2015', 'Journal of Computer Security', '2015'))
-a = extract_references_from_paper('2-s2.0-84951753303')
+a = extract_references_from_paper(Paper('2-s2.0-84951753303'))
+print(a)
 
 program_committee = list()
 conference = Conference()
@@ -71,4 +70,10 @@ for paper in conference_papers:
     paper = extract_references_from_paper(paper)
 
 # check if conference papers have references to a member of a program committee
-
+for paper in conference_papers:
+    for reference in paper.references:
+        # TODO: usare un RDBMS per storare le info
+    for author in program_committee:
+        # se l'autore ha una paper tra le reference campo autore ++
+        # num. volte citato ++
+        # num conferenze in cui e' membro ++
