@@ -1,9 +1,7 @@
 from scopus import AuthorSearch, ScopusSearch, AbstractRetrieval
 from fuzzywuzzy import process, fuzz
 
-from classes.author import Author
-from classes.conference import Conference
-from classes.paper import Paper, Reference
+from models import *
 
 
 # ENHANCE: use API 'field' attribute to only return used fileds
@@ -13,7 +11,9 @@ from classes.paper import Paper, Reference
 # yeilds no results, although searching without UK yeilds the correct result
 def find_author(author):
     score_threshold = 70
-    query = f"AUTHFIRST({author.getattr('firstname')}) AND AUTHLASTNAME({author.getattr('middlename')} {author.getattr('lastname')}) AND AFFIL({author.getattr('affiliation')})"
+    query = f"AUTHFIRST({author.getattr('firstname')}) AND \
+        AUTHLASTNAME({author.getattr('middlename')} {author.getattr('lastname')}) AND \
+        AFFIL({author.getattr('affiliation')})"
 
     # Author(eid, surname, initials, givenname, affiliation, documents, affiliation_id, city, country, areas)
     possible_people = AuthorSearch(query).authors
@@ -51,29 +51,29 @@ def extract_references_from_paper(paper):
 
 
 
-# a = find_author(Person("Xiaodong Lin", firstname="Xiaodong", lastname="Lin", affiliation="University of Ontario Institute of Technology, Canada"))
-# a = find_conference_papers(Conference('Journal of Computer Security, 2015', 'Journal of Computer Security', '2015'))
-a = extract_references_from_paper(Paper('2-s2.0-84951753303'))
-print(a)
+# # a = find_author(Person("Xiaodong Lin", firstname="Xiaodong", lastname="Lin", affiliation="University of Ontario Institute of Technology, Canada"))
+# # a = find_conference_papers(Conference('Journal of Computer Security, 2015', 'Journal of Computer Security', '2015'))
+# a = extract_references_from_paper(Paper('2-s2.0-84951753303'))
+# print(a)
 
-program_committee = list()
-conference = Conference()
+# program_committee = list()
+# conference = Conference()
 
-# program committee extraction
-for author in program_committee:
-    author = find_author(author)
+# # program committee extraction
+# for author in program_committee:
+#     author = find_author(author)
 
-# conference papers extraction
-conference_papers = find_conference_papers(conference)
-# conference papers' references extraction
-for paper in conference_papers:
-    paper = extract_references_from_paper(paper)
+# # conference papers extraction
+# conference_papers = find_conference_papers(conference)
+# # conference papers' references extraction
+# for paper in conference_papers:
+#     paper = extract_references_from_paper(paper)
 
-# check if conference papers have references to a member of a program committee
-for paper in conference_papers:
-    for reference in paper.references:
-        # TODO: usare un RDBMS per storare le info
-    for author in program_committee:
-        # se l'autore ha una paper tra le reference campo autore ++
-        # num. volte citato ++
-        # num conferenze in cui e' membro ++
+# # check if conference papers have references to a member of a program committee
+# for paper in conference_papers:
+#     for reference in paper.references:
+#         # TODO: usare un RDBMS per storare le info
+#     for author in program_committee:
+#         # se l'autore ha una paper tra le reference campo autore ++
+#         # num. volte citato ++
+#         # num conferenze in cui e' membro ++

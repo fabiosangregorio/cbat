@@ -6,12 +6,12 @@ import probablepeople as pp
 import en_core_web_md
 import spacy
 from spacy import displacy
-from person import Person
+from models import Author
 
 import webutil
 
 
-def extract_program_sections(text):
+def _extract_program_sections(text):
     start_time = time.time()
     
     program_headings = ["program committee", "program chair", "program commission"]
@@ -32,10 +32,10 @@ def extract_program_sections(text):
 
 
 def extract_program_committee(text):
-    program_sections = extract_program_sections(text)
+    program_sections = _extract_program_sections(text)
 
     start_time = time.time()
-    nlp = en_core_web_md.load()
+    nlp = spacy.load('en_core_web_md')
     print('Loading NER: ', time.time() - start_time)
 
     results = list()
@@ -70,19 +70,21 @@ def extract_program_committee(text):
             else:
                 affiliation = ', '.join(lines[(i + 1):(i + 1 + step - 1)])
 
+            # probablepeople name extraction
             pp_result = pp.tag(name)
 
             if(pp_result[1] == "Person"):
                 person = pp_result[0]
                 results.append(
-                    Person(
-                        name,
+                    Author(
+                        fullname=name,
                         firstname=person.get('GivenName'),
-                        middlename=" ".join([person.get('MiddleName'), person.get('MiddleInitial')]),
+                        middlename=person.get('MiddleName') or person.get('MiddleInitial'),
                         lastname=person.get('LastName'),
                         affiliation=affiliation)
                 )
             else:
-                results.append(Person(name, affiliation=affiliation))
+                # pp either thinks the name is a company name or can't extract it
+                results.append(Author(fullname=name, affiliation=affiliation))
 
     return results

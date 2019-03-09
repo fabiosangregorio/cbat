@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from fuzzywuzzy import process
 from fuzzywuzzy import fuzz
 
-from person import Person
+from models import Author
 import webutil
 
 
