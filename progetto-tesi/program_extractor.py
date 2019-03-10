@@ -23,16 +23,48 @@ def _extract_program_sections(text):
     for start in program_indexes:
         next_headings = [text[start:].lower().find(p) for p in headings if text[start:].lower().find(p) > -1]
         next_heading = min(next_headings) if len(next_headings) else len(text)
-        end = text.rfind("\n", 0, next_heading)
+        end = text.rfind("\n", 0, start+next_heading)
         # re-polish html to avoid misprints from the substring process
-        sections.append(webutil.polish_html(text[start:start+end]))
+        sections.append(webutil.polish_html(text[start:end]))
 
     print('Extraction of program committee: ', time.time() - start_time)
     return sections
 
 
+# extract person name based on probablepeople or, alternatively, most common name formats
+def _extract_person_name(name, affiliation):
+    person = None
+    try: # probablepeople name extraction
+        pp_result = pp.tag(name)
+        if(pp_result[1] == "Person"):
+            person = Author(
+                fullname=name,
+                firstname=pp_result[0].get('GivenName'),
+                middlename=pp_result[0].get('MiddleName') or pp_result[0].get('MiddleInitial'),
+                lastname=pp_result[0].get('LastName'),
+                affiliation=affiliation)
+        else:
+            raise Exception()
+    except: # pp either thinks the name is a company name or can't extract it
+        person = Author(fullname=name, affiliation=affiliation)
+
+    # if pp can't extract name and surname, try an extraction based on most common name formats
+    if not (person.firstname and person.lastname):
+        # check the format based on the presence of a comma
+        if ',' in person.fullname:
+            splitted = person.fullname.split(',')
+            person.lastname = splitted.pop(0).strip()
+            person.firstname = " ".join(splitted).strip()
+        else:
+            splitted = person.fullname.split(' ')
+            person.firstname = splitted.pop(0).strip()
+            person.lastname = " ".join(splitted).strip()
+
+    return person
+
+
 def extract_program_committee(text):
-    program_sections = _extract_program_sections(text)
+    program_sections = _extract_program_sections(webutil.polish_html(text))
 
     start_time = time.time()
     nlp = spacy.load('en_core_web_md')
@@ -68,23 +100,9 @@ def extract_program_committee(text):
             if step == 1:
                 affiliation = text_lines[i].replace(name, "").strip(string.punctuation + " ")            
             else:
-                affiliation = ', '.join(lines[(i + 1):(i + 1 + step - 1)])
+                affiliation = ', '.join(text_lines[(i + 1):(i + 1 + step - 1)])
 
-            # probablepeople name extraction
-            pp_result = pp.tag(name)
-
-            if(pp_result[1] == "Person"):
-                person = pp_result[0]
-                results.append(
-                    Author(
-                        fullname=name,
-                        firstname=person.get('GivenName'),
-                        middlename=person.get('MiddleName') or person.get('MiddleInitial'),
-                        lastname=person.get('LastName'),
-                        affiliation=affiliation)
-                )
-            else:
-                # pp either thinks the name is a company name or can't extract it
-                results.append(Author(fullname=name, affiliation=affiliation))
-
+            person = _extract_person_name(name, affiliation)
+            results.append(person)
+            
     return results

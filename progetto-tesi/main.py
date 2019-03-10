@@ -24,19 +24,23 @@ if __name__ == "__main__":
     for conf_url in conferences_urls:
         conf = Conference(wikicfp_url=conf_url)
         cfp = wiki_cfp.get_cfp(conf.wikicfp_url)
-
         program_committee = program_extractor.extract_program_committee(cfp)
-        authors_id = list()
 
-        for author in program_committee:
-            author = elsevier.find_author(author)
-            saved_author = Author.objects(eid_list__nin=author.eid_list)
-            if(saved_author):
-                authors_id.append(saved_author.id)
+        authors_id = list()
+        non = 0
+        for p in program_committee:
+            author = elsevier.find_author(p)
+            if author == None:
+                non += 1
+                continue
+            db_author = Author.objects(eid_list__in=author.eid_list).first()
+            if(db_author):
+                authors_id.append(db_author.id)
             else:
                 author.save()
                 authors_id.append(author.id)
 
+        print(authors_id)
 
         #TODO: add program_committee to conference
 

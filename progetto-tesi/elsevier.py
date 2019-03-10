@@ -4,17 +4,19 @@ from fuzzywuzzy import process, fuzz
 from models import *
 
 
-# ENHANCE: use API 'field' attribute to only return used fileds
+# IMPROVE: use API 'field' attribute to only return used fileds
 
 
-# ENHANCE: searching for FIRSTNAME=Frederic LASTNAME=Fol Leymarie AFFIL=University of London, UK
+# IMPROVE: searching for FIRSTNAME=Frederic LASTNAME=Fol Leymarie AFFIL=University of London, UK
 # yeilds no results, although searching without UK yeilds the correct result
 def find_author(author):
     score_threshold = 70
+
     query = f"AUTHFIRST({author.getattr('firstname')}) AND \
         AUTHLASTNAME({author.getattr('middlename')} {author.getattr('lastname')}) AND \
         AFFIL({author.getattr('affiliation')})"
 
+    # IMPROVE: if FIRSTNAME AND LASTNAME yields no results, try switching the names
     # Author(eid, surname, initials, givenname, affiliation, documents, affiliation_id, city, country, areas)
     possible_people = AuthorSearch(query).authors
     if not possible_people:
@@ -26,16 +28,17 @@ def find_author(author):
     if fuzz_score > score_threshold or (len(aff_list) == 1 and fuzz_score == 0):
         author.eid_list = [p.eid for p in possible_people if affiliation.lower() == f"{p.affiliation}, {p.country}".lower()]
         return author
-    elif len([a[0] for a in aff_list.items() if not len(a[1])]) > 1: 
+    elif True: 
+        print(author.fullname, author.affiliation, "; ".join(aff_list))
         # "multiple_no_affiliation"
-        # ENHANCE: handle no affiliation and wrong affiliation
+        # IMPROVE: handle no affiliation and wrong affiliation
         return None
     else: 
         # "wrong_affiliation"
         return None
 
 
-# ENHANCE: filtrare i risultati tramite levenshtein, vedere se sono conference o journals (quindi vol. o anno) e vedere se l'anno va bene come filtro
+# IMPROVE: filtrare i risultati tramite levenshtein, vedere se sono conference o journals (quindi vol. o anno) e vedere se l'anno va bene come filtro
 def find_conference_papers(conference):
     query = f"SRCTITLE({conference.getattr('name')}) AND PUBYEAR = {conference.getattr('year')}"
 
