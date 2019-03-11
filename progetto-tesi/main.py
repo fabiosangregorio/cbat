@@ -16,33 +16,59 @@ import spacy
 connect('tesi-triennale')
 
 
-if __name__ == "__main__":
-    # TODO: retrieve all conferences
-    conferences_urls = ["http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040",
-        "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345"]
-
+def add_conferences(conferences_urls):
+    added_conferences = list()
     for conf_url in conferences_urls:
         conf = Conference(wikicfp_url=conf_url)
         cfp = wiki_cfp.get_cfp(conf.wikicfp_url)
         program_committee = program_extractor.extract_program_committee(cfp)
 
-        authors_id = list()
-        non = 0
+        # save program committee to db
+        authors = list()
         for p in program_committee:
             author = elsevier.find_author(p)
             if author == None:
-                non += 1
                 continue
             db_author = Author.objects(eid_list__in=author.eid_list).first()
-            if(db_author):
-                authors_id.append(db_author.id)
+            if db_author:
+                authors.append(db_author)
             else:
                 author.save()
-                authors_id.append(author.id)
+                authors.append(author)
 
-        print(authors_id)
+        conf.program_committee = authors
+        conf.save()
 
-        #TODO: add program_committee to conference
+        # save conference papers to db
+        papers_found = elsevier.find_conference_papers(conf)
+        papers = list()
+        for paper in papers_found:
+            db_paper = Paper.objects(scopus_id=paper.scopus_id).first()
+            if db_paper:
+                papers.append(db_paper)
+            else:
+                paper.save()
+                papers.append(paper)
+
+        conf.papers = papers
+        conf.save()
+        added_conferences.append(conf)
+    
+    return added_conferences
+
+
+if __name__ == "__main__":
+    # TODO: retrieve all conferences
+    added_conferences = add_conferences([
+        "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040",
+        "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345"])
+
+
+    for conf in added_conferences:
+        for paper in conf.papers:
+            references = elsevier.extract_references_from_paper(paper)
+            paper.references = Author.objects(eid_list__in=references)
+            paper.save()
 
 
     # html = dblp.get_wikiCFP(url)

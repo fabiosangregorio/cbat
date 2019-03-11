@@ -38,18 +38,23 @@ def find_author(author):
         return None
 
 
-# IMPROVE: filtrare i risultati tramite levenshtein, vedere se sono conference o journals (quindi vol. o anno) e vedere se l'anno va bene come filtro
+# IMPROVE: filtrare i risultati tramite levenshtein, vedere se sono conference 
+# o journals (quindi vol. o anno) e vedere se l'anno va bene come filtro
 def find_conference_papers(conference):
     query = f"SRCTITLE({conference.getattr('name')}) AND PUBYEAR = {conference.getattr('year')}"
 
     documents = ScopusSearch(query, view="STANDARD")
-    conference.papers = [Paper(sid) for sid in documents.get_eids()]
+    papers = [Paper(scopus_id=sid) for sid in documents.get_eids()]
+
+    return papers
 
 
 # FIXME: implement references view
 def extract_references_from_paper(paper):
     references = AbstractRetrieval(paper.scopus_id, view="FULL", refresh=True).references
-    paper.references = [Reference(r.id, r.authors) for r in references]
+    # TODO: find in db referenced authors or add them to db
+    return [] # a list of author ids
+
 
 
 
@@ -75,7 +80,6 @@ def extract_references_from_paper(paper):
 # # check if conference papers have references to a member of a program committee
 # for paper in conference_papers:
 #     for reference in paper.references:
-#         # TODO: usare un RDBMS per storare le info
 #     for author in program_committee:
 #         # se l'autore ha una paper tra le reference campo autore ++
 #         # num. volte citato ++

@@ -5,7 +5,6 @@ import probablepeople as pp
 
 import en_core_web_md
 import spacy
-from spacy import displacy
 from models import Author
 
 import webutil
@@ -63,11 +62,15 @@ def _extract_person_name(name, affiliation):
     return person
 
 
+# FIXME: improve memory usage. Check how much RAM the model needs and figure out which components are needed
+# See: https://stackoverflow.com/questions/38263384/how-to-save-spacy-model-onto-cache
+# See: https://github.com/explosion/spaCy/issues/3054
+# Reply to https://stackoverflow.com/questions/54625341/how-to-solve-memory-error-while-loading-english-module-using-spacy
 def extract_program_committee(text):
     program_sections = _extract_program_sections(webutil.polish_html(text))
 
     start_time = time.time()
-    nlp = spacy.load('en_core_web_md')
+    nlp = spacy.load('en_core_web_md', disable=['parser', 'tagger', 'parser', 'textcat', 'entity'])
     print('Loading NER: ', time.time() - start_time)
 
     results = list()
