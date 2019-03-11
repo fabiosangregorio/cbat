@@ -2,7 +2,6 @@ import time
 from bs4 import BeautifulSoup
 
 import webutil
-import spacy
 
 
 # gets the whole CFP from wikiCFP

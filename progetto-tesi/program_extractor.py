@@ -70,7 +70,7 @@ def extract_program_committee(text):
     program_sections = _extract_program_sections(webutil.polish_html(text))
 
     start_time = time.time()
-    nlp = spacy.load('en_core_web_md', disable=['parser', 'tagger', 'parser', 'textcat', 'entity'])
+    nlp = spacy.load('en_core_web_md', disable=['parser'])
     print('Loading NER: ', time.time() - start_time)
 
     results = list()
