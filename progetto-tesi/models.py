@@ -2,7 +2,6 @@ from mongoengine import *
 
 
 class Author(Document):
-    _id = StringField()
     fullname = StringField()
     firstname = StringField()
     middlename = StringField()
@@ -17,7 +16,6 @@ class Author(Document):
 
 
 class Paper(Document):
-    _id = StringField()
     scopus_id = StringField()
     references = ListField(ReferenceField(Author))
 
@@ -26,7 +24,6 @@ class Paper(Document):
 
 
 class Conference(Document):
-    _id = StringField()
     fullname = StringField()
     name = StringField()
     year = IntField()

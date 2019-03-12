@@ -3,7 +3,6 @@ import time
 import string
 import probablepeople as pp
 
-import en_core_web_md
 import spacy
 from models import Author
 
@@ -70,7 +69,8 @@ def extract_program_committee(text):
     program_sections = _extract_program_sections(webutil.polish_html(text))
 
     start_time = time.time()
-    nlp = spacy.load('en_core_web_md', disable=['parser'])
+    # IMPROVE: load once, reuse everytime
+    nlp = spacy.load('en_core_web_md')
     print('Loading NER: ', time.time() - start_time)
 
     results = list()
