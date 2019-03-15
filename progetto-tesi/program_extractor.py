@@ -48,30 +48,29 @@ def _extract_person_name(name, affiliation):
 
     # if pp can't extract name and surname, try an extraction based on most common name formats
     if not (person.firstname and person.lastname):
-        # check the format based on the presence of a comma
+        splitted = person.fullname.split(',')
+        first_word = splitted.pop(0).strip()
+        last_words = " ".join(splitted).strip()
         if ',' in person.fullname:
-            splitted = person.fullname.split(',')
-            person.lastname = splitted.pop(0).strip()
-            person.firstname = " ".join(splitted).strip()
+            person.lastname = first_word
+            person.firstname = last_words
         else:
-            splitted = person.fullname.split(' ')
-            person.firstname = splitted.pop(0).strip()
-            person.lastname = " ".join(splitted).strip()
+            person.firstname = first_word
+            person.lastname = last_words
 
     return person
 
 
-# FIXME: improve memory usage. Check how much RAM the model needs and figure out which components are needed
+# FIXME: improve memory usage. Check how much RAM the model needs and figure out 
+# which components are needed
 # See: https://stackoverflow.com/questions/38263384/how-to-save-spacy-model-onto-cache
 # See: https://github.com/explosion/spaCy/issues/3054
 # Reply to https://stackoverflow.com/questions/54625341/how-to-solve-memory-error-while-loading-english-module-using-spacy
-def extract_program_committee(text):
+# IMPROVE: also get country of affiliation with NER
+def extract_program_committee(text, nlp):
+    # loss_threshold: threshold over which we can say the NER lost a significant amount of names
+    loss_threshold = 0.9
     program_sections = _extract_program_sections(webutil.polish_html(text))
-
-    start_time = time.time()
-    # IMPROVE: load once, reuse everytime
-    nlp = spacy.load('en_core_web_md')
-    print('Loading NER: ', time.time() - start_time)
 
     results = list()
     
@@ -90,8 +89,7 @@ def extract_program_committee(text):
 
             ner_results.append(people)
             print('NER results with step', step + 1, ':  ', ner_results[step], time.time() - start_time)
-            # 10%: threshold over which we can say the NER lost a significant amount of names
-            if(ner_results[step]) < 0.9 * max(ner_results):
+            if(ner_results[step]) < loss_threshold * max(ner_results):
                 break
             step += 1
 

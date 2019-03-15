@@ -54,15 +54,15 @@ def get_conference(conf_url):
         )
 
 
-def add_conferences(conferences_urls):
+def add_conferences(conferences_urls, nlp):
     added_conferences = list()
     i = 0
     for conf_url in conferences_urls:
         conf = get_conference(conf_url)
         cfp = wiki_cfp.get_cfp(conf.wikicfp_url)
 
-        program_committee = program_extractor.extract_program_committee(cfp)
-        # program_committee = load_program_committee(i)
+        # program_committee = program_extractor.extract_program_committee(cfp, nlp)
+        program_committee = load_program_committee(i)
         i += 1 # HACK: remove when switching back to NER
 
         # save program committee to db
@@ -73,7 +73,7 @@ def add_conferences(conferences_urls):
                 continue
             db_author = Author.objects(eid_list__in=author.eid_list).first()
 
-            # IMPROVE: not an atomic operation, could result in problems with multithreading
+            # FIXME: not an atomic operation, could result in problems with multithreading
             if db_author:
                 authors.append(db_author)
             else:
@@ -99,22 +99,80 @@ def add_conferences(conferences_urls):
         added_conferences.append(conf)
 
         # save references to db
-        # for conf in added_conferences:
-        # for paper in conf.papers:
-        #     references = elsevier.extract_references_from_paper(paper)
-        #     paper.references = Author.objects(eid_list__in=references)
-        #     paper.save()
+        for paper in conf.papers:
+            ref_eids = elsevier.extract_references_from_paper(paper)
+            # TODO: find in db referenced authors or add them to db
+            for eid in ref_eids:
+                # is eid in program committe?
+                conf.program_committee.find(eid_list__in=[eid])
+                # yes: add objid to prog_ref
+                # no: is eid in db?
+                #   yes: add objid to no_prog_ref
+                #   no: add eid to authors and add to no_prog_ref
+
+            paper.save()
+            # paper.references = Author.objects(eid_list__in=references)
+            # due alternative:
+            # 1. mi salvo in Author anche gli autori non di commissione
+            #    e nelle references metto tutti (ce bisogno di un campo che 
+            #    dice che l'autore era in una commisssione, oppure si vede
+            #    dal fatto che non e' figlio di nessun conference.program_committee)
+            # 2. non mi salvo gli autori NON di commissione. nelle reference
+            #    allora metto solo gli eid? oppure metto una lista di eid e 
+            #    una lista di objid per i membri della conference citati
+            # in effetti non mi interessano gli autori non di prog_com., pero
+            # mi servono per dire prob non com di essere citato / prob com di
+            # essere citato, e prob non com e' num cit dell'autore/tot citazioni
+            # 3. salvare l'author e salvare le references in due campi:
+            #    ref_prog_com e ref_NON_prog_com e tot_ref cosi' posso fare
+            #    non cit autore = for conf for paper paper.ref_non_com
+            # Scelgo 3.
 
     return added_conferences
 
 
 if __name__ == "__main__":
-    added_conferences = add_conferences([
-        "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040",
-        "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345"])
+    conferences_urls = ["http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040",
+                          "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345"]
+    # start_time = time.time()
+    # nlp = spacy.load('en_core_web_md')
+    # print('Loading NER: ', time.time() - start_time)
+
+    # added_conferences = add_conferences(conferences_urls, nlp)
+    added_conferences = add_conferences(conferences_urls, None)
 
     # TODO: compare references with program committee
     
+
+
+
+# # a = find_author(Person("Xiaodong Lin", firstname="Xiaodong", lastname="Lin", affiliation="University of Ontario Institute of Technology, Canada"))
+# # a = find_conference_papers(Conference('Journal of Computer Security, 2015', 'Journal of Computer Security', '2015'))
+# a = extract_references_from_paper(Paper('2-s2.0-84951753303'))
+# print(a)
+
+# program_committee = list()
+# conference = Conference()
+
+# # program committee extraction
+# for author in program_committee:
+#     author = find_author(author)
+
+# # conference papers extraction
+# conference_papers = find_conference_papers(conference)
+# # conference papers' references extraction
+# for paper in conference_papers:
+#     paper = extract_references_from_paper(paper)
+
+# # check if conference papers have references to a member of a program committee
+# for paper in conference_papers:
+#     for reference in paper.references:
+#     for author in program_committee:
+#         # se l'autore ha una paper tra le reference campo autore ++
+#         # num. volte citato ++
+#         # num conferenze in cui e' membro ++
+
+
 
 
     # html = dblp.get_wikiCFP(url)
