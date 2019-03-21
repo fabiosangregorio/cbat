@@ -1,11 +1,14 @@
-from scopus import AuthorSearch, ScopusSearch, AbstractRetrieval
-from fuzzywuzzy import process, fuzz
+import warnings
 
-from models import *
+from fuzzywuzzy import process, fuzz
+from scopus import AuthorSearch, ScopusSearch, AbstractRetrieval
+
+from models import Author, Paper, Conference
+
+
 
 
 # IMPROVE: use API 'field' attribute to only return used fileds
-
 
 # IMPROVE: searching for FIRSTNAME=Frederic LASTNAME=Fol Leymarie 
 # AFFIL=University of London, UK yeilds no results, although searching 
@@ -42,6 +45,9 @@ def find_author(author):
 
 # IMPROVE: filtrare i risultati tramite levenshtein, vedere se sono conference 
 # o journals (quindi vol. o anno) e vedere se l'anno va bene come filtro
+# IMPROVE: non tutte le conferences sono listate in scopus, ma possono avere le
+# paper. es: https://dblp.org/db/conf/securecomm/securecomm2016.html
+# quindi cercare anche su dblp le conference e cercare le paper su scopus
 def find_conference_papers(conference):
     query = f"SRCTITLE({conference.getattr('name')}) \
               AND PUBYEAR = {conference.getattr('year')}"
@@ -52,6 +58,12 @@ def find_conference_papers(conference):
 
 
 def extract_references_from_paper(paper):
-    references = AbstractRetrieval(paper.scopus_id, view="REF", refresh=True).references
-    eids = [f"9-s2.0-{auid}" for auid in authors_auid]
+    try:
+        references = AbstractRetrieval(paper.scopus_id, view="REF", refresh=True).references
+    except Exception:
+        warnings.warn('Retrieval of references failed for eid ' + paper.scopus_id)
+        return []
+
+    eids = [f"9-s2.0-{auid.strip()}" for ref in references if ref.authors_auid
+            for auid in ref.authors_auid.split('; ')]
     return eids

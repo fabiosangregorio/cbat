@@ -17,7 +17,8 @@ class Author(Document):
 
 class Paper(Document):
     scopus_id = StringField()
-    references = ListField(ReferenceField(Author))
+    program_refs = ListField(ReferenceField(Author))
+    non_program_refs = ListField(ReferenceField(Author))
 
     def getattr(self, key, default=""):
         return default if self.__getattribute__(key) is None else self.__getattribute__(key)
@@ -30,6 +31,7 @@ class Conference(Document):
     program_committee = ListField(ReferenceField(Author))
     papers = ListField(ReferenceField(Paper))
     wikicfp_url = StringField()
+    wikicfp_id = StringField()
 
     def getattr(self, key, default=""):
         return default if self.__getattribute__(key) is None else self.__getattribute__(key)
