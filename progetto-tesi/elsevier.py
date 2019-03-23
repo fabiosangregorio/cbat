@@ -36,7 +36,7 @@ def find_author(author):
     elif True: 
         print(author.fullname, author.affiliation, "; ".join(aff_list))
         # "multiple_no_affiliation"
-        # IMPROVE: handle no affiliation and wrong affiliation
+        # TODO: handle no affiliation and wrong affiliation
         return None
     else: 
         # "wrong_affiliation"
