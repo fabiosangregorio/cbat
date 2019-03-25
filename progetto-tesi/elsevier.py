@@ -48,7 +48,9 @@ def find_author(author):
 # IMPROVE: non tutte le conferences sono listate in scopus, ma possono avere le
 # paper. es: https://dblp.org/db/conf/securecomm/securecomm2016.html
 # quindi cercare anche su dblp le conference e cercare le paper su scopus
-def find_conference_papers(conference):
+# IMPROVE: aumentare la confidenza che quella paper sia di quella conference
+# facendo levhensthein anche sul nome della conference
+def get_conference_papers(conference):
     query = f"SRCTITLE({conference.getattr('name')}) \
               AND PUBYEAR = {conference.getattr('year')}"
 
