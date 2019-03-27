@@ -21,14 +21,14 @@ connect('tesi-triennale')
 if __name__ == "__main__":
     # conferences_urls = ["http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040",
                         #   "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345"]
-    # start_time = time.time()
-    # nlp = spacy.load('en_core_web_md')
-    # print('Loading NER: ', time.time() - start_time)
+    start_time = time.time()
+    nlp = spacy.load('en_core_web_sm')
+    print('Loading NER: ', time.time() - start_time)
 
     # added_conferences = add_conferences(conferences_urls, nlp)
     # added_conferences = add_conferences(conferences_urls, None)
-    conf_names = conferences.load_conferences_from_xlsx("progetto-tesi/cini.xlsx")
-    added_conferences = conferences.add_conferences(conf_names, None)
+    conf_names = conferences.load_conferences_from_xlsx("./progetto-tesi/cini.xlsx")[0:3]
+    added_conferences = conferences.add_conferences(conf_names, nlp)
 
     # TODO: compare references with program committee
 
