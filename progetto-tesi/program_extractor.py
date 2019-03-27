@@ -18,8 +18,8 @@ program_headings = ["program", "programme"]
 p_program_headings = [f'{ph} {h}' for h in headings for ph in program_headings]
 
 
-# extract person name based on probablepeople or, alternatively, 
-# most common name formats
+# extracts person name based on probablepeople or, alternatively, 
+# based on most common name formats
 def _extract_person_name(name, affiliation):
     person = None
     try: # probablepeople name extraction
@@ -79,7 +79,8 @@ def _search_external_cfp(url, secondary=False):
 
     response = webutil.get_page(url)
     html = BeautifulSoup(response["html"], 'html.parser')
-    # se program committee in testo guarda testo e
+    # if a link to the conference's program committee is present, extract the 
+    # committee from there
     if not secondary:
         link_regex = re.compile('.*(' + '|'.join(headings) +').*', re.IGNORECASE)
         program_links = [tag for tag in html('a', text=link_regex)]
@@ -87,17 +88,15 @@ def _search_external_cfp(url, secondary=False):
             full_url = requests.compat.urljoin(url, program_links[0]['href'])
             return _search_external_cfp(full_url, secondary=True)
             
+    # otherwise extract it from the main external page
     regex = re.compile('.*(' + '|'.join(p_program_headings) + ').*', re.IGNORECASE)
     program_tags = [tag.parent for tag in html(text=regex)] # tag.parent gets the tag
 
-    # se no clicca sul link che contiente "committee" e
-    # guarda il tag parent del tag dove ce program committee
-    # prendi il testo del parent di lui e tutti i children...
-    # formatta il testo in modo che ad ogni cambio di tag ce un \n
-    # fallo passare in find_sections e poi in extract program committee
-    # vedere se tag parent contiene un po di testo in piu oppure prendere html
     cfp_text = '\n'.join([parent.text for parent in 
         list(set([tag.parent for tag in program_tags]))])
+
+    # if the parent tag contains a small amount of text (e.g. only the heading)
+    # return the whole html text
     if len(cfp_text) < len('\n'.join([t.text for t in program_tags])) + 10:
         cfp_text = html.text
     return cfp_text
@@ -115,7 +114,7 @@ def extract_program_committee(cfp, nlp):
     loss_threshold = 0.9
     program_sections = _extract_program_sections(webutil.polish_html(text))
 
-    # no program committee in CFP text
+    # no program committee in CFP text, search in the external link
     if len(program_sections) == 0:
         text = _search_external_cfp(cfp.external_source)
         program_sections = _extract_program_sections(webutil.polish_html(text))
