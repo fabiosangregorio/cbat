@@ -3,6 +3,7 @@ import codecs
 
 import elsevier
 import wiki_cfp
+import program_extractor
 from models import Conference, Author, Paper
 
 
@@ -37,7 +38,7 @@ def load_conferences_from_xlsx(path, col_idx=1, row_start_idx=2):
 # TODO: implement get conference. Scopus Serach sucks, consider using dblp for 
 # searching confererences, if Scopus fails. Conferences may be listed with a 
 # different name, and papers of that conference may still exist on Scopus.
-def get_conference(conf_name):
+def get_conference(i):
     # mi cerco ogni conferenza e mi prendo un po di anni
     # per vedere se posso trattare una conference il collo di bottiglia e' la 
     # disponibilita' dei membri del program committee, se non ho quelli
@@ -46,37 +47,46 @@ def get_conference(conf_name):
     # siti delle conference
     # scopus fa
 
-    if conf_url == "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040":
-        return Conference(
-            wikicfp_url=conf_url,
-            wikicfp_id='10040',
-            fullname="SMVC 2010 : ACM Multimedia Workshop on Surreal Media and Virtual Cloning 2010",
-            name="ACM Multimedia Workshop on Surreal Media and Virtual Cloning",
-            year="2010"
-        )
-    else:
-        return Conference(
-            wikicfp_url=conf_url,
-            wikicfp_id='52345',
-            fullname="SecureComm 2016 : 12th EAI International Conference on Security and Privacy in Communication Networks",
-            name="SecureComm",
-            year="2016"
-        )
+    # if conf_name == "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040":
+    #     return Conference(
+    #         wikicfp_url=conf_name,
+    #         wikicfp_id='10040',
+    #         fullname="SMVC 2010 : ACM Multimedia Workshop on Surreal Media and Virtual Cloning 2010",
+    #         name="ACM Multimedia Workshop on Surreal Media and Virtual Cloning",
+    #         year="2010"
+    #     )
+    # else:
+    #     return Conference(
+    #         wikicfp_url=conf_name,
+    #         wikicfp_id='52345',
+    #         fullname="SecureComm 2016 : 12th EAI International Conference on Security and Privacy in Communication Networks",
+    #         name="SecureComm",
+    #         year="2016"
+    #     )
+    if i == 0:
+        return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=28432&copyownerid=2")
+    if i == 1:
+        return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=77406&copyownerid=84748")
+    if i == 2:
+        return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=77833&copyownerid=101501")    
 
 
 def add_conferences(conferences_names, nlp):
     added_conferences = list()
     i = 0
     for conf_name in conferences_names:
-        conf = get_conference(conf_name)
+        # conf = get_conference(conf_name)
+        conf = get_conference(i)
         if Conference.objects(wikicfp_id=conf.wikicfp_id):
             return
 
         cfp = wiki_cfp.get_cfp(conf.wikicfp_url)
 
-        # program_committee = program_extractor.extract_program_committee(cfp, nlp)
-        program_committee = load_program_committee(i)
+        program_committee = program_extractor.extract_program_committee(cfp, nlp)
+        # program_committee = load_program_committee(i)
         i += 1  # HACK: remove when switching back to NER
+        print(program_committee)
+        return
 
         # save program committee to db
         authors = list()
