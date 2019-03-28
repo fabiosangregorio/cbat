@@ -13,12 +13,17 @@ from models import Author, Paper, Conference
 # IMPROVE: searching for FIRSTNAME=Frederic LASTNAME=Fol Leymarie 
 # AFFIL=University of London, UK yeilds no results, although searching 
 # without UK yeilds the correct result
+# IMPROVE: Many times the affiliation makes the search yield no result bc it 
+# doesn't match perfectly, maybe try to search only for firstname and lastname 
+# and use levenshtein to get the right author
 def find_author(author):
     score_threshold = 70
 
-    query = f"AUTHFIRST({author.getattr('firstname')}) AND \
-        AUTHLASTNAME({author.getattr('middlename')} \
-        {author.getattr('lastname')}) AND AFFIL({author.getattr('affiliation')})"
+    query = "AUTHFIRST({}) AND AUTHLASTNAME({}) AND AFFIL({})".format(
+        author.getattr('firstname'),
+        ' '.join(filter(None, [author.getattr('middlename'), 
+            author.getattr('lastname')])),
+        author.getattr('affiliation'))
 
     # IMPROVE: if FIRSTNAME AND LASTNAME yields no results, try switching names
     possible_people = AuthorSearch(query).authors
@@ -50,6 +55,7 @@ def find_author(author):
 # quindi cercare anche su dblp le conference e cercare le paper su scopus
 # IMPROVE: aumentare la confidenza che quella paper sia di quella conference
 # facendo levhensthein anche sul nome della conference
+# TODO: refactor this method using the conference info from CONFNAME
 def get_conference_papers(conference):
     query = f"SRCTITLE({conference.getattr('name')}) \
               AND PUBYEAR = {conference.getattr('year')}"
@@ -69,3 +75,4 @@ def extract_references_from_paper(paper):
     eids = [f"9-s2.0-{auid.strip()}" for ref in references if ref.authors_auid
             for auid in ref.authors_auid.split('; ')]
     return eids
+    

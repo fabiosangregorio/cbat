@@ -8,7 +8,7 @@ import spacy
 
 import webutil
 import dblp
-import wiki_cfp
+import wikicfp
 import elsevier
 import program_extractor
 from models import Author, Paper, Conference
@@ -28,7 +28,9 @@ if __name__ == "__main__":
     # added_conferences = add_conferences(conferences_urls, nlp)
     # added_conferences = add_conferences(conferences_urls, None)
     conf_names = conferences.load_conferences_from_xlsx("./progetto-tesi/cini.xlsx")[0:3]
-    added_conferences = conferences.add_conferences(conf_names, nlp)
+    for conf_name in conf_names:
+        conf_editions = wikicfp.get_conferences(conf_name)
+        added_conferences = conferences.add_conferences(conf_editions, nlp)
 
     # TODO: compare references with program committee
 

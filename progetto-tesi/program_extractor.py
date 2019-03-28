@@ -10,6 +10,7 @@ import spacy
 from models import Author
 
 import webutil
+from helpers import findall
 
 
 headings = ["committee", "commission"]
@@ -24,23 +25,27 @@ def _extract_person_name(name, affiliation):
     person = None
     try: # probablepeople name extraction
         pp_result = pp.tag(name)
-        if(pp_result[1] == "Person"):
-            person = Author(
-                fullname=name,
-                firstname=pp_result[0].get('GivenName'),
-                middlename=pp_result[0].get('MiddleName') or 
-                           pp_result[0].get('MiddleInitial'),
-                lastname=pp_result[0].get('LastName'),
-                affiliation=affiliation)
-        else:
-            raise Exception()
     except: # pp either thinks the name is a company name or can't extract it
+        pp_result = [None, None]
+
+    if(pp_result[1] == "Person"):
+        person = Author(
+            fullname=name,
+            firstname=pp_result[0].get('GivenName'),
+            middlename=pp_result[0].get('MiddleName') or 
+                        pp_result[0].get('MiddleInitial'),
+            lastname=pp_result[0].get('LastName') or
+                        pp_result[0].get('Surname'),
+            affiliation=affiliation)
+    else:
         person = Author(fullname=name, affiliation=affiliation)
 
     # if pp can't extract name and surname, try an extraction based on most 
     # common name formats
-    if not (person.firstname and person.lastname):
-        splitted = person.fullname.split(',')
+    if not person.firstname or not person.lastname:
+        split_char = ',' if ',' in person.fullname else ' '
+        splitted = person.fullname.split(split_char) 
+
         first_word = splitted.pop(0).strip()
         last_words = " ".join(splitted).strip()
         if ',' in person.fullname:
@@ -49,6 +54,7 @@ def _extract_person_name(name, affiliation):
         else:
             person.firstname = first_word
             person.lastname = last_words
+        person.exact = False
 
     return person
 
@@ -57,15 +63,24 @@ def _extract_person_name(name, affiliation):
 def _extract_program_sections(text):
     if not text:
         return []
-    program_indexes = [text.lower().find(p) + len(p) for p in p_program_headings 
-        if text.lower().find(p) > -1]
+
+    program_indexes = list()
+    for p in p_program_headings:
+        idxs = [i + len(p) for i in findall(p, text.lower())]
+        if len(idxs):
+            program_indexes += idxs
+
     sections = list()
     for start in program_indexes:
-        next_headings = [text[start:].lower().find(p) for p in headings 
+        next_headings = [text[start:].lower().find(p) for p in headings + ['chair']
             if text[start:].lower().find(p) > -1]
         next_heading = min(next_headings) if len(next_headings) else -1
         if next_heading > -1:
-            end = text.rfind("\n", 0, start+next_heading)
+            end = text.rfind("\n", start, start+next_heading)
+            if end == -1:
+                # this means that the current and the next heading are on the 
+                # same line (e.g. Program committe chair)
+                continue
         else:
             end = len(text)
         # re-polish html to avoid misprints from the substring process
