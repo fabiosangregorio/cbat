@@ -121,7 +121,6 @@ def _search_external_cfp(url, secondary=False):
 # See: https://stackoverflow.com/questions/38263384/how-to-save-spacy-model-onto-cache
 # See: https://github.com/explosion/spaCy/issues/3054
 # Reply to https://stackoverflow.com/questions/54625341/how-to-solve-memory-error-while-loading-english-module-using-spacy
-# IMPROVE: also get country of affiliation with NER
 def extract_program_committee(cfp, nlp):
     text = cfp.cfp_text
     # threshold over which we can say the NER lost a significant amount of names
@@ -167,7 +166,8 @@ def extract_program_committee(cfp, nlp):
         # run regex on the right `step` and offset set
         offset = max([max(i) for i in n_section_people])
         regex = re.compile(r"^\W*([\w\. '’-]+)", re.MULTILINE)
-
+        
+        section_people = list()
         for i in range(offset, len(text_lines), step):
             name = regex.search(text_lines[i]).group(1).strip()
             if step == 1:
@@ -185,6 +185,18 @@ def extract_program_committee(cfp, nlp):
             person = _extract_person_name(name)
             person.affiliation = affiliation
             person.affiliation_country = affiliation_country
-            program_committee.append(person)   
+            section_people.append(person)
+
+        '''
+        if more than half of the people were not extracted correctly, it means 
+        that the section probably didn't contain people names *only*, therefore 
+        we keep only the ones we are sure that are real people (and not 
+        something else extracted as a person)
+        '''
+        n_not_exact = len([True for p in section_people if not p.exact])
+        if n_not_exact / len(section_people) > 0.5:
+            program_committee.append([p for p in section_people if p.exact])
+        else:
+            program_committee.append(person)
     
     return program_committee
