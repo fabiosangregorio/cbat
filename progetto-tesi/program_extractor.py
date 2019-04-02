@@ -136,31 +136,40 @@ def extract_program_committee(cfp, nlp):
 
     program_committee = list()
     for section in program_sections:
-        ner_results = []
+        n_section_people = []
         step = 0
         text_lines = section.splitlines()
-        # run NER every `step` lines and check if the result set is 
+        # run NER every `step` + offset lines and check if the result set is 
         # significantly reduced
         while True:
             start_time = time.time()
-            people = 0
-            # NER multiprocessing on single lines
-            step_lines = [l for i, l in enumerate(text_lines) if len(l) >= 4 and 
-                            i % (step + 1) == 0]
-            for doc in nlp.pipe(step_lines, n_threads=16, batch_size=10000):
-                people = people + 1 if len([ee.text for ee in 
-                    doc.ents if ee.label_ == 'PERSON']) else people
+            n_step_people = list()
 
-            ner_results.append(people)
-            print('NER results with step', step + 1, ':  ', ner_results[step], time.time() - start_time)
-            if(ner_results[step]) < loss_threshold * max(ner_results):
+            for offset in range(0, step + 1):
+                n_people = 0
+                step_lines = [l for i, l in enumerate(text_lines) if (
+                    len(l) >= 4 and i % (step + 1) == offset)]
+                # NER multiprocessing on single lines
+                for doc in nlp.pipe(step_lines, n_threads=16, batch_size=10000):
+                    if len([e.text for e in doc.ents if e.label_ == 'PERSON']):
+                        n_people += 1
+
+                n_step_people.append(n_people)
+                print('NER results with step', step + 1, ' and offset ' + offset +
+                    ':  ', n_section_people[step], time.time() - start_time)
+
+            n_section_people += n_step_people
+
+            if(max(n_section_people[step])) < loss_threshold * max([max(i) 
+                for i in n_section_people]):
                 break
             step += 1
 
-        # run regex on the right `step` set
+        # run regex on the right `step` and offset set
+        offset = max([max(i) for i in n_section_people])
         regex = re.compile(r"^\W*([\w\. '’-]+)", re.MULTILINE)
-
-        for i in range(0, len(text_lines), step):
+            
+        for i in range(offset, len(text_lines), step):
             name = regex.search(text_lines[i]).group(1).strip()
             if step == 1:
                 affiliation = text_lines[i].replace(name, "").strip(

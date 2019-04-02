@@ -38,57 +38,57 @@ def load_conferences_from_xlsx(path):
     return conferences
 
 '''
-    # TODO: implement get conference. Scopus Serach sucks, consider using dblp for 
-    # searching confererences, if Scopus fails. Conferences may be listed with a 
-    # different name, and papers of that conference may still exist on Scopus.
-    # def get_conference(conf_name):
+    TODO: implement get conference. Scopus Serach sucks, consider using dblp for 
+    searching confererences, if Scopus fails. Conferences may be listed with a 
+    different name, and papers of that conference may still exist on Scopus.
+    def get_conference(conf_name):
 
-    #     get_conference:
-    #     for each row of file get name and acronym.
-    #     check which years of conference there are (with a program committee) in both 
-    #     wikicfp and scopus. (? all of the years? how many?)
-    #     search in wikicfp for acronym and get the years.
-    #     search in scopus for acronym and get the years
-    #     ! check if there is information of all the years available (just like in
-    #       the filters) = no! but the bottleneck is wikicfp anyway. i just need to 
-    #       check if there are papers for the wikicfp year on scopus.
+        get_conference:
+        for each row of file get name and acronym.
+        check which years of conference there are (with a program committee) in both 
+        wikicfp and scopus. (? all of the years? how many?)
+        search in wikicfp for acronym and get the years.
+        search in scopus for acronym and get the years
+        ! check if there is information of all the years available (just like in
+          the filters) = no! but the bottleneck is wikicfp anyway. i just need to 
+          check if there are papers for the wikicfp year on scopus.
 
-    #     for each year:
-    #         1. scopus
-    #     search CONFNAME() and get papers of the current year. 
-    #     search for acronym, its the best way. for each paper get the description 
-    #     which contains the conf name and acronym and use levenshtein (with a 
-    #     different token) to check if the conference is the right one.
-    #         2. wikicfp
-    #     search for acronym, parse years and navigate to the right year. get program
-    #     committee. discard if there is no program committee.
+        for each year:
+            1. scopus
+        search CONFNAME() and get papers of the current year. 
+        search for acronym, its the best way. for each paper get the description 
+        which contains the conf name and acronym and use levenshtein (with a 
+        different token) to check if the conference is the right one.
+            2. wikicfp
+        search for acronym, parse years and navigate to the right year. get program
+        committee. discard if there is no program committee.
 
-    #     conferences = wikicfp.get_conferences(conf_name)
+        conferences = wikicfp.get_conferences(conf_name)
 
 
-    #     return conf
-    #     # if conf_name == "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040":
-    #     #     return Conference(
-    #     #         wikicfp_url=conf_name,
-    #     #         wikicfp_id='10040',
-    #     #         fullname="SMVC 2010 : ACM Multimedia Workshop on Surreal Media and Virtual Cloning 2010",
-    #     #         name="ACM Multimedia Workshop on Surreal Media and Virtual Cloning",
-    #     #         year="2010"
-    #     #     )
-    #     # else:
-    #     #     return Conference(
-    #     #         wikicfp_url=conf_name,
-    #     #         wikicfp_id='52345',
-    #     #         fullname="SecureComm 2016 : 12th EAI International Conference on Security and Privacy in Communication Networks",
-    #     #         name="SecureComm",
-    #     #         year="2016"
-    #     #     )
-    #     # if i == 0:
-    #     #     return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=28432&copyownerid=2")
-    #     # if i == 1:
-    #     #     return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=77406&copyownerid=84748")
-    #     # if i == 2:
-    #     #     return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=77833&copyownerid=101501")    
+        return conf
+        # if conf_name == "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040":
+        #     return Conference(
+        #         wikicfp_url=conf_name,
+        #         wikicfp_id='10040',
+        #         fullname="SMVC 2010 : ACM Multimedia Workshop on Surreal Media and Virtual Cloning 2010",
+        #         name="ACM Multimedia Workshop on Surreal Media and Virtual Cloning",
+        #         year="2010"
+        #     )
+        # else:
+        #     return Conference(
+        #         wikicfp_url=conf_name,
+        #         wikicfp_id='52345',
+        #         fullname="SecureComm 2016 : 12th EAI International Conference on Security and Privacy in Communication Networks",
+        #         name="SecureComm",
+        #         year="2016"
+        #     )
+        # if i == 0:
+        #     return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=28432&copyownerid=2")
+        # if i == 1:
+        #     return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=77406&copyownerid=84748")
+        # if i == 2:
+        #     return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=77833&copyownerid=101501")    
 '''
 def add_conferences(conferences, nlp):
     added_conferences = list()
