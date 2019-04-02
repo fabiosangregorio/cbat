@@ -65,9 +65,12 @@ def _extract_program_sections(text):
 
     program_indexes = list()
     for p in p_program_headings:
-        idxs = [i + len(p) for i in findall(p, text.lower())]
-        if len(idxs):
-            program_indexes += idxs
+        for idx in findall(p, text.lower()):
+            i_newline = text.find('\n', idx)
+            # this means that the current and the next heading are on the 
+            # same line (e.g. Program committe chair)
+            if not headings + ['chair'] in text[idx+len(p):i_newline]:
+                program_indexes.append(i_newline)
 
     sections = list()
     for start in program_indexes:
@@ -77,8 +80,6 @@ def _extract_program_sections(text):
         if next_heading > -1:
             end = text.rfind("\n", start, start+next_heading)
             if end == -1:
-                # this means that the current and the next heading are on the 
-                # same line (e.g. Program committe chair)
                 continue
         else:
             end = len(text)
@@ -104,9 +105,9 @@ def _search_external_cfp(url, secondary=False):
             
     # otherwise extract it from the main external page
     regex = re.compile('.*(' + '|'.join(p_program_headings) + ').*', re.IGNORECASE)
-    program_tags = [tag.parent for tag in html(text=regex)] # tag.parent gets the tag
+    program_tags = [tag.parent for tag in html.body(text=regex)] # tag.parent gets the tag
 
-    cfp_text = '\n'.join([parent.text for parent in 
+    cfp_text = '\n'.join([parent.striped_strings for parent in 
         list(set([tag.parent for tag in program_tags]))])
 
     # if the parent tag contains a small amount of text (e.g. only the heading)
