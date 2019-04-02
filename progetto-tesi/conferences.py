@@ -8,22 +8,6 @@ import program_extractor
 from models import Conference, Author, Paper
 
 
-# REMOVE: loads program committee from file
-def load_program_committee(i):
-    authors = list()
-    with codecs.open(f"./progetto-tesi/dump{i}.txt", 'r', 'utf-8-sig') as f:
-        data = f.read()
-
-    for line in data.split('\n'):
-        splitted = line.split('#')
-        authors.append(Author(
-            fullname=f"{splitted[0]} {splitted[1]}",
-            firstname=splitted[0],
-            lastname=splitted[1],
-            affiliation=splitted[2]
-        ))
-    return authors
-
 # loads conference names from xlsx file
 def load_conferences_from_xlsx(path):
     workbook = xlrd.open_workbook(path, "rb")
@@ -36,6 +20,7 @@ def load_conferences_from_xlsx(path):
             conference = namedtuple('conference', 'name acronym')
             conferences.append(conference(name=row[1],acronym=row[2]))
     return conferences
+
 
 '''
     TODO: implement get conference. Scopus Serach sucks, consider using dblp for 
