@@ -67,9 +67,12 @@ def _extract_program_sections(text):
     for p in p_program_headings:
         for idx in findall(p, text.lower()):
             i_newline = text.find('\n', idx)
-            # this means that the current and the next heading are on the 
+            if i_newline == -1:
+                continue
+            # this means that the current and the next headin g are on the 
             # same line (e.g. Program committe chair)
-            if not headings + ['chair'] in text[idx+len(p):i_newline]:
+            if (not any(h in text[idx+len(p):i_newline].lower() for h in 
+                headings + ['chair'])):
                 program_indexes.append(i_newline)
 
     sections = list()
@@ -83,8 +86,10 @@ def _extract_program_sections(text):
                 continue
         else:
             end = len(text)
-        # re-polish html to avoid misprints from the substring process
-        sections.append(webutil.polish_html(text[start:end]))
+            
+        if end - start > 5:
+            # re-polish html to avoid misprints from the substring process
+            sections.append(webutil.polish_html(text[start:end]))
     return sections
 
 
@@ -107,8 +112,13 @@ def _search_external_cfp(url, secondary=False):
     regex = re.compile('.*(' + '|'.join(p_program_headings) + ').*', re.IGNORECASE)
     program_tags = [tag.parent for tag in html.body(text=regex)] # tag.parent gets the tag
 
-    cfp_text = '\n'.join([parent.striped_strings for parent in 
-        list(set([tag.parent for tag in program_tags]))])
+    cfp_text = ""
+    # filter out the parents of other tags
+    for tag in program_tags:
+        parent = tag.parent
+        if any(t in parent for t in program_tags if t != tag):
+            continue
+        cfp_text += "\n".join(list(parent.stripped_strings))
 
     # if the parent tag contains a small amount of text (e.g. only the heading)
     # return the whole html text
@@ -135,7 +145,7 @@ def extract_program_committee(cfp, nlp):
 
     program_committee = list()
     for section in program_sections:
-        n_section_people = []
+        n_section_people = list()
         step = 0
         text_lines = section.splitlines()
         # run NER every `step` + offset lines and check if the result set is 
@@ -154,18 +164,18 @@ def extract_program_committee(cfp, nlp):
                         n_people += 1
 
                 n_step_people.append(n_people)
-                print('NER results with step', step + 1, ' and offset ' + offset +
-                    ':  ', n_section_people[step], time.time() - start_time)
+            
+            n_section_people.append(n_step_people)
+            print('NER results with step', step + 1, ':  ', 
+                n_section_people[step], time.time() - start_time)
 
-            n_section_people += n_step_people
-
-            if(max(n_section_people[step])) < loss_threshold * max([max(i) 
-                for i in n_section_people]):
+            if(max(n_section_people[step]) < loss_threshold * max([max(i) 
+                for i in n_section_people])):
                 break
             step += 1
 
         # run regex on the right `step` and offset set
-        offset = max([max(i) for i in n_section_people])
+        offset = n_section_people[-1].index(max(n_section_people[-1]))
         regex = re.compile(r"^\W*([\w\. '’-]+)", re.MULTILINE)
         
         section_people = list()
@@ -198,6 +208,6 @@ def extract_program_committee(cfp, nlp):
         if n_not_exact / len(section_people) > 0.5:
             program_committee.append([p for p in section_people if p.exact])
         else:
-            program_committee.append(person)
+            program_committee += section_people
     
     return program_committee
