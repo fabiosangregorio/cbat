@@ -21,7 +21,7 @@ p_program_headings = [f'{ph} {h}' for h in headings for ph in program_headings]
 
 # extracts person name based on probablepeople or, alternatively, 
 # based on most common name formats
-def _extract_person_name(name, affiliation):
+def _extract_person_name(name):
     person = None
     try: # probablepeople name extraction
         pp_result = pp.tag(name)
@@ -35,10 +35,9 @@ def _extract_person_name(name, affiliation):
             middlename=pp_result[0].get('MiddleName') or 
                         pp_result[0].get('MiddleInitial'),
             lastname=pp_result[0].get('LastName') or
-                        pp_result[0].get('Surname'),
-            affiliation=affiliation)
+                        pp_result[0].get('Surname'))
     else:
-        person = Author(fullname=name, affiliation=affiliation)
+        person = Author(fullname=name)
 
     # if pp can't extract name and surname, try an extraction based on most 
     # common name formats
@@ -168,16 +167,24 @@ def extract_program_committee(cfp, nlp):
         # run regex on the right `step` and offset set
         offset = max([max(i) for i in n_section_people])
         regex = re.compile(r"^\W*([\w\. '’-]+)", re.MULTILINE)
-            
+
         for i in range(offset, len(text_lines), step):
             name = regex.search(text_lines[i]).group(1).strip()
             if step == 1:
                 affiliation = text_lines[i].replace(name, "").strip(
                     string.punctuation + " ")            
             else:
-                affiliation = ', '.join(text_lines[(i + 1):(i + 1 + step - 1)])
+                affiliation = ', '.join(text_lines[(i + 1):(i + step)])
 
-            person = _extract_person_name(name, affiliation)
+            affiliation_country = None
+            aff_splitted = affiliation.split(',')
+            if len(aff_splitted) > 1:
+                affiliation_country = aff_splitted.pop()
+                affiliation = ", ".join(aff_splitted)
+
+            person = _extract_person_name(name)
+            person.affiliation = affiliation
+            person.affiliation_country = affiliation_country
             program_committee.append(person)   
     
     return program_committee

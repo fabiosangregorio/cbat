@@ -8,6 +8,7 @@ class Author(Document):
     middlename = StringField()
     lastname = StringField()
     affiliation = StringField()
+    affiliation_country = StringField()
     dblp_url = StringField()
     eid_list = ListField(StringField())
     # If, in any point of the pipeline, the author fails a search/parse,

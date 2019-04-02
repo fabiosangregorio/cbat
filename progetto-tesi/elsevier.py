@@ -10,9 +10,6 @@ from models import Author, Paper, Conference
 
 # IMPROVE: use API 'field' attribute to only return used fileds
 
-# IMPROVE: searching for FIRSTNAME=Frederic LASTNAME=Fol Leymarie 
-# AFFIL=University of London, UK yeilds no results, although searching 
-# without UK yeilds the correct result
 # IMPROVE: Many times the affiliation makes the search yield no result bc it 
 # doesn't match perfectly, maybe try to search only for firstname and lastname 
 # and use levenshtein to get the right author

@@ -7,6 +7,7 @@ import time
 from bs4 import BeautifulSoup
 
 from models import Conference
+from config import CONFERENCES_YEAR_LOWER_BOUNDARY as CONF_YEAR_LB
 
 import webutil
 
@@ -47,7 +48,8 @@ def get_conferences(conf_name):
         # to it's papers, therefore there's no point in having it in db.
         # IMPROVE: choose a lower boundary year limit (we may not want 
         # conferences from 1980)
-        if w_year >  datetime.now().year:
+        today = datetime.now().year
+        if w_year >  today or w_year < today - CONF_YEAR_LB:
             continue
 
         w_url = base_url + first_row.select('a')[0]['href']
