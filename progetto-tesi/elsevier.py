@@ -15,15 +15,15 @@ from models import Author, Paper, Conference
 # and use levenshtein to get the right author
 def find_author(author):
     score_threshold = 70
-
-    query = "AUTHFIRST({}) AND AUTHLASTNAME({}) AND AFFIL({})".format(
+    aff = author.getattr('affiliation')
+    query = "AUTHFIRST({}) AND AUTHLASTNAME({}) {}".format(
         author.getattr('firstname'),
         ' '.join(filter(None, [author.getattr('middlename'), 
             author.getattr('lastname')])),
-        author.getattr('affiliation'))
+        f"AND AFFIL({aff})" if aff else '')
 
     # IMPROVE: if FIRSTNAME AND LASTNAME yields no results, try switching names
-    possible_people = AuthorSearch(query).authors
+    possible_people = AuthorSearch(query, refresh=True).authors
     if not possible_people:
         return None
 

@@ -190,7 +190,7 @@ def extract_program_committee(cfp, nlp):
             affiliation_country = None
             aff_splitted = affiliation.split(',')
             if len(aff_splitted) > 1:
-                affiliation_country = aff_splitted.pop()
+                affiliation_country = aff_splitted.pop().strip()
                 affiliation = ", ".join(aff_splitted)
 
             person = _extract_person_name(name)
