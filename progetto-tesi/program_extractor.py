@@ -29,13 +29,14 @@ def _extract_person_name(name):
         pp_result = [None, None]
 
     if(pp_result[1] == "Person"):
+        r = pp_result[0]
+        r = {k: i.replace('(', '').replace(')', '') for k, i in r.items()}
         person = Author(
             fullname=name,
-            firstname=pp_result[0].get('GivenName'),
-            middlename=pp_result[0].get('MiddleName') or 
-                        pp_result[0].get('MiddleInitial'),
-            lastname=pp_result[0].get('LastName') or
-                        pp_result[0].get('Surname'))
+            firstname=r.get('GivenName'),
+            middlename=r.get('MiddleName') or r.get('MiddleInitial') or
+                       r.get('Nickname'),
+            lastname=r.get('LastName') or r.get('Surname'))
     else:
         person = Author(fullname=name)
 
@@ -54,6 +55,10 @@ def _extract_person_name(name):
             person.firstname = first_word
             person.lastname = last_words
         person.exact = False
+
+    # if I cant extract the name from the text, discard the person
+    if not person.firstname or not person.lastname:
+        return None
 
     return person
 
@@ -173,27 +178,33 @@ def extract_program_committee(cfp, nlp):
                 for i in n_section_people])):
                 break
             step += 1
+            if step > 3:
+                return []
 
         # run regex on the right `step` and offset set
         offset = n_section_people[-1].index(max(n_section_people[-1]))
-        regex = re.compile(r"^\W*([\w\. '’-]+)", re.MULTILINE)
+        regex = re.compile(r"^\W*([\()\"\w\. '’-]+)", re.MULTILINE)
         
         section_people = list()
         for i in range(offset, len(text_lines), step):
             name = regex.search(text_lines[i]).group(1).strip()
             if step == 1:
                 affiliation = text_lines[i].replace(name, "").strip(
-                    string.punctuation + " ")            
+                    string.punctuation + " ")
             else:
                 affiliation = ', '.join(text_lines[(i + 1):(i + step)])
 
             affiliation_country = None
+            # IMPROVE: names and affiliation could also be separated by "-"
+            # note: the names could contain a "-"
             aff_splitted = affiliation.split(',')
             if len(aff_splitted) > 1:
                 affiliation_country = aff_splitted.pop().strip()
                 affiliation = ", ".join(aff_splitted)
 
             person = _extract_person_name(name)
+            if not person:
+                continue
             person.affiliation = affiliation
             person.affiliation_country = affiliation_country
             section_people.append(person)

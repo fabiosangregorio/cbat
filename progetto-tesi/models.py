@@ -42,7 +42,8 @@ class Conference(Document):
     _wikicfp_url = StringField(db_field='wikicfp_url')
 
     def __init__(self, *args, **kwargs):
-        kwargs['_wikicfp_url'] = kwargs.pop('wikicfp_url')
+        if kwargs.get('wikicfp_url'):
+            kwargs['_wikicfp_url'] = kwargs.pop('wikicfp_url')
         Document.__init__(self, *args, **kwargs)
         self.wikicfp_url = kwargs['_wikicfp_url']
 

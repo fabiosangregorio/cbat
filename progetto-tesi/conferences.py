@@ -91,6 +91,7 @@ def add_conferences(conferences, nlp):
 
         # save program committee to db
         authors = list()
+        print('Authors not extracted:')
         for p in program_committee:
             author = elsevier.find_author(p)
             if author == None:
@@ -99,6 +100,7 @@ def add_conferences(conferences, nlp):
 
             # FIXME: not an atomic operation, could result in problems with multithreading
             if db_author:
+                # TODO: merge the eid list and update
                 authors.append(db_author)
             else:
                 author.save()

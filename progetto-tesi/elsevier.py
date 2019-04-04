@@ -23,7 +23,7 @@ def find_author(author):
         f"AND AFFIL({aff})" if aff else '')
 
     # IMPROVE: if FIRSTNAME AND LASTNAME yields no results, try switching names
-    possible_people = AuthorSearch(query, refresh=True).authors
+    possible_people = AuthorSearch(query).authors
     if not possible_people:
         return None
 
@@ -36,7 +36,7 @@ def find_author(author):
             if affiliation.lower() == f"{p.affiliation}, {p.country}".lower()]
         return author
     elif True: 
-        print(author.fullname, author.affiliation, "; ".join(aff_list))
+        print(f"{author.fullname}; {author.affiliation}; {', '.join(aff_list)}")
         # "multiple_no_affiliation"
         # TODO: handle no affiliation and wrong affiliation
         return None
@@ -64,7 +64,7 @@ def get_conference_papers(conference):
 
 def extract_references_from_paper(paper):
     try:
-        references = AbstractRetrieval(paper.scopus_id, view="REF", refresh=True).references
+        references = AbstractRetrieval(paper.scopus_id, view="REF").references
     except Exception:
         warnings.warn('Retrieval of references failed for eid ' + paper.scopus_id)
         return []
