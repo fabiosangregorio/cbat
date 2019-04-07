@@ -11,7 +11,7 @@ def find_author(person):
     if response["redirected"]:
         response = get_page(base_url + '?' + query)
 
-    html = BeautifulSoup(response["html"], 'html.parser')
+    html = response['html']
 
     is_exact = html.select("#completesearch-authors > .body p")[0].getText().lower() == "exact matches"
 

@@ -3,6 +3,7 @@ import time
 import string
 from itertools import permutations
 import requests
+from logging import info
 
 import probablepeople as pp
 from bs4 import BeautifulSoup
@@ -74,7 +75,7 @@ def _extract_program_sections(text):
             i_newline = text.find('\n', idx)
             if i_newline == -1:
                 continue
-            # this means that the current and the next headin g are on the 
+            # this means that the current and the next heading are on the 
             # same line (e.g. Program committe chair)
             if (not any(h in text[idx+len(p):i_newline].lower() for h in 
                 headings + ['chair'])):
@@ -102,23 +103,33 @@ def _search_external_cfp(url, secondary=False):
     if not url:
         return None
 
-    response = webutil.get_page(url)
-    html = BeautifulSoup(response["html"], 'html.parser')
+    html = webutil.get_page(url)['html']
+    if not html.text:
+        return None
     # if a link to the conference's program committee is present, extract the 
-    # committee from there
+    # committee from there, otherwise extract it from the main external page.
     if not secondary:
-        link_regex = re.compile('.*(' + '|'.join(headings) +').*', re.IGNORECASE)
-        program_links = [tag for tag in html('a', text=link_regex)]
+        program_links = [tag for tag in html('a') 
+            if any(h in tag.text.lower() for h in headings)]
         if len(program_links):
-            full_url = requests.compat.urljoin(url, program_links[0]['href'])
+            link = None
+            # if there's a link with the words "program committee" take that one,
+            # otherwise just "committee" is ok
+            for l in program_links:
+                if any(p in l.text.lower() for p in p_program_headings):
+                    link = l
+                    break
+            if not link:
+                link = program_links[0]
+            full_url = requests.compat.urljoin(url, link['href'])
             return _search_external_cfp(full_url, secondary=True)
             
-    # otherwise extract it from the main external page
     regex = re.compile('.*(' + '|'.join(p_program_headings) + ').*', re.IGNORECASE)
     program_tags = [tag.parent for tag in html.body(text=regex)] # tag.parent gets the tag
 
     cfp_text = ""
-    # filter out the parents of other tags
+    # get unique parents of the tags (if several tags have the same parent, 
+    # keep only one)
     for tag in program_tags:
         parent = tag.parent
         if any(t in parent for t in program_tags if t != tag):
@@ -140,7 +151,7 @@ def _search_external_cfp(url, secondary=False):
 def extract_program_committee(cfp, nlp):
     text = cfp.cfp_text
     # threshold over which we can say the NER lost a significant amount of names
-    loss_threshold = 0.9
+    loss_threshold = 0.7
     program_sections = _extract_program_sections(webutil.polish_html(text))
 
     # no program committee in CFP text, search in the external link
@@ -156,7 +167,6 @@ def extract_program_committee(cfp, nlp):
         # run NER every `step` + offset lines and check if the result set is 
         # significantly reduced
         while True:
-            start_time = time.time()
             n_step_people = list()
 
             for offset in range(0, step + 1):
@@ -171,8 +181,7 @@ def extract_program_committee(cfp, nlp):
                 n_step_people.append(n_people)
             
             n_section_people.append(n_step_people)
-            print('NER results with step', step + 1, ':  ', 
-                n_section_people[step], time.time() - start_time)
+            info(f'NER results with step {step + 1}: {n_section_people[step]}')
 
             if(max(n_section_people[step]) < loss_threshold * max([max(i) 
                 for i in n_section_people])):
@@ -213,11 +222,13 @@ def extract_program_committee(cfp, nlp):
         if more than half of the people were not extracted correctly, it means 
         that the section probably didn't contain people names *only*, therefore 
         we keep only the ones we are sure that are real people (and not 
-        something else extracted as a person)
+        something else extracted as a person).
         '''
         n_not_exact = len([True for p in section_people if not p.exact])
         if n_not_exact / len(section_people) > 0.5:
-            program_committee.append([p for p in section_people if p.exact])
+            p_to_add = [p for p in section_people if p.exact]
+            if p_to_add:
+                program_committee.append(p_to_add)
         else:
             program_committee += section_people
     

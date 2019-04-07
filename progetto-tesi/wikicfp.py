@@ -16,12 +16,14 @@ base_url = 'http://www.wikicfp.com'
 
 # gets the whole CFP from wikiCFP, as well as the external url of the conference
 def get_cfp(url):
-    response = webutil.get_page(url)
-    html = BeautifulSoup(response["html"], 'html.parser')
+    html = webutil.get_page(url)['html']
+    if not html.text:
+        return None
     
     ext_sources = [a['href'] for a in html.select('.contsec tr:nth-child(3) a') 
         if '/cfp/' not in a['href']]
-    external_source = ext_sources[0] if len(ext_sources) > 0 else None
+    external_source = ext_sources[0] if (len(ext_sources) > 0 and 
+        'mailto:' not in ext_sources[0]) else None
     cfp_text = webutil.polish_html("".join(
         [tag.getText() for tag in html.select('table .cfp')]))
     cfp = namedtuple('Cfp', 'cfp_text external_source')
@@ -31,8 +33,9 @@ def get_cfp(url):
 # get conferences from wikicfp
 def get_conferences(conf_name):
     url = f'{base_url}/cfp/servlet/tool.search?q={conf_name.acronym}&year=a'
-    response = webutil.get_page(url)
-    html = BeautifulSoup(response['html'], 'html.parser')
+    html = webutil.get_page(url)['html']
+    if not html.text:
+        return None
 
     rows = html.select('.contsec table table tr')
     events = [[i, k] for i,k in zip(rows[1::2], rows[2::2])]
@@ -46,8 +49,6 @@ def get_conferences(conf_name):
 
         # if the conference has not taken place yet, there can't be references 
         # to it's papers, therefore there's no point in having it in db.
-        # IMPROVE: choose a lower boundary year limit (we may not want 
-        # conferences from 1980)
         today = datetime.now().year
         if w_year >  today or w_year < today - CONF_YEAR_LB:
             continue

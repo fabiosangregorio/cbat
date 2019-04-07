@@ -13,8 +13,6 @@ import webutil
 score_threshold = 70
 
 def find_author(person_to_find):
-    start_time = time.time()
-
     base_url = "https://dblp.org/search"
     query = urllib.parse.urlencode({"q": person_to_find.name})
     response = webutil.get_page(base_url + '/author?' + query)
@@ -23,7 +21,7 @@ def find_author(person_to_find):
     if response["redirected"]:
         response = webutil.get_page(base_url + '?' + query)
 
-    html = BeautifulSoup(response["html"], 'html.parser')
+    html = response['html']
 
     is_exact = html.select("#completesearch-authors > .body p")[0].getText().lower() == "exact matches"
 
@@ -37,7 +35,6 @@ def find_author(person_to_find):
         ))
     results = find_right_person(person_to_find, possible_people, is_exact)
 
-    print('Search of name in dblp: ', time.time() - start_time)
     return results
 
 
@@ -86,8 +83,7 @@ def find_right_person(person_to_find, people_list, is_exact):
 
 
 def is_previous_affiliation(person, affiliation):
-    response = webutil.get_page(person.dblp_url)
-    html = BeautifulSoup(response["html"], 'html.parser')
+    html = webutil.get_page(person.dblp_url)['html']
 
     affiliations = [tag.getText() for tag in html.select('.profile [itemprop=name]')]
     if not len(affiliations):

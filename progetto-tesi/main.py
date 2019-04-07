@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from multiprocessing import Pool
 import time
+import logging
+from logging import info
 
 from bs4 import BeautifulSoup
 from mongoengine import connect
@@ -14,22 +16,19 @@ import program_extractor
 from models import Author, Paper, Conference
 import conferences
 
-
+logging.basicConfig(level=logging.INFO)
 connect('tesi-triennale')
 
 
 if __name__ == "__main__":
-    # conferences_urls = ["http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040",
-                        #   "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=52345"]
     start_time = time.time()
     nlp = spacy.load('en_core_web_sm')
-    print('Loading NER: ', time.time() - start_time)
+    info(f'Loading NER: {time.time() - start_time}')
 
-    # added_conferences = add_conferences(conferences_urls, nlp)
-    # added_conferences = add_conferences(conferences_urls, None)
-    conf_names = conferences.load_conferences_from_xlsx("./progetto-tesi/cini.xlsx")[0:3]
+    conf_names = conferences.load_conferences_from_xlsx("./progetto-tesi/cini.xlsx")[0:1]
     for conf_name in conf_names:
         conf_editions = wikicfp.get_conferences(conf_name)
+        conf_editions = [conf_editions[2]]
         added_conferences = conferences.add_conferences(conf_editions, nlp)
 
     # TODO: compare references with program committee

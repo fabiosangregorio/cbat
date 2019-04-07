@@ -1,6 +1,7 @@
 import xlrd
 from collections import namedtuple
 import codecs
+from logging import info
 
 import elsevier
 import wikicfp
@@ -22,94 +23,56 @@ def load_conferences_from_xlsx(path):
     return conferences
 
 
-'''
-    TODO: implement get conference. Scopus Serach sucks, consider using dblp for 
-    searching confererences, if Scopus fails. Conferences may be listed with a 
-    different name, and papers of that conference may still exist on Scopus.
-    def get_conference(conf_name):
-
-        get_conference:
-        for each row of file get name and acronym.
-        check which years of conference there are (with a program committee) in both 
-        wikicfp and scopus. (? all of the years? how many?)
-        search in wikicfp for acronym and get the years.
-        search in scopus for acronym and get the years
-        ! check if there is information of all the years available (just like in
-          the filters) = no! but the bottleneck is wikicfp anyway. i just need to 
-          check if there are papers for the wikicfp year on scopus.
-
-        for each year:
-            1. scopus
-        search CONFNAME() and get papers of the current year. 
-        search for acronym, its the best way. for each paper get the description 
-        which contains the conf name and acronym and use levenshtein (with a 
-        different token) to check if the conference is the right one.
-            2. wikicfp
-        search for acronym, parse years and navigate to the right year. get program
-        committee. discard if there is no program committee.
-
-        conferences = wikicfp.get_conferences(conf_name)
-
-
-        return conf
-        # if conf_name == "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=10040":
-        #     return Conference(
-        #         wikicfp_url=conf_name,
-        #         wikicfp_id='10040',
-        #         fullname="SMVC 2010 : ACM Multimedia Workshop on Surreal Media and Virtual Cloning 2010",
-        #         name="ACM Multimedia Workshop on Surreal Media and Virtual Cloning",
-        #         year="2010"
-        #     )
-        # else:
-        #     return Conference(
-        #         wikicfp_url=conf_name,
-        #         wikicfp_id='52345',
-        #         fullname="SecureComm 2016 : 12th EAI International Conference on Security and Privacy in Communication Networks",
-        #         name="SecureComm",
-        #         year="2016"
-        #     )
-        # if i == 0:
-        #     return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=28432&copyownerid=2")
-        # if i == 1:
-        #     return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=77406&copyownerid=84748")
-        # if i == 2:
-        #     return Conference(wikicfp_url="http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=77833&copyownerid=101501")    
-'''
 def add_conferences(conferences, nlp):
     added_conferences = list()
     for conf in conferences:
+        info(f'### BEGIN conference: {conf.acronym} {conf.year}')
         if Conference.objects(wikicfp_id=conf.wikicfp_id):
             return
 
         cfp = wikicfp.get_cfp(conf.wikicfp_url)
         program_committee = program_extractor.extract_program_committee(cfp, nlp)
-
+        info(f'FINISHED EXTRACT_PROGRAM_COMMITTEE:\nfound: {len(program_committee)}, '\
+             f' without affiliation: {len([p for p in program_committee if len(p.affiliation) < 2])}')
         # Having a conference without program committee means we can't compare
         # the references, therefore there's no point in having it saved to db.
         if not program_committee:
+            info('Program committee not found')
             continue
 
         # save program committee to db
         authors = list()
-        print('Authors not extracted:')
+        info('Authors not extracted:')
+        extracted = 0
+        not_extracted = 0
         for p in program_committee:
             author = elsevier.find_author(p)
             if author == None:
+                not_extracted += 1
                 continue
             db_author = Author.objects(eid_list__in=author.eid_list).first()
 
             # FIXME: not an atomic operation, could result in problems with multithreading
             if db_author:
-                # TODO: merge the eid list and update
+                # merge the new and old eid list 
+                db_eid = db_author.eid_list
+                new_eid = author.eid_list
+                db_author.eid_list = db_eid + list(set(new_eid) - set(db_eid))
+                db_author.save()
                 authors.append(db_author)
             else:
                 author.save()
                 authors.append(author)
+            extracted += 1
 
         conf.program_committee = authors
+        conf.processing_status = 'committee_extracted'
         conf.save()
+        info(f'Total authors extracted: {extracted} Total not extracted: {not_extracted}')
 
         # save conference papers to db
+        # IMPROVE: if no papers are found, remove the conference from db?
+        # it could distort the statistics
         papers_found = elsevier.get_conference_papers(conf)
         papers = list()
         for paper in papers_found:
@@ -121,6 +84,7 @@ def add_conferences(conferences, nlp):
                 papers.append(paper)
 
         conf.papers = papers
+        conf.processing_status = 'papers_extracted'
         conf.save()
         added_conferences.append(conf)
 
@@ -133,12 +97,15 @@ def add_conferences(conferences, nlp):
                 if auth:
                     paper.program_refs.append(auth)
                     continue
-
+                    
                 auth = Author.objects(eid_list__in=[eid]).first()
                 if not auth:
                     auth = Author(eid_list=[eid]).save()
                 paper.non_program_refs.append(auth)
 
             paper.save()
+        
+        conf.processing_status = 'complete'
+        conf.save()
 
     return added_conferences
