@@ -22,8 +22,8 @@ class Author(Document):
 
 class Paper(Document):
     scopus_id = StringField()
-    program_refs = ListField(ReferenceField(Author))
-    non_program_refs = ListField(ReferenceField(Author))
+    committee_refs = ListField(ReferenceField(Author))
+    non_committee_refs = ListField(ReferenceField(Author))
 
     def getattr(self, key, default=""):
         return (default if self.__getattribute__(key) is None else 

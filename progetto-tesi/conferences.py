@@ -95,21 +95,29 @@ def add_conferences(conferences, nlp):
             f'Papers already in db: {papers_already_in_db}')
         
         # save references to db
+        ref_to_committee=0
+        ref_not_to_committee=0
         for paper in conf.papers:
             ref_eids = elsevier.extract_references_from_paper(paper)  
             for eid in ref_eids:
                 auth = next((a for a in conf.program_committee
                              if eid in a.eid_list), None)
-                if not auth:
+                if auth:
+                    paper.committee_refs.append(auth)
+                else:
                     auth = Author.objects(eid_list__in=eid).upsert_one(
                         set_on_insert__eid_list=[eid])
 
-                paper.non_program_refs.append(auth)
-
+                paper.non_committee_refs.append(auth)
+            ref_to_committee += len(paper.committee_refs)
+            ref_not_to_committee += len(paper.non_committee_refs)
             paper.save()
         
         conf.processing_status = 'complete'
         conf.save()
+
+        info(f'REFERENCES OF ALL PAPERS EXTRACTION: \nRefs to committee: '\
+            f'{len(ref_to_committee)}, Refs not to committee: {ref_not_to_committee}')
 
         added_conferences.append(conf)
 
