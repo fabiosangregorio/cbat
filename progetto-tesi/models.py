@@ -44,8 +44,7 @@ class Conference(Document):
     _wikicfp_url = StringField(db_field='wikicfp_url')
 
     def __init__(self, *args, **kwargs):
-        if kwargs.get('wikicfp_url'):
-            kwargs['_wikicfp_url'] = kwargs.pop('wikicfp_url')
+        kwargs['_wikicfp_url'] = kwargs.pop('wikicfp_url') if kwargs.get('wikicfp_url') else None
         Document.__init__(self, *args, **kwargs)
         self.wikicfp_url = kwargs['_wikicfp_url']
 
@@ -55,6 +54,8 @@ class Conference(Document):
 
     @wikicfp_url.setter
     def wikicfp_url(self, url):
+        if not url:
+            return
         self._wikicfp_url = url
         self.wikicfp_id = parse.parse_qs(parse.urlparse(url).query)['eventid'][0]
 

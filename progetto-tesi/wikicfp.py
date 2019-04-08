@@ -50,7 +50,7 @@ def get_conferences(conf_name):
         # if the conference has not taken place yet, there can't be references 
         # to it's papers, therefore there's no point in having it in db.
         today = datetime.now().year
-        if w_year >  today or w_year < today - CONF_YEAR_LB:
+        if w_year >  today - 1 or w_year < today - CONF_YEAR_LB:
             continue
 
         w_url = base_url + first_row.select('a')[0]['href']

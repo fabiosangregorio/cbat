@@ -28,7 +28,7 @@ if __name__ == "__main__":
     conf_names = conferences.load_conferences_from_xlsx("./progetto-tesi/cini.xlsx")[0:1]
     for conf_name in conf_names:
         conf_editions = wikicfp.get_conferences(conf_name)
-        conf_editions = [conf_editions[2]]
+        conf_editions = [conf_editions[3]]
         added_conferences = conferences.add_conferences(conf_editions, nlp)
 
     # TODO: compare references with program committee
