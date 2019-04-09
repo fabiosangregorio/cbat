@@ -69,6 +69,9 @@ def extract_references_from_paper(paper):
         warning('Retrieval of references failed for eid ' + paper.scopus_id)
         return []
 
+    if not references:
+        return []
+
     eids = [f"9-s2.0-{auid.strip()}" for ref in references if ref.authors_auid
             for auid in ref.authors_auid.split('; ')]
     return eids

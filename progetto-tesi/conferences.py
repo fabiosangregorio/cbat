@@ -67,8 +67,9 @@ def add_conferences(conferences, nlp):
                 authors.append(author)
             extracted += 1
 
-        conf.modify(set__program_committee=authors, 
-                    set__processing_status="committee_extracted")
+        conf.program_committee = authors
+        conf.processing_status = 'committee_extracted'
+        conf.save()
 
         info(f'AUTHORS EXTRACTION: \nTotal authors extracted: {extracted} '\
             f'Total not extracted: {not_extracted}')
@@ -96,7 +97,8 @@ def add_conferences(conferences, nlp):
         
         # save references to db
         ref_to_committee=0
-        ref_not_to_committee=0
+        ref_not_to_committee_db=0
+        ref_not_to_committee_not_db=0
         for paper in conf.papers:
             ref_eids = elsevier.extract_references_from_paper(paper)  
             for eid in ref_eids:
@@ -104,20 +106,29 @@ def add_conferences(conferences, nlp):
                              if eid in a.eid_list), None)
                 if auth:
                     paper.committee_refs.append(auth)
+                    continue
+                # else:
+                #     auth = Author.objects(eid_list__in=eid).upsert_one(
+                #         set_on_insert__eid_list=[eid])
+
+                auth = Author.objects(eid_list__in=[eid]).first()
+                if not auth:
+                    auth = Author(eid_list=[eid]).save()
+                    ref_not_to_committee_not_db += 1
                 else:
-                    auth = Author.objects(eid_list__in=eid).upsert_one(
-                        set_on_insert__eid_list=[eid])
+                    ref_not_to_committee_db += 1
 
                 paper.non_committee_refs.append(auth)
+                
             ref_to_committee += len(paper.committee_refs)
-            ref_not_to_committee += len(paper.non_committee_refs)
             paper.save()
         
         conf.processing_status = 'complete'
         conf.save()
 
         info(f'REFERENCES OF ALL PAPERS EXTRACTION: \nRefs to committee: '\
-            f'{len(ref_to_committee)}, Refs not to committee: {ref_not_to_committee}')
+            f'{ref_to_committee}, Refs not to committee already in db: '\
+            f'{ref_not_to_committee_db}, ref not to committee not in db: {ref_not_to_committee_not_db}')
 
         added_conferences.append(conf)
 
