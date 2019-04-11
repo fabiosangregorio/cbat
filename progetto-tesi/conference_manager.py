@@ -1,5 +1,15 @@
+from collections import namedtuple
+
+import xlrd
+
+import util.webutil as webutil
+
+
+base_url = 'http://www.wikicfp.com'
+
+
 # loads conference names from xlsx file
-def load_conferences_from_xlsx(path):
+def load_from_xlsx(path):
     workbook = xlrd.open_workbook(path, "rb")
     sheets = workbook.sheet_names()
     conferences = []
@@ -8,7 +18,7 @@ def load_conferences_from_xlsx(path):
         for rownum in range(2, sh.nrows):
             row = sh.row_values(rownum)
             conference = namedtuple('conference', 'name acronym')
-            conferences.append(conference(name=row[1],acronym=row[2]))
+            conferences.append(conference(name=row[1], acronym=row[2]))
     return conferences
 
 
@@ -20,8 +30,8 @@ def get_conferences(conf_name):
         return None
 
     rows = html.select('.contsec table table tr')
-    events = [[i, k] for i,k in zip(rows[1::2], rows[2::2])]
-    
+    events = [[i, k] for i, k in zip(rows[1::2], rows[2::2])]
+
     conferences = list()
     for event in events:
         first_row = event[0]
