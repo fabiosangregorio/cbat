@@ -2,7 +2,7 @@ import warnings
 from logging import info, warning
 
 from fuzzywuzzy import process, fuzz
-from scopus import AuthorSearch, ScopusSearch, AbstractRetrieval
+from scopus import AuthorSearch, ScopusSearch, AbstractRetrieval, AuthorRetrieval
 
 from models import Author, Paper, Conference
 
@@ -31,18 +31,27 @@ def find_author(author):
     if not possible_people or not aff:
         # if there is no affiliation we can't be sure if it's the right person.
         return None
-        
+    
+    # FIXME: I don't think this is right. This doesn't check the affilitation's
+    # country
     aff_list = [f"{p.affiliation}, {p.country}" for p in possible_people]
     affiliation, fuzz_score = process.extractOne(author.affiliation, 
         aff_list, scorer=fuzz.token_set_ratio)
     if fuzz_score > score_threshold:
         author.eid_list = [p.eid for p in possible_people 
             if affiliation.lower() == f"{p.affiliation}, {p.country}".lower()]
-        return author
     else:
         # info(f"{author.fullname}; {author.affiliation}; {', '.join(aff_list)}")
         # TODO: handle no affiliation and wrong affiliation
         return None
+
+    # Get author's subject areas
+    # IMPROVE: Currently I only check for the first subject area, due to inability
+    # to get multiple eids in one query (I might hit the weekly API cap)
+    author.subject_areas = [int(s.code) for s in 
+        AuthorRetrieval(author.eid_list[0]).subject_areas]
+
+    return author
 
 
 # IMPROVE: filtrare i risultati tramite levenshtein, vedere se sono conference 
@@ -50,8 +59,6 @@ def find_author(author):
 # IMPROVE: non tutte le conferences sono listate in scopus, ma possono avere le
 # paper. es: https://dblp.org/db/conf/securecomm/securecomm2016.html
 # quindi cercare anche su dblp le conference e cercare le paper su scopus
-# IMPROVE: aumentare la confidenza che quella paper sia di quella conference
-# facendo levhensthein anche sul nome della conference
 # TODO: refactor this method using the conference info from CONFNAME
 def get_conference_papers(conference):
     query = f"SRCTITLE({conference.getattr('acronym')}) \
@@ -75,4 +82,3 @@ def extract_references_from_paper(paper):
     eids = [f"9-s2.0-{auid.strip()}" for ref in references if ref.authors_auid
             for auid in ref.authors_auid.split('; ')]
     return eids
-    

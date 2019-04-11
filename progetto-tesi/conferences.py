@@ -60,7 +60,22 @@ def add_conferences(conferences, nlp):
                 db_eid = db_author.eid_list
                 new_eid = author.eid_list
                 merged_list = db_eid + list(set(new_eid) - set(db_eid))
-                db_author.modify(set__eid_list=merged_list)
+                '''
+                Could be that an author is found as a references and added to the
+                db. Then this author is found to be a member of a program committee.
+                If I simply merge the EIDs, I will be missing out on the newfound 
+                info on name, affiliation, etc. Therefore, I just overwrite the infos.
+                '''
+                # IMPROVE: overwrite only if field is null.
+                # https://stackoverflow.com/questions/55615467/update-field-if-is-null-in-mongoengine
+                db_author.modify(
+                    set__fullname=db_author.fullname,
+                    set__firstname=db_author.firstname,
+                    set__middlename=db_author.middlename,
+                    set__lastname=db_author.lastname,
+                    set__affiliation=db_author.affiliation,
+                    set__affiliation_country=db_author.affiliation_country,
+                    set__eid_list=merged_list)
                 authors.append(db_author)
             else:
                 author.save()

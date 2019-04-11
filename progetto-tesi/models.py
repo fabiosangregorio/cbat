@@ -11,6 +11,7 @@ class Author(Document):
     affiliation_country = StringField()
     dblp_url = StringField()
     eid_list = ListField(StringField())
+    subject_areas = ListField(IntField())
     # If, in any point of the pipeline, the author fails a search/parse,
     # mark it with 'exact' = False
     exact = BooleanField(default=True)
