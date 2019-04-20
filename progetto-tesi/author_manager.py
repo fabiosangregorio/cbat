@@ -1,4 +1,5 @@
 from fuzzywuzzy import fuzz, process
+
 from scopus import AuthorSearch, AuthorRetrieval
 
 
@@ -9,7 +10,7 @@ def find_authors(authors):
     auths = list()
     for author in authors:
         auths.append(find_author(author))
-    return auths, filter(None, auths)
+    return list(filter(None, auths)), sum(True for a in auths if a is None)
 
 
 def find_author(author):

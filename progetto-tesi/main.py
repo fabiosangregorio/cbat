@@ -1,6 +1,6 @@
 import logging
 from logging import info
-from time import time
+import time
 
 from mongoengine import connect
 import spacy
@@ -10,7 +10,7 @@ import conference_manager
 import committee_manager
 import author_manager
 import paper_manager
-from .models import Conference, Author, Paper
+from models import Conference, Author, Paper
 
 
 logging.basicConfig(level=logging.INFO)
@@ -25,9 +25,9 @@ def _add_conference(conf, nlp):
     cfp = cfp_manager.get_cfp(conf.wikicfp_url)
     program_sections = committee_manager.extract_program_sections(cfp.text)
     if len(program_sections) == 0:
-        cfp = cfp_manager.search_external_cfp(cfp.external_source)
-        program_sections = committee_manager.extract_program_sections(cfp.text)
-    program_committee = committee_manager.extract_committee(cfp, nlp)
+        cfp_text = cfp_manager.search_external_cfp(cfp.external_source)
+        program_sections = committee_manager.extract_program_sections(cfp_text)
+    program_committee = committee_manager.extract_committee(program_sections, nlp)
     if not program_committee:
         # Having a conference without program committee means we can't compare
         # the references, therefore there's no point in having it saved to db.
@@ -41,7 +41,7 @@ def _add_conference(conf, nlp):
     # Find authors and save them to db
     authors, authors_not_found = author_manager.find_authors(program_committee)
     for author in authors:
-        db_author = Author.objects(eid_list__in=author.eid_list).first()
+        db_author = Author.objects(eid_list__in=[author.eid_list]).first()
         if db_author:
             # FIXME: not an atomic operation, could result in problems with
             # multithreading
@@ -66,12 +66,13 @@ def _add_conference(conf, nlp):
         else:
             author.save()
 
-    conf.modify(
-        set__program_committee=authors,
-        set__processing_status='committee_extracted')
+    conf.program_committee = authors
+    conf.processing_status = "committee_extracted"
+    conf.save()
+
     info('AUTHORS EXTRACTION:\n'
          'Total authors extracted: {0} Total not extracted: {1}'
-         .format(len(authors), len(authors_not_found)))
+         .format(len(authors), authors_not_found))
 
     # save conference papers to db
     # IMPROVE: if no papers are found, remove the conference from db?
@@ -110,11 +111,11 @@ def _add_conference(conf, nlp):
             #     auth = Author.objects(eid_list__in=eid).upsert_one(
             #         set_on_insert__eid_list=[eid])
             # FIXME: check why upsert is not working
-            auth = Author.objects(eid_list__in=eid).first()
+            auth = Author.objects(eid_list__in=[eid]).first()
             if auth:
                 ref_not_to_committee_db += 1
             else:
-                auth = Author(eid_list=eid).save()
+                auth = Author(eid_list=[eid]).save()
                 ref_not_to_committee_not_db += 1
 
             paper.non_committee_refs.append(auth)
@@ -136,10 +137,10 @@ if __name__ == "__main__":
     nlp = spacy.load('en_core_web_sm')
     info(f'Loading NER: {time.time() - start_time}')
 
-    conf_names = conference_manager.load_from_xlsx("./progetto-tesi/cini.xlsx")[0:1]
-    for conf_name in conf_names:
-        conf_editions = conference_manager.get_conferences(conf_name)
+    confs = conference_manager.load_from_xlsx("./progetto-tesi/data/cini.xlsx")[0:1]
+    for conf in confs:
+        conf_editions = conference_manager.search_conference(conf)
         conf_editions = [conf_editions[3]]
         for edition in conf_editions:
             info(f'### BEGIN conference: {edition.acronym} {edition.year} ###')
-            added_conferences = _add_conference(conf_editions, nlp)
+            _add_conference(edition, nlp)

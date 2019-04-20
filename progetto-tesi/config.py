@@ -1,1 +1,3 @@
-CONFERENCES_YEAR_LOWER_BOUNDARY=5 # get last five years of conferences 
+HEADINGS = ["committee", "commission"]
+PROGRAM_HEADINGS = ["program", "programme"]
+P_PROGRAM_HEADINGS = [f'{ph} {h}' for h in HEADINGS for ph in PROGRAM_HEADINGS]
