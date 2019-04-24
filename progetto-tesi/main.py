@@ -1,16 +1,17 @@
 import logging
 from logging import info
-import time
 
 from mongoengine import connect
 import spacy
 
 import cfp_manager
 import conference_manager
-import committee_manager
+# import committee_manager
 import author_manager
 import paper_manager
 from models import Conference, Author, Paper
+import matplotlib.pyplot as plt
+import scipy.stats as stats
 
 
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +41,7 @@ def _add_conference(conf, nlp):
 
     # Find authors and save them to db
     authors, authors_not_found = author_manager.find_authors(program_committee)
+    authors_list = list()
     for author in authors:
         db_author = Author.objects(eid_list__in=[author.eid_list]).first()
         if db_author:
@@ -63,10 +65,12 @@ def _add_conference(conf, nlp):
                 set__affiliation=db_author.affiliation,
                 set__affiliation_country=db_author.affiliation_country,
                 set__eid_list=merged_list)
+            authors_list.append(db_author)
         else:
             author.save()
+            authors_list.append(author)
 
-    conf.program_committee = authors
+    conf.program_committee = authors_list
     conf.processing_status = "committee_extracted"
     conf.save()
 
@@ -89,7 +93,7 @@ def _add_conference(conf, nlp):
             paper.save()
             papers_to_add.append(paper)
 
-    conf.modify(set__papers=papers_to_add, 
+    conf.modify(set__papers=papers_to_add,
                 set__processing_status='papers_extracted')
 
     info(f'PAPERS EXTRACTION: \nTotal papers extracted: {len(papers)}, '
@@ -132,15 +136,32 @@ def _add_conference(conf, nlp):
          f'{ref_not_to_committee_not_db}')
 
 
-if __name__ == "__main__":
-    start_time = time.time()
+def _add_conferences():
     nlp = spacy.load('en_core_web_sm')
-    info(f'Loading NER: {time.time() - start_time}')
 
     confs = conference_manager.load_from_xlsx("./progetto-tesi/data/cini.xlsx")[0:1]
     for conf in confs:
         conf_editions = conference_manager.search_conference(conf)
-        conf_editions = [conf_editions[3]]
+        conf_editions = [conf_editions[0]]
         for edition in conf_editions:
             info(f'### BEGIN conference: {edition.acronym} {edition.year} ###')
             _add_conference(edition, nlp)
+
+
+def _plot_data():
+    data = list(Paper.objects.aggregate({
+        '$project': {
+            '_id': 0,
+            'x': {'$add': [{'$size': "$committee_refs"}, {'$size': "$non_committee_refs"}]},
+            'y': {'$size': "$committee_refs"}
+        }
+    }))
+    x = [point['x'] for point in data]
+    y = [point['y'] for point in data]
+    plt.scatter(x, y)
+    plt.show()
+
+
+if __name__ == "__main__":
+    # _add_conferences()
+    _plot_data()
