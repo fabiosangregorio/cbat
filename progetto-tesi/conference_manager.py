@@ -1,8 +1,10 @@
 import re
 from datetime import datetime
+from logging import warning
 
 import xlrd
 from fuzzywuzzy import fuzz
+from scopus import AbstractRetrieval, SerialTitle
 
 import util.webutil as webutil
 from models import Conference
@@ -75,3 +77,25 @@ def search_conference(conf, lower_boundary=5, exclude_current_year=True):
             location=w_location, year=w_year, wikicfp_url=w_url))
 
     return conferences
+
+
+def get_subject_areas(conference):
+    if len(conference.papers) == 0:
+        warning("At least one paper is needed to get the conference's subject areas.")
+        return []
+
+    issn = None
+    for i in range(4):
+        # Not all papers have the conference's ISSN, therefore try at most 5 papers
+        # in order not to overload the API.
+        if len(conference.papers) <= i + 1:
+            break
+        # FIXME: remove refresh=True when the following issue is resolved:
+        # https://github.com/scopus-api/scopus/issues/99
+        issn = AbstractRetrieval(
+            conference.papers[i].scopus_eid, view="FULL", refresh=True).issn
+        if issn:
+            break
+
+    subject_areas = [s.code for s in SerialTitle(issn).subject_area]
+    return subject_areas

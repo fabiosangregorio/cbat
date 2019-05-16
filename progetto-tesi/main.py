@@ -6,12 +6,11 @@ import spacy
 
 import cfp_manager
 import conference_manager
-# import committee_manager
+import committee_manager
 import author_manager
 import paper_manager
 from models import Conference, Author, Paper
 import matplotlib.pyplot as plt
-import scipy.stats as stats
 
 
 logging.basicConfig(level=logging.INFO)
@@ -99,6 +98,9 @@ def _add_conference(conf, nlp):
     info(f'PAPERS EXTRACTION: \nTotal papers extracted: {len(papers)}, '
          f'Papers already in db: {papers_already_in_db}')
 
+    # get conference's subject areas
+    conference_manager.get_subject_areas(conf)
+
     # save references to db
     ref_to_committee = 0
     ref_not_to_committee_db = 0
@@ -139,10 +141,10 @@ def _add_conference(conf, nlp):
 def _add_conferences():
     nlp = spacy.load('en_core_web_sm')
 
-    confs = conference_manager.load_from_xlsx("./progetto-tesi/data/cini.xlsx")[0:1]
+    confs = conference_manager.load_from_xlsx("./progetto-tesi/data/cini.xlsx")[1:2]
     for conf in confs:
         conf_editions = conference_manager.search_conference(conf)
-        conf_editions = [conf_editions[0]]
+        # conf_editions = [conf_editions[2]]
         for edition in conf_editions:
             info(f'### BEGIN conference: {edition.acronym} {edition.year} ###')
             _add_conference(edition, nlp)
@@ -159,9 +161,12 @@ def _plot_data():
     x = [point['x'] for point in data]
     y = [point['y'] for point in data]
     plt.scatter(x, y)
+    plt.title('Refs distribution in papers')
+    plt.ylabel('Refs to program committee')
+    plt.xlabel('Total refs')
     plt.show()
 
 
 if __name__ == "__main__":
-    # _add_conferences()
-    _plot_data()
+    _add_conferences()
+    # _plot_data()

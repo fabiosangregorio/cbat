@@ -10,8 +10,8 @@ from util.webutil import polish_html
 from models import Author
 
 
-# gets all the sections referring to a program committee
 def extract_program_sections(text):
+    """Gets all the sections referring to a program committee"""
     if not text:
         return []
 
@@ -168,7 +168,7 @@ def extract_committee(program_sections, nlp):
             # something else extracted as a person).
             p_to_add = [p for p in section_people if p.exact]
             if p_to_add:
-                program_committee.append(p_to_add)
+                program_committee += p_to_add
         else:
             program_committee += section_people
 
