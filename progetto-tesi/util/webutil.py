@@ -6,13 +6,14 @@ from logging import warning
 
 from bs4 import BeautifulSoup
 
-# handles the request for a generic webpage
+
 def get_page(url):
+    """Handles the request for a generic webpage"""
     try:
         with closing(get(url, stream=True)) as resp:
             content_type = resp.headers['Content-Type'].lower()
-            if (resp.status_code == 200 and content_type is not None and 
-                content_type.find('html') > -1):
+            if (resp.status_code == 200 and content_type is not None and
+               content_type.find('html') > -1):
                 return {
                     "html": BeautifulSoup(resp.content, 'html.parser'),
                     "redirected": len(resp.history) > 0
@@ -34,7 +35,7 @@ def get_page(url):
 def polish_html(html):
     if not html:
         return None
-        
+
     html = html.replace('\r', '\n')
     html = os.linesep.join([s for s in html.splitlines() if len(s.strip()) >= 4])
     return html

@@ -6,12 +6,11 @@ import spacy
 
 import cfp_manager
 import conference_manager
-# import committee_manager
+import committee_manager
 import author_manager
 import paper_manager
+import stats_manager
 from models import Conference, Author, Paper
-import matplotlib.pyplot as plt
-import scipy.stats as stats
 
 
 logging.basicConfig(level=logging.INFO)
@@ -148,20 +147,7 @@ def _add_conferences():
             _add_conference(edition, nlp)
 
 
-def _plot_data():
-    data = list(Paper.objects.aggregate({
-        '$project': {
-            '_id': 0,
-            'x': {'$add': [{'$size': "$committee_refs"}, {'$size': "$non_committee_refs"}]},
-            'y': {'$size': "$committee_refs"}
-        }
-    }))
-    x = [point['x'] for point in data]
-    y = [point['y'] for point in data]
-    plt.scatter(x, y)
-    plt.show()
-
-
 if __name__ == "__main__":
     # _add_conferences()
-    _plot_data()
+    stats_manager.plot_refs()
+    # TODO: add stats to author db
