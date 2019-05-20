@@ -80,22 +80,12 @@ def search_conference(conf, lower_boundary=5, exclude_current_year=True):
 
 
 def get_subject_areas(conference):
-    if len(conference.papers) == 0:
-        warning("At least one paper is needed to get the conference's subject areas.")
-        return []
+    subject_areas = []
 
-    issn = None
-    for i in range(4):
-        # Not all papers have the conference's ISSN, therefore try at most 5 papers
-        # in order not to overload the API.
-        if len(conference.papers) <= i + 1:
-            break
+    for paper in conference.papers:
         # FIXME: remove refresh=True when the following issue is resolved:
         # https://github.com/scopus-api/scopus/issues/99
-        issn = AbstractRetrieval(
-            conference.papers[i].scopus_eid, view="FULL", refresh=True).issn
-        if issn:
-            break
+        paper = AbstractRetrieval(paper.scopus_id, view="FULL", refresh=True)
+        subject_areas += [s.code for s in subject_areas]
 
-    subject_areas = [s.code for s in SerialTitle(issn).subject_area]
     return subject_areas

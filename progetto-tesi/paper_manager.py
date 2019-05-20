@@ -38,4 +38,3 @@ def extract_references_from_paper(paper):
     eids = [f"9-s2.0-{auid.strip()}" for ref in references if ref.authors_auid
             for auid in ref.authors_auid.split('; ')]
     return eids
-
