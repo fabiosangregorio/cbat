@@ -3,6 +3,7 @@ from datetime import datetime
 
 import xlrd
 from fuzzywuzzy import fuzz
+from scopus import AbstractRetrieval
 
 import util.webutil as webutil
 from models import Conference
@@ -75,3 +76,16 @@ def search_conference(conf, lower_boundary=5, exclude_current_year=True):
             location=w_location, year=w_year, wikicfp_url=w_url))
 
     return conferences
+
+
+def get_subject_areas(conference):
+    subject_areas = []
+    print("Getting conference subject areas", end="", flush=True)
+    for paper in conference.papers:
+        # FIXME: remove refresh=True when the following issue is resolved:
+        # https://github.com/scopus-api/scopus/issues/99
+        paper = AbstractRetrieval(paper.scopus_id, view="FULL", refresh=True)
+        subject_areas += [s.code for s in paper.subject_areas]
+        print(".", end="", flush=True)
+
+    return list(set(subject_areas))
