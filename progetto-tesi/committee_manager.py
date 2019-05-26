@@ -53,7 +53,7 @@ def _extract_person_name(name):
     person = None
     try:  # probablepeople name extraction
         pp_result = pp.tag(name)
-    except:  # pp either thinks the name is a company name or can't extract it
+    except Exception:  # pp either thinks the name is a company name or can't extract it
         pp_result = [None, None]
 
     if(pp_result[1] == "Person"):
@@ -73,7 +73,7 @@ def _extract_person_name(name):
         # if pp can't extract name and surname, try an extraction based on most
         # common name formats
         split_char = ',' if ',' in person.fullname else ' '
-        splitted = person.fullname.split(split_char) 
+        splitted = person.fullname.split(split_char)
 
         first_word = splitted.pop(0).strip()
         last_words = " ".join(splitted).strip()
@@ -127,6 +127,7 @@ def extract_committee(program_sections, nlp):
 
             if(max(n_section_people[step]) < loss_threshold * max([max(i)
                for i in n_section_people])):
+                info(f'Choosing step {step}')
                 break
             step += 1
             if step > 3:

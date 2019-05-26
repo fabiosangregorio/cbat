@@ -1,5 +1,4 @@
 import logging
-from logging import info
 
 from mongoengine import connect
 import spacy
@@ -31,12 +30,12 @@ def _add_conference(conf, nlp):
     if not program_committee:
         # Having a conference without program committee means we can't compare
         # the references, therefore there's no point in having it saved to db.
-        info('Program committee not found')
+        print('Program committee not found')
         return None
 
-    info('PROGRAM COMMITTEE EXTRACTION:\nFound: {0}, Without affiliation: {1}'
-         .format(len(program_committee),
-                 len([p for p in program_committee if len(p.affiliation) < 2])))
+    print('PROGRAM COMMITTEE EXTRACTION:\nFound: {0}, Without affiliation: {1}'
+          .format(len(program_committee),
+                  len([p for p in program_committee if len(p.affiliation) < 2])))
 
     # Find authors and save them to db
     authors, authors_not_found = author_manager.find_authors(program_committee)
@@ -73,9 +72,9 @@ def _add_conference(conf, nlp):
     conf.processing_status = "committee_extracted"
     conf.save()
 
-    info('AUTHORS EXTRACTION:\n'
-         'Total authors extracted: {0} Total not extracted: {1}'
-         .format(len(authors), authors_not_found))
+    print('AUTHORS EXTRACTION:\n'
+          'Total authors extracted: {0} Total not extracted: {1}'
+          .format(len(authors), authors_not_found))
 
     # save conference papers to db
     # IMPROVE: if no papers are found, remove the conference from db?
@@ -95,11 +94,12 @@ def _add_conference(conf, nlp):
     conf.modify(set__papers=papers_to_add,
                 set__processing_status='papers_extracted')
 
-    info(f'PAPERS EXTRACTION: \nTotal papers extracted: {len(papers)}, '
-         f'Papers already in db: {papers_already_in_db}')
+    print(f'PAPERS EXTRACTION: \nTotal papers extracted: {len(papers)}, '
+          f'Papers already in db: {papers_already_in_db}')
 
     # get conference's subject areas
-    conference_manager.get_subject_areas(conf)
+    subject_areas = conference_manager.get_subject_areas(conf)
+    conf.modify(set__subject_areas=subject_areas)
 
     # save references to db
     ref_to_committee = 0
@@ -132,10 +132,10 @@ def _add_conference(conf, nlp):
     conf.processing_status = 'complete'
     conf.save()
 
-    info(f'REFERENCES OF ALL PAPERS EXTRACTION: \nRefs to committee: '
-         f'{ref_to_committee}, Refs not to committee already in db: '
-         f'{ref_not_to_committee_db}, ref not to committee not in db: '
-         f'{ref_not_to_committee_not_db}')
+    print(f'REFERENCES OF ALL PAPERS EXTRACTION: \nRefs to committee: '
+          f'{ref_to_committee}, Refs not to committee already in db: '
+          f'{ref_not_to_committee_db}, ref not to committee not in db: '
+          f'{ref_not_to_committee_not_db}')
 
 
 def _add_conferences():
@@ -146,7 +146,7 @@ def _add_conferences():
         conf_editions = conference_manager.search_conference(conf)
         # conf_editions = [conf_editions[2]]
         for edition in conf_editions:
-            info(f'### BEGIN conference: {edition.acronym} {edition.year} ###')
+            print(f'### BEGIN conference: {edition.acronym} {edition.year} ###')
             _add_conference(edition, nlp)
 
 
@@ -168,5 +168,5 @@ def _plot_data():
 
 
 if __name__ == "__main__":
-    _add_conferences()
-    # _plot_data()
+    # _add_conferences()
+    _plot_data()

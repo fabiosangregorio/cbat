@@ -40,6 +40,7 @@ class Conference(Document):
     program_committee = ListField(ReferenceField(Author))
     papers = ListField(ReferenceField(Paper))
     wikicfp_id = StringField()
+    subject_areas = ListField(IntField())
     # not_processed, committee_extracted, papers_extracted, complete
     processing_status = StringField(default='not_processed')
     _wikicfp_url = StringField(db_field='wikicfp_url')
