@@ -8,6 +8,7 @@ import conference_manager
 import committee_manager
 import author_manager
 import paper_manager
+import stats_manager
 from models import Conference, Author, Paper
 import matplotlib.pyplot as plt
 
@@ -169,4 +170,5 @@ def _plot_data():
 
 if __name__ == "__main__":
     # _add_conferences()
-    _plot_data()
+    stats_manager.plot_refs()
+    # TODO: add stats to author db
