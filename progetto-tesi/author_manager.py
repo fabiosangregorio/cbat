@@ -44,7 +44,6 @@ def find_author(author):
         author.eid_list = [p.eid for p in possible_people
                            if affiliation.lower() == f"{p.affiliation}, {p.country}".lower()]
     else:
-        # info(f"{author.fullname}; {author.affiliation}; {', '.join(aff_list)}")
         # TODO: handle no affiliation and wrong affiliation
         return None
 

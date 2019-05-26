@@ -97,7 +97,6 @@ def extract_committee(program_sections, nlp):
     # out which components are needed
     # See: https://stackoverflow.com/questions/38263384/how-to-save-spacy-model-onto-cache
     # See: https://github.com/explosion/spaCy/issues/3054
-    # Reply to https://stackoverflow.com/questions/54625341/how-to-solve-memory-error-while-loading-english-module-using-spacy
 
     # threshold over which we can say the NER lost a significant amount of names
     loss_threshold = 0.7

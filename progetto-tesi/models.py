@@ -1,4 +1,4 @@
-from mongoengine import Document, StringField, ListField, ReferenceField, IntField, BooleanField
+from mongoengine import Document, StringField, ListField, ReferenceField, IntField, BooleanField, DecimalField
 from urllib import parse
 
 
@@ -15,8 +15,13 @@ class Author(Document):
     # If, in any point of the pipeline, the author fails a search/parse,
     # mark it with 'exact' = False
     exact = BooleanField(default=True)
+    committee_mentions_ratio = DecimalField()
+    not_committee_mentions_ratio = DecimalField()
 
     def getattr(self, key, default=""):
+        '''
+        Returns the attribute if it not None, `default` otherwise
+        '''
         return (default if self.__getattribute__(key) is None else
                 self.__getattribute__(key))
 
@@ -27,6 +32,9 @@ class Paper(Document):
     non_committee_refs = ListField(ReferenceField(Author))
 
     def getattr(self, key, default=""):
+        '''
+        Returns the attribute if it not None, `default` otherwise
+        '''
         return (default if self.__getattribute__(key) is None else
                 self.__getattribute__(key))
 
@@ -46,7 +54,9 @@ class Conference(Document):
     _wikicfp_url = StringField(db_field='wikicfp_url')
 
     def __init__(self, *args, **kwargs):
-        kwargs['_wikicfp_url'] = kwargs.pop('wikicfp_url') if kwargs.get('wikicfp_url') else None
+        kwargs['_wikicfp_url'] = None
+        if kwargs.get('wikicfp_url'):
+            kwargs['_wikicfp_url'] = kwargs.pop('wikicfp_url')
         Document.__init__(self, *args, **kwargs)
         self.wikicfp_url = kwargs['_wikicfp_url']
 
@@ -62,5 +72,8 @@ class Conference(Document):
         self.wikicfp_id = parse.parse_qs(parse.urlparse(url).query)['eventid'][0]
 
     def getattr(self, key, default=""):
+        '''
+        Returns the attribute if it not None, `default` otherwise
+        '''
         return (default if self.__getattribute__(key) is None else
                 self.__getattribute__(key))

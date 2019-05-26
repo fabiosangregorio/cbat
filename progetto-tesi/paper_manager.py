@@ -25,9 +25,7 @@ def get_papers(conference):
 
 def extract_references_from_paper(paper):
     try:
-        # FIXME: remove refresh=True when the following issue is resolved:
-        # https://github.com/scopus-api/scopus/issues/99
-        references = AbstractRetrieval(paper.scopus_id, view="REF", refresh=True).references
+        references = AbstractRetrieval(paper.scopus_id, view="REF").references
     except Exception:
         warning('Retrieval of references failed for eid ' + paper.scopus_id)
         return []
