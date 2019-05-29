@@ -2,14 +2,19 @@ from fuzzywuzzy import fuzz, process
 
 from scopus import AuthorSearch, AuthorRetrieval
 
+from helpers import printl
+
 
 # IMPROVE: use API 'field' attribute to only return used fileds
 
 
 def find_authors(authors):
     auths = list()
+    printl('Getting authors')
     for author in authors:
         auths.append(find_author(author))
+        printl('.')
+    print(' Done')
     return list(filter(None, auths)), sum(True for a in auths if a is None)
 
 

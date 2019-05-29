@@ -12,6 +12,7 @@ import author_manager
 import paper_manager
 import util.webutil as webutil
 from models import Conference, Author, Paper
+from helpers import printl
 
 
 base_url = 'http://www.wikicfp.com'
@@ -85,16 +86,17 @@ def search_conference(conf, lower_boundary=5, exclude_current_year=True):
 
 def get_subject_areas(conference):
     subject_areas = []
-    print("Getting conference subject areas", end="", flush=True)
+    printl("Getting conference subject areas")
     for paper in conference.papers:
         paper = AbstractRetrieval(paper.scopus_id, view="FULL")
         subject_areas += [s.code for s in paper.subject_areas]
-        print(".", end="", flush=True)
+        printl(".")
 
+    printl(" Done")
     return list(set(subject_areas))
 
 
-def add_conference(conf, nlp):
+def add_conference(conf, nlp, precise=False):
     if Conference.objects(wikicfp_id=conf.wikicfp_id):
         return
 
@@ -108,10 +110,10 @@ def add_conference(conf, nlp):
     if not program_committee:
         # Having a conference without program committee means we can't compare
         # the references, therefore there's no point in having it saved to db.
-        print('Program committee not found')
+        print('Program committee not found. Skipping conference.')
         return None
 
-    print('PROGRAM COMMITTEE EXTRACTION:\nFound: {0}, Without affiliation: {1}'
+    print('Program committee extraction: found {0}, {1} without affiliation.'
           .format(len(program_committee),
                   len([p for p in program_committee if len(p.affiliation) < 2])))
 
@@ -150,8 +152,7 @@ def add_conference(conf, nlp):
     conf.processing_status = "committee_extracted"
     conf.save()
 
-    print('AUTHORS EXTRACTION:\n'
-          'Total authors extracted: {0} Total not extracted: {1}'
+    print('Author extraction: extracted {0}. Total not extracted: {1}'
           .format(len(authors), authors_not_found))
 
     # save conference papers to db
@@ -172,13 +173,14 @@ def add_conference(conf, nlp):
     conf.modify(set__papers=papers_to_add,
                 set__processing_status='papers_extracted')
 
-    print(f'PAPERS EXTRACTION: \nTotal papers extracted: {len(papers)}, '
+    print(f'Papers extraction: extracted {len(papers)} papers. '
           f'Papers already in db: {papers_already_in_db}')
 
     # get conference's subject areas
     subject_areas = conference_manager.get_subject_areas(conf)
     conf.modify(set__subject_areas=subject_areas)
 
+    printl('Getting references from papers')
     # save references to db
     ref_to_committee = 0
     ref_not_to_committee_db = 0
@@ -210,7 +212,9 @@ def add_conference(conf, nlp):
 
         ref_to_committee += len(paper.committee_refs)
         paper.save()
+        printl('.')
 
+    print(' Done')
     conf.processing_status = 'complete'
     conf.save()
 
