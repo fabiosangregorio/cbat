@@ -1,3 +1,4 @@
 HEADINGS = ["committee", "commission"]
 PROGRAM_HEADINGS = ["program", "programme"]
 P_PROGRAM_HEADINGS = [f'{ph} {h}' for h in HEADINGS for ph in PROGRAM_HEADINGS]
+NER_LOSS_THRESHOLD = 0.7

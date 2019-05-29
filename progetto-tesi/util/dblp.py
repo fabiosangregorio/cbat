@@ -1,8 +1,5 @@
-import sys
-import time
 import urllib
 
-from bs4 import BeautifulSoup
 from fuzzywuzzy import process
 from fuzzywuzzy import fuzz
 
@@ -11,6 +8,7 @@ import webutil
 
 
 score_threshold = 70
+
 
 def find_author(person_to_find):
     base_url = "https://dblp.org/search"
@@ -28,7 +26,7 @@ def find_author(person_to_find):
     # first ul, either contains the exact matches or likely matches
     possible_people = list()
     for li in html.select("#completesearch-authors > .body ul")[0].select('li'):
-        possible_people.append(Person(
+        possible_people.append(Author(
             name="".join([m.getText() for m in li.select('a mark')]),
             affiliation=li.select('small')[0].getText() if li.select('small') else "",
             dblp_url=li.select('a')[0]['href']
@@ -41,7 +39,7 @@ def find_author(person_to_find):
 def find_right_person(person_to_find, people_list, is_exact):
     result_message = {
         "status": "ok",
-        "is_exact": is_exact # True if exact match, False if likely match
+        "is_exact": is_exact  # True if exact match, False if likely match
     }
 
     affiliations = {i: r.affiliation for i, r in enumerate(people_list)}
@@ -56,7 +54,7 @@ def find_right_person(person_to_find, people_list, is_exact):
         # TODO: gestire il caso likely_match
 
     _, fuzz_score, best_index = process.extractOne(person_to_find.affiliation, affiliations, scorer=fuzz.token_set_ratio)
-    
+
     if fuzz_score > score_threshold or (len(affiliations) == 1 and fuzz_score == 0):
         # regular best match or only one match (no affiliation)
         result_message["result"] = people_list[best_index]
@@ -78,7 +76,7 @@ def find_right_person(person_to_find, people_list, is_exact):
                     "err": "wrong_affiliation",
                     "is_exact": is_exact
                 }
-    
+
     return result_message
 
 

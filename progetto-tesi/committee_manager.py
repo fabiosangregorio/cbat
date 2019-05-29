@@ -4,10 +4,12 @@ import string
 
 import probablepeople as pp
 
-from config import HEADINGS, P_PROGRAM_HEADINGS
+from config import HEADINGS, P_PROGRAM_HEADINGS, NER_LOSS_THRESHOLD
 from util.helpers import findall
 from util.webutil import polish_html
 from models import Author
+
+from helpers import printl
 
 
 def extract_program_sections(text):
@@ -98,14 +100,16 @@ def extract_committee(program_sections, nlp):
     # See: https://stackoverflow.com/questions/38263384/how-to-save-spacy-model-onto-cache
     # See: https://github.com/explosion/spaCy/issues/3054
 
+    printl('Extracting program committee')
     # threshold over which we can say the NER lost a significant amount of names
-    loss_threshold = 0.7
+    loss_threshold = NER_LOSS_THRESHOLD
     program_committee = list()
     for section in program_sections:
         n_section_people = list()
         step = 0
         text_lines = section.splitlines()
         while True:
+            printl('.')
             # run NER every `step` + offset lines and check if the result set is
             # significantly reduced
             n_step_people = list()
@@ -171,5 +175,6 @@ def extract_committee(program_sections, nlp):
                 program_committee += p_to_add
         else:
             program_committee += section_people
-
+            
+    print(' Done')
     return program_committee
