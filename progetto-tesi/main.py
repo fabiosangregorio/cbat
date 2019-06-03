@@ -6,15 +6,15 @@ import stats_manager
 from models import Conference
 
 
-def _add_conferences(precise=True):
+def _add_conferences():
     nlp = spacy.load('en_core_web_sm')
 
     confs = conference_manager.load_from_xlsx("./progetto-tesi/data/cini.xlsx")[1:2]
     for conf in confs:
-        conf_editions = conference_manager.search_conference(conf)
+        conf_editions = conference_manager.search_conference(conf)[3:4]
         for edition in conf_editions:
             print(f'### BEGIN conference: {edition.acronym} {edition.year} ###')
-            conference_manager.add_conference(edition, nlp, precise=False)
+            conference_manager.add_conference(edition, nlp)
 
 
 def _add_authors_stats():
@@ -28,6 +28,6 @@ def _add_authors_stats():
 if __name__ == "__main__":
     connect('tesi-triennale')
 
-    _add_conferences(precise=False)
+    _add_conferences()
     # stats_manager.plot_refs()
-    _add_authors_stats()
+    # _add_authors_stats()

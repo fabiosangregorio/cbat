@@ -2,7 +2,7 @@ from fuzzywuzzy import fuzz, process
 
 from scopus import AuthorSearch, AuthorRetrieval
 
-from helpers import printl
+from util.helpers import printl
 
 
 # IMPROVE: use API 'field' attribute to only return used fileds
@@ -46,7 +46,7 @@ def find_author(author):
                                                  aff_list,
                                                  scorer=fuzz.token_set_ratio)
     if fuzz_score > score_threshold:
-        author.eid_list = [p.eid for p in possible_people
+        author.eid_list = [p.eid.split('-')[-1] for p in possible_people
                            if affiliation.lower() == f"{p.affiliation}, {p.country}".lower()]
     else:
         # TODO: handle no affiliation and wrong affiliation

@@ -12,7 +12,7 @@ import author_manager
 import paper_manager
 import util.webutil as webutil
 from models import Conference, Author, Paper
-from helpers import printl
+from util.helpers import printl
 
 
 base_url = 'http://www.wikicfp.com'
@@ -96,7 +96,9 @@ def get_subject_areas(conference):
     return list(set(subject_areas))
 
 
-def add_conference(conf, nlp, precise=False):
+def add_conference(conf, nlp):
+    api_calls = 0
+
     if Conference.objects(wikicfp_id=conf.wikicfp_id):
         return
 
@@ -119,6 +121,7 @@ def add_conference(conf, nlp, precise=False):
 
     # Find authors and save them to db
     authors, authors_not_found = author_manager.find_authors(program_committee)
+    api_calls += 2 * len(authors) + authors_not_found
     authors_list = list()
     for author in authors:
         db_author = Author.objects(eid_list__in=[author.eid_list]).first()
@@ -159,6 +162,9 @@ def add_conference(conf, nlp, precise=False):
     # IMPROVE: if no papers are found, remove the conference from db?
     # it could distort the statistics
     papers = paper_manager.get_papers(conf)
+
+    api_calls += len(papers)
+
     papers_to_add = list()
     papers_already_in_db = 0
     for paper in papers:
@@ -178,6 +184,7 @@ def add_conference(conf, nlp, precise=False):
 
     # get conference's subject areas
     subject_areas = conference_manager.get_subject_areas(conf)
+    api_calls += len(paper)
     conf.modify(set__subject_areas=subject_areas)
 
     printl('Getting references from papers')
@@ -187,6 +194,8 @@ def add_conference(conf, nlp, precise=False):
     ref_not_to_committee_not_db = 0
     for paper in conf.papers:
         ref_eids = paper_manager.extract_references_from_paper(paper)
+        api_calls += len(paper)
+
         for eid in ref_eids:
             # if there's a reference to the program committee, get the pc author
             found = False
@@ -222,3 +231,5 @@ def add_conference(conf, nlp, precise=False):
           f'{ref_to_committee}, Refs not to committee already in db: '
           f'{ref_not_to_committee_db}, ref not to committee not in db: '
           f'{ref_not_to_committee_not_db}')
+
+    print(api_calls)

@@ -10,13 +10,18 @@ class Author(Document):
     affiliation = StringField()
     affiliation_country = StringField()
     dblp_url = StringField()
-    eid_list = ListField(StringField())
+    eid_list = ListField(IntField())
     subject_areas = ListField(IntField())
     # If, in any point of the pipeline, the author fails a search/parse,
     # mark it with 'exact' = False
     exact = BooleanField(default=True)
     committee_mentions_ratio = DecimalField()
     not_committee_mentions_ratio = DecimalField()
+    meta = {
+        'indexes': [
+            '#eid_list'
+        ]
+    }
 
     def getattr(self, key, default=""):
         '''

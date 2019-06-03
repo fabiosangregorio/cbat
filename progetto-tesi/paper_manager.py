@@ -20,6 +20,7 @@ def get_papers(conference):
 
     documents = ScopusSearch(query, view="STANDARD")
     papers = [Paper(scopus_id=sid) for sid in documents.get_eids()]
+
     return papers
 
 
