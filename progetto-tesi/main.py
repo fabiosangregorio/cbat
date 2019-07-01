@@ -9,11 +9,11 @@ from models import Conference
 def _add_conferences():
     nlp = spacy.load('en_core_web_sm')
 
-    confs = conference_manager.load_from_xlsx("./progetto-tesi/data/cini.xlsx")[1:2]
+    confs = conference_manager.load_from_xlsx("./progetto-tesi/data/cini.xlsx")[1:4]
     for conf in confs:
-        conf_editions = conference_manager.search_conference(conf)[3:4]
+        conf_editions = conference_manager.search_conference(conf)
         for edition in conf_editions:
-            print(f'### BEGIN conference: {edition.acronym} {edition.year} ###')
+            print(f'\n### BEGIN conference: {edition.acronym} {edition.year} ###')
             conference_manager.add_conference(edition, nlp)
 
 

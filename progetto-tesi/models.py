@@ -17,11 +17,6 @@ class Author(Document):
     exact = BooleanField(default=True)
     committee_mentions_ratio = DecimalField()
     not_committee_mentions_ratio = DecimalField()
-    meta = {
-        'indexes': [
-            '#eid_list'
-        ]
-    }
 
     def getattr(self, key, default=""):
         '''
@@ -29,6 +24,16 @@ class Author(Document):
         '''
         return (default if self.__getattribute__(key) is None else
                 self.__getattribute__(key))
+
+
+class AuthorIndex(Document):
+    eid = IntField(primary_key=True)
+    author = ReferenceField(Author)
+    # meta = {
+    #     'indexes': [
+    #         'author'
+    #     ]
+    # }
 
 
 class Paper(Document):

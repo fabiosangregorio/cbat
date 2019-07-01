@@ -1,17 +1,17 @@
 import re
 from datetime import datetime
+import time
 
 import xlrd
 from fuzzywuzzy import fuzz
 from scopus import AbstractRetrieval
 
 import cfp_manager
-import conference_manager
 import committee_manager
 import author_manager
 import paper_manager
 import util.webutil as webutil
-from models import Conference, Author, Paper
+from models import Conference, Author, Paper, AuthorIndex
 from util.helpers import printl
 
 
@@ -97,8 +97,6 @@ def get_subject_areas(conference):
 
 
 def add_conference(conf, nlp):
-    api_calls = 0
-
     if Conference.objects(wikicfp_id=conf.wikicfp_id):
         return
 
@@ -121,21 +119,22 @@ def add_conference(conf, nlp):
 
     # Find authors and save them to db
     authors, authors_not_found = author_manager.find_authors(program_committee)
-    api_calls += 2 * len(authors) + authors_not_found
     authors_list = list()
     for author in authors:
-        db_author = Author.objects(eid_list__in=[author.eid_list]).first()
+        db_author = AuthorIndex.objects(eid__in=author.eid_list).first()
         if db_author:
             # FIXME: not an atomic operation, could result in problems with
             # multithreading
             db_eid = db_author.eid_list
             new_eid = author.eid_list
-            merged_list = db_eid + list(set(new_eid) - set(db_eid))
+            unique_new_eids = list(set(new_eid) - set(db_eid))
+            merged_list = db_eid + unique_new_eids
+
             # Could be that an author is found as a references and added to the
             # db. Then this author is found to be a member of a program
             # committee. If I simply merge the EIDs, I will be missing out on
             # the newfound info on name, affiliation, etc.
-            # Therefore, I just overwrite the infos.
+            # Therefore, I just overwrite the info.
             # IMPROVE: overwrite only if field is null.
             # https://stackoverflow.com/questions/55615467/update-field-if-is-null-in-mongoengine
             db_author.modify(
@@ -146,10 +145,18 @@ def add_conference(conf, nlp):
                 set__affiliation=db_author.affiliation,
                 set__affiliation_country=db_author.affiliation_country,
                 set__eid_list=merged_list)
+            AuthorIndex.objects.insert(
+                [AuthorIndex(eid=eid, author=db_author) for eid in db_author.eid_list])
             authors_list.append(db_author)
         else:
             author.save()
+            AuthorIndex.objects.insert(
+                [AuthorIndex(eid=eid, author=author) for eid in author.eid_list])
             authors_list.append(author)
+
+    if not authors:
+        print("Authors not found. Skipping conference.")
+        return
 
     conf.program_committee = authors_list
     conf.processing_status = "committee_extracted"
@@ -162,8 +169,6 @@ def add_conference(conf, nlp):
     # IMPROVE: if no papers are found, remove the conference from db?
     # it could distort the statistics
     papers = paper_manager.get_papers(conf)
-
-    api_calls += len(papers)
 
     papers_to_add = list()
     papers_already_in_db = 0
@@ -182,20 +187,20 @@ def add_conference(conf, nlp):
     print(f'Papers extraction: extracted {len(papers)} papers. '
           f'Papers already in db: {papers_already_in_db}')
 
-    # get conference's subject areas
-    subject_areas = conference_manager.get_subject_areas(conf)
-    api_calls += len(paper)
-    conf.modify(set__subject_areas=subject_areas)
+    # # get conference's subject areas
+    # subject_areas = conference_manager.get_subject_areas(conf)
+    # api_calls += len(paper)
+    # conf.modify(set__subject_areas=subject_areas)
 
     printl('Getting references from papers')
     # save references to db
     ref_to_committee = 0
     ref_not_to_committee_db = 0
     ref_not_to_committee_not_db = 0
+    times = []
     for paper in conf.papers:
         ref_eids = paper_manager.extract_references_from_paper(paper)
-        api_calls += len(paper)
-
+        start = time.time()
         for eid in ref_eids:
             # if there's a reference to the program committee, get the pc author
             found = False
@@ -203,27 +208,37 @@ def add_conference(conf, nlp):
                 if eid in a.eid_list:
                     paper.committee_refs.append(a)
                     found = True
-                    continue
+                    break
             if found:
                 continue
             # else:
             #     auth = Author.objects(eid_list__in=eid).upsert_one(
             #         set_on_insert__eid_list=[eid])
             # FIXME: check why upsert is not working
-            auth = Author.objects(eid_list__in=[eid]).first()
+            auth = AuthorIndex.objects(eid=eid).first()
+            # auth = Author.objects(eid_list__in=[eid]).first()
             if auth:
+                auth = auth.author
                 ref_not_to_committee_db += 1
             else:
                 auth = Author(eid_list=[eid]).save()
+                AuthorIndex(eid=eid, author=auth).save()
                 ref_not_to_committee_not_db += 1
-
             paper.non_committee_refs.append(auth)
+        times.append(time.time() - start)
+        print("paper: ", time.time() - start)
+
+        if not ref_eids:
+            printl('x')
+            paper.delete()
+            continue
 
         ref_to_committee += len(paper.committee_refs)
         paper.save()
         printl('.')
 
     print(' Done')
+    print("avg time per paper: ", sum(times) / len(times))
     conf.processing_status = 'complete'
     conf.save()
 
@@ -231,5 +246,3 @@ def add_conference(conf, nlp):
           f'{ref_to_committee}, Refs not to committee already in db: '
           f'{ref_not_to_committee_db}, ref not to committee not in db: '
           f'{ref_not_to_committee_not_db}')
-
-    print(api_calls)
