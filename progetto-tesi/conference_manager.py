@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 import time
+from multiprocessing import Pool
 
 import xlrd
 from fuzzywuzzy import fuzz
@@ -194,55 +195,47 @@ def add_conference(conf, nlp):
 
     printl('Getting references from papers')
     # save references to db
-    ref_to_committee = 0
-    ref_not_to_committee_db = 0
-    ref_not_to_committee_not_db = 0
-    times = []
-    for paper in conf.papers:
-        ref_eids = paper_manager.extract_references_from_paper(paper)
-        start = time.time()
-        for eid in ref_eids:
-            # if there's a reference to the program committee, get the pc author
-            found = False
-            for a in conf.program_committee:
-                if eid in a.eid_list:
-                    paper.committee_refs.append(a)
-                    found = True
-                    break
-            if found:
-                continue
-            # else:
-            #     auth = Author.objects(eid_list__in=eid).upsert_one(
-            #         set_on_insert__eid_list=[eid])
-            # FIXME: check why upsert is not working
-            auth = AuthorIndex.objects(eid=eid).first()
-            # auth = Author.objects(eid_list__in=[eid]).first()
-            if auth:
-                auth = auth.author
-                ref_not_to_committee_db += 1
-            else:
-                auth = Author(eid_list=[eid]).save()
-                AuthorIndex(eid=eid, author=auth).save()
-                ref_not_to_committee_not_db += 1
-            paper.non_committee_refs.append(auth)
-        times.append(time.time() - start)
-        print("paper: ", time.time() - start)
-
-        if not ref_eids:
-            printl('x')
-            paper.delete()
-            continue
-
-        ref_to_committee += len(paper.committee_refs)
-        paper.save()
-        printl('.')
+    start = time.time()
+    pool = Pool()
+    pool.map(_save_paper_refs, [(p, conf) for p in conf.papers])
+    pool.close()
+    print("conf: ", time.time() - start)
 
     print(' Done')
-    print("avg time per paper: ", sum(times) / len(times))
     conf.processing_status = 'complete'
     conf.save()
 
-    print(f'REFERENCES OF ALL PAPERS EXTRACTION: \nRefs to committee: '
-          f'{ref_to_committee}, Refs not to committee already in db: '
-          f'{ref_not_to_committee_db}, ref not to committee not in db: '
-          f'{ref_not_to_committee_not_db}')
+
+def _save_paper_refs(data):
+    paper, conf = data
+    ref_eids = paper_manager.extract_references_from_paper(paper)
+    for eid in ref_eids:
+        # if there's a reference to the program committee, get the pc author
+        found = False
+        for a in conf.program_committee:
+            if eid in a.eid_list:
+                paper.committee_refs.append(a)
+                found = True
+                break
+        if found:
+            continue
+        # else:
+        #     auth = Author.objects(eid_list__in=eid).upsert_one(
+        #         set_on_insert__eid_list=[eid])
+        # FIXME: check why upsert is not working
+        auth = AuthorIndex.objects(eid=eid).first()
+        # auth = Author.objects(eid_list__in=[eid]).first()
+        if auth:
+            auth = auth.author
+        else:
+            auth = Author(eid_list=[eid]).save()
+            AuthorIndex(eid=eid, author=auth).save()
+        paper.non_committee_refs.append(auth)
+
+    if not ref_eids:
+        printl('x')
+        paper.delete()
+        return
+
+    paper.save()
+    printl('.')

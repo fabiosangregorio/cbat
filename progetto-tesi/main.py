@@ -9,7 +9,7 @@ from models import Conference
 def _add_conferences():
     nlp = spacy.load('en_core_web_sm')
 
-    confs = conference_manager.load_from_xlsx("./progetto-tesi/data/cini.xlsx")[1:4]
+    confs = conference_manager.load_from_xlsx("./progetto-tesi/data/cini.xlsx")[3:4]
     for conf in confs:
         conf_editions = conference_manager.search_conference(conf)
         for edition in conf_editions:
@@ -25,8 +25,8 @@ def _add_authors_stats():
                       not_committee_mentions_ratio=stats.not_committee_ratio)
 
 
+connect('tesi-triennale', alias="default")
 if __name__ == "__main__":
-    connect('tesi-triennale')
 
     _add_conferences()
     # stats_manager.plot_refs()
