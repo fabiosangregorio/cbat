@@ -5,11 +5,9 @@ import string
 import probablepeople as pp
 
 from config import HEADINGS, P_PROGRAM_HEADINGS, NER_LOSS_THRESHOLD
-from util.helpers import findall
+from util.helpers import findall, printl
 from util.webutil import polish_html
 from models import Author
-
-from helpers import printl
 
 
 def extract_program_sections(text):
@@ -175,6 +173,6 @@ def extract_committee(program_sections, nlp):
                 program_committee += p_to_add
         else:
             program_committee += section_people
-            
+
     print(' Done')
     return program_committee

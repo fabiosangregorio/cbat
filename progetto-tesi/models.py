@@ -10,7 +10,7 @@ class Author(Document):
     affiliation = StringField()
     affiliation_country = StringField()
     dblp_url = StringField()
-    eid_list = ListField(StringField())
+    eid_list = ListField(IntField())
     subject_areas = ListField(IntField())
     # If, in any point of the pipeline, the author fails a search/parse,
     # mark it with 'exact' = False
@@ -24,6 +24,16 @@ class Author(Document):
         '''
         return (default if self.__getattribute__(key) is None else
                 self.__getattribute__(key))
+
+
+class AuthorIndex(Document):
+    eid = IntField(primary_key=True)
+    author = ReferenceField(Author)
+    # meta = {
+    #     'indexes': [
+    #         'author'
+    #     ]
+    # }
 
 
 class Paper(Document):

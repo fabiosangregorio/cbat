@@ -1,18 +1,19 @@
 import re
 from datetime import datetime
+import time
+from multiprocessing import Pool
 
 import xlrd
 from fuzzywuzzy import fuzz
 from scopus import AbstractRetrieval
 
 import cfp_manager
-import conference_manager
 import committee_manager
 import author_manager
 import paper_manager
 import util.webutil as webutil
-from models import Conference, Author, Paper
-from helpers import printl
+from models import Conference, Author, Paper, AuthorIndex
+from util.helpers import printl
 
 
 base_url = 'http://www.wikicfp.com'
@@ -96,7 +97,7 @@ def get_subject_areas(conference):
     return list(set(subject_areas))
 
 
-def add_conference(conf, nlp, precise=False):
+def add_conference(conf, nlp):
     if Conference.objects(wikicfp_id=conf.wikicfp_id):
         return
 
@@ -121,18 +122,20 @@ def add_conference(conf, nlp, precise=False):
     authors, authors_not_found = author_manager.find_authors(program_committee)
     authors_list = list()
     for author in authors:
-        db_author = Author.objects(eid_list__in=[author.eid_list]).first()
+        db_author = AuthorIndex.objects(eid__in=author.eid_list).first()
         if db_author:
             # FIXME: not an atomic operation, could result in problems with
             # multithreading
             db_eid = db_author.eid_list
             new_eid = author.eid_list
-            merged_list = db_eid + list(set(new_eid) - set(db_eid))
+            unique_new_eids = list(set(new_eid) - set(db_eid))
+            merged_list = db_eid + unique_new_eids
+
             # Could be that an author is found as a references and added to the
             # db. Then this author is found to be a member of a program
             # committee. If I simply merge the EIDs, I will be missing out on
             # the newfound info on name, affiliation, etc.
-            # Therefore, I just overwrite the infos.
+            # Therefore, I just overwrite the info.
             # IMPROVE: overwrite only if field is null.
             # https://stackoverflow.com/questions/55615467/update-field-if-is-null-in-mongoengine
             db_author.modify(
@@ -143,10 +146,18 @@ def add_conference(conf, nlp, precise=False):
                 set__affiliation=db_author.affiliation,
                 set__affiliation_country=db_author.affiliation_country,
                 set__eid_list=merged_list)
+            AuthorIndex.objects.insert(
+                [AuthorIndex(eid=eid, author=db_author) for eid in db_author.eid_list])
             authors_list.append(db_author)
         else:
             author.save()
+            AuthorIndex.objects.insert(
+                [AuthorIndex(eid=eid, author=author) for eid in author.eid_list])
             authors_list.append(author)
+
+    if not authors:
+        print("Authors not found. Skipping conference.")
+        return
 
     conf.program_committee = authors_list
     conf.processing_status = "committee_extracted"
@@ -159,6 +170,7 @@ def add_conference(conf, nlp, precise=False):
     # IMPROVE: if no papers are found, remove the conference from db?
     # it could distort the statistics
     papers = paper_manager.get_papers(conf)
+
     papers_to_add = list()
     papers_already_in_db = 0
     for paper in papers:
@@ -176,49 +188,54 @@ def add_conference(conf, nlp, precise=False):
     print(f'Papers extraction: extracted {len(papers)} papers. '
           f'Papers already in db: {papers_already_in_db}')
 
-    # get conference's subject areas
-    subject_areas = conference_manager.get_subject_areas(conf)
-    conf.modify(set__subject_areas=subject_areas)
+    # # get conference's subject areas
+    # subject_areas = conference_manager.get_subject_areas(conf)
+    # api_calls += len(paper)
+    # conf.modify(set__subject_areas=subject_areas)
 
     printl('Getting references from papers')
     # save references to db
-    ref_to_committee = 0
-    ref_not_to_committee_db = 0
-    ref_not_to_committee_not_db = 0
-    for paper in conf.papers:
-        ref_eids = paper_manager.extract_references_from_paper(paper)
-        for eid in ref_eids:
-            # if there's a reference to the program committee, get the pc author
-            found = False
-            for a in conf.program_committee:
-                if eid in a.eid_list:
-                    paper.committee_refs.append(a)
-                    found = True
-                    continue
-            if found:
-                continue
-            # else:
-            #     auth = Author.objects(eid_list__in=eid).upsert_one(
-            #         set_on_insert__eid_list=[eid])
-            # FIXME: check why upsert is not working
-            auth = Author.objects(eid_list__in=[eid]).first()
-            if auth:
-                ref_not_to_committee_db += 1
-            else:
-                auth = Author(eid_list=[eid]).save()
-                ref_not_to_committee_not_db += 1
-
-            paper.non_committee_refs.append(auth)
-
-        ref_to_committee += len(paper.committee_refs)
-        paper.save()
-        printl('.')
+    start = time.time()
+    pool = Pool()
+    pool.map(_save_paper_refs, [(p, conf) for p in conf.papers])
+    pool.close()
+    print("conf: ", time.time() - start)
 
     print(' Done')
     conf.processing_status = 'complete'
     conf.save()
 
-    print(f'REFERENCES OF ALL PAPERS EXTRACTION: \nRefs to committee: '
-          f'{ref_to_committee}, Refs not to committee already in db: '
-          f'{ref_not_to_committee_db}, ref not to committee not in db: '
-          f'{ref_not_to_committee_not_db}')
+
+def _save_paper_refs(data):
+    paper, conf = data
+    ref_eids = paper_manager.extract_references_from_paper(paper)
+    for eid in ref_eids:
+        # if there's a reference to the program committee, get the pc author
+        found = False
+        for a in conf.program_committee:
+            if eid in a.eid_list:
+                paper.committee_refs.append(a)
+                found = True
+                break
+        if found:
+            continue
+        # else:
+        #     auth = Author.objects(eid_list__in=eid).upsert_one(
+        #         set_on_insert__eid_list=[eid])
+        # FIXME: check why upsert is not working
+        auth = AuthorIndex.objects(eid=eid).first()
+        # auth = Author.objects(eid_list__in=[eid]).first()
+        if auth:
+            auth = auth.author
+        else:
+            auth = Author(eid_list=[eid]).save()
+            AuthorIndex(eid=eid, author=auth).save()
+        paper.non_committee_refs.append(auth)
+
+    if not ref_eids:
+        printl('x')
+        paper.delete()
+        return
+
+    paper.save()
+    printl('.')

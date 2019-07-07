@@ -1,8 +1,8 @@
 from fuzzywuzzy import fuzz, process
 
-from scopus import AuthorSearch, AuthorRetrieval
+from scopus import AuthorSearch
 
-from helpers import printl
+from util.helpers import printl
 
 
 # IMPROVE: use API 'field' attribute to only return used fileds
@@ -46,7 +46,7 @@ def find_author(author):
                                                  aff_list,
                                                  scorer=fuzz.token_set_ratio)
     if fuzz_score > score_threshold:
-        author.eid_list = [p.eid for p in possible_people
+        author.eid_list = [int(p.eid.split('-')[-1]) for p in possible_people
                            if affiliation.lower() == f"{p.affiliation}, {p.country}".lower()]
     else:
         # TODO: handle no affiliation and wrong affiliation
@@ -55,6 +55,6 @@ def find_author(author):
     # Get author's subject areas
     # IMPROVE: Currently I only check for the first subject area, due to
     # inability to get multiple eids in one query (I might hit the API cap)
-    author.subject_areas = [int(s.code) for s in
-                            AuthorRetrieval(author.eid_list[0]).subject_areas]
+    # author.subject_areas = [int(s.code) for s in
+    #                         AuthorRetrieval(author.eid_list[0]).subject_areas]
     return author
