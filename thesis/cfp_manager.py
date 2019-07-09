@@ -2,8 +2,10 @@ import requests
 from collections import namedtuple
 import re
 
+from bs4 import NavigableString
+
 import util.webutil as webutil
-from config import HEADINGS, P_PROGRAM_HEADINGS
+from config import HEADINGS, RE_P_PROGRAM_HEADINGS, P_PROGRAM_HEADINGS
 
 
 def get_cfp(url):
@@ -26,6 +28,10 @@ def get_cfp(url):
 
 
 def search_external_cfp(url, secondary=False):
+    """
+    Searches the conference website for a program committee, looking in the
+    homepage and in secondary pages.
+    """
     if not url:
         return None
 
@@ -50,7 +56,7 @@ def search_external_cfp(url, secondary=False):
             full_url = requests.compat.urljoin(url, link['href'])
             return search_external_cfp(full_url, secondary=True)
 
-    regex = re.compile('.*(' + '|'.join(P_PROGRAM_HEADINGS) + ').*', re.IGNORECASE)
+    regex = re.compile('.*(' + '|'.join(RE_P_PROGRAM_HEADINGS) + ').*', re.IGNORECASE)
     # tag.parent gets the tag
     program_tags = [tag.parent for tag in html.body(text=regex)]
 
@@ -61,10 +67,25 @@ def search_external_cfp(url, secondary=False):
         parent = tag.parent
         if any(t in parent for t in program_tags if t != tag):
             continue
-        cfp_text += "\n".join(list(parent.stripped_strings))
+        prev_len = -1
+        prev_tag = None
+        while True:
+            parent = parent.parent
+            if not parent or (prev_len > -1 and len(parent.text) > prev_len + 10):
+                break
+            prev_len = len(parent.text)
+            prev_tag = parent
+
+        # get the text from the found tag and all the tags after it
+        strings = list(prev_tag.stripped_strings) + [b for a in [
+            list(a.stripped_strings) for a in prev_tag.next_siblings
+            if not isinstance(a, NavigableString)
+        ] for b in a]
+
+        cfp_text += "\n".join(strings)
 
     if len(cfp_text) < len('\n'.join([t.text for t in program_tags])) + 10:
         # if the parent tag contains a small amount of text (e.g. only the
         # heading) return the whole html text
         cfp_text = html.text
-    return cfp_text
+    return webutil.polish_html(cfp_text)

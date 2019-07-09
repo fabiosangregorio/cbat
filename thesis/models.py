@@ -29,11 +29,6 @@ class Author(Document):
 class AuthorIndex(Document):
     eid = IntField(primary_key=True)
     author = ReferenceField(Author)
-    # meta = {
-    #     'indexes': [
-    #         'author'
-    #     ]
-    # }
 
 
 class Paper(Document):

@@ -98,7 +98,6 @@ def extract_committee(program_sections, nlp):
     # See: https://stackoverflow.com/questions/38263384/how-to-save-spacy-model-onto-cache
     # See: https://github.com/explosion/spaCy/issues/3054
 
-    printl('Extracting program committee')
     # threshold over which we can say the NER lost a significant amount of names
     loss_threshold = NER_LOSS_THRESHOLD
     program_committee = list()
@@ -135,7 +134,8 @@ def extract_committee(program_sections, nlp):
                 return []
 
         # run regex on the right `step` and offset set
-        offset = n_section_people[-1].index(max(n_section_people[-1]))
+        # the offset is the offset with more results in the second-to-last run
+        offset = n_section_people[-2].index(max(n_section_people[-2]))
         regex = re.compile(r"^\W*([\()\"\w\. '’-]+)", re.MULTILINE)
 
         section_people = list()
@@ -174,5 +174,4 @@ def extract_committee(program_sections, nlp):
         else:
             program_committee += section_people
 
-    print(' Done')
     return program_committee

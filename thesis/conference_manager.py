@@ -1,7 +1,6 @@
 import re
 from datetime import datetime
-import time
-from multiprocessing import Pool
+from multiprocessing import Pool, Lock
 
 import xlrd
 from fuzzywuzzy import fuzz
@@ -103,16 +102,19 @@ def add_conference(conf, nlp):
 
     # Get cfp and extract program committee
     cfp = cfp_manager.get_cfp(conf.wikicfp_url)
+    printl('Extracting program committee ')
     program_sections = committee_manager.extract_program_sections(cfp.text)
-    if len(program_sections) == 0:
+    program_committee = committee_manager.extract_committee(program_sections, nlp)
+    if not program_committee:
         cfp_text = cfp_manager.search_external_cfp(cfp.external_source)
         program_sections = committee_manager.extract_program_sections(cfp_text)
-    program_committee = committee_manager.extract_committee(program_sections, nlp)
+        program_committee = committee_manager.extract_committee(program_sections, nlp)
     if not program_committee:
         # Having a conference without program committee means we can't compare
         # the references, therefore there's no point in having it saved to db.
         print('Program committee not found. Skipping conference.')
         return None
+    print(' Done')
 
     print('Program committee extraction: found {0}, {1} without affiliation.'
           .format(len(program_committee),
@@ -126,6 +128,7 @@ def add_conference(conf, nlp):
         if db_author:
             # FIXME: not an atomic operation, could result in problems with
             # multithreading
+            db_author = db_author.author
             db_eid = db_author.eid_list
             new_eid = author.eid_list
             unique_new_eids = list(set(new_eid) - set(db_eid))
@@ -146,8 +149,11 @@ def add_conference(conf, nlp):
                 set__affiliation=db_author.affiliation,
                 set__affiliation_country=db_author.affiliation_country,
                 set__eid_list=merged_list)
-            AuthorIndex.objects.insert(
-                [AuthorIndex(eid=eid, author=db_author) for eid in db_author.eid_list])
+
+            if unique_new_eids:
+                AuthorIndex.objects.insert(
+                    [AuthorIndex(eid=eid, author=db_author) for eid in unique_new_eids])
+
             authors_list.append(db_author)
         else:
             author.save()
@@ -195,18 +201,20 @@ def add_conference(conf, nlp):
 
     printl('Getting references from papers')
     # save references to db
-    start = time.time()
     pool = Pool()
     pool.map(_save_paper_refs, [(p, conf) for p in conf.papers])
     pool.close()
-    print("conf: ", time.time() - start)
 
     print(' Done')
     conf.processing_status = 'complete'
     conf.save()
 
 
+index_lock = Lock()
+
+
 def _save_paper_refs(data):
+    global index_lock
     paper, conf = data
     ref_eids = paper_manager.extract_references_from_paper(paper)
     for eid in ref_eids:
@@ -223,6 +231,7 @@ def _save_paper_refs(data):
         #     auth = Author.objects(eid_list__in=eid).upsert_one(
         #         set_on_insert__eid_list=[eid])
         # FIXME: check why upsert is not working
+        index_lock.acquire()
         auth = AuthorIndex.objects(eid=eid).first()
         # auth = Author.objects(eid_list__in=[eid]).first()
         if auth:
@@ -230,6 +239,8 @@ def _save_paper_refs(data):
         else:
             auth = Author(eid_list=[eid]).save()
             AuthorIndex(eid=eid, author=auth).save()
+        index_lock.release()
+
         paper.non_committee_refs.append(auth)
 
     if not ref_eids:

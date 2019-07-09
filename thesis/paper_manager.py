@@ -1,5 +1,3 @@
-from logging import warning
-
 from scopus import AbstractRetrieval, ScopusSearch
 
 from models import Paper

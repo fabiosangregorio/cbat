@@ -37,5 +37,7 @@ def polish_html(html):
         return None
 
     html = html.replace('\r', '\n')
+    html = html.replace('\t', ' ')
+    html = html.replace('\xa0', ' ')
     html = os.linesep.join([s for s in html.splitlines() if len(s.strip()) >= 4])
     return html
