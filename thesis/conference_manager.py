@@ -120,6 +120,8 @@ def add_conference(conf, nlp):
           .format(len(program_committee),
                   len([p for p in program_committee if len(p.affiliation) < 2])))
 
+    return
+
     # Find authors and save them to db
     authors, authors_not_found = author_manager.find_authors(program_committee)
     authors_list = list()
