@@ -61,12 +61,11 @@ def search_external_cfp(url, secondary=False):
     program_tags = [tag.parent for tag in html.body(text=regex)]
 
     cfp_text = ""
+    parent_tags = []
     for tag in program_tags:
-        # get unique parents of the tags (if several tags have the same parent,
-        # keep only one)
+        # travel the DOM upwards until other text beside the one in program_tag
+        # is found
         parent = tag.parent
-        if any(t in parent for t in program_tags if t != tag):
-            continue
         prev_len = -1
         prev_tag = None
         while True:
@@ -75,10 +74,13 @@ def search_external_cfp(url, secondary=False):
                 break
             prev_len = len(parent.text)
             prev_tag = parent
+        parent_tags.append(prev_tag)
 
+    for tag in list(set(parent_tags)):
         # get the text from the found tag and all the tags after it
-        strings = list(prev_tag.stripped_strings) + [b for a in [
-            list(a.stripped_strings) for a in prev_tag.next_siblings
+        # (using unique found tags)
+        strings = list(tag.stripped_strings) + [b for a in [
+            list(a.stripped_strings) for a in tag.next_siblings
             if not isinstance(a, NavigableString)
         ] for b in a]
 
