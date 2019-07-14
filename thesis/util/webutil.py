@@ -1,4 +1,3 @@
-import os
 from requests import get
 from requests.exceptions import RequestException
 from contextlib import closing
@@ -58,5 +57,5 @@ def polish_html(html):
     html = html.replace('\r', '\n')
     html = html.replace('\t', ' ')
     html = html.replace('\xa0', ' ')
-    html = "\n".join([s for s in html.splitlines() if len(s.strip()) >= 4])
+    html = "\n".join([s for s in html.splitlines() if len(s.strip()) >= 2])
     return html
