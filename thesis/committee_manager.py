@@ -21,16 +21,26 @@ def extract_program_sections(text):
             i_newline = text.find('\n', idx)
             if i_newline == -1:
                 continue
-            if (not any(h in text[idx+len(p):i_newline].lower() for h in
-               HEADINGS + ['chair'])):
+            t = text[idx+len(p):i_newline].lower()
+            if (not any(h in t for h in HEADINGS + ['chair'])
+               and r'\(.*chair.*\)' not in t):
                 # this means that the current and the next heading are on the
                 # same line (e.g. Program committe chair)
                 program_indexes.append(i_newline)
 
     sections = list()
     for start in program_indexes:
-        next_headings = [text[start:].lower().find(p) for p in (HEADINGS +
-                         ['chair']) if text[start:].lower().find(p) > -1]
+        next_headings = []
+        re_chair = re.compile('\(.*chair.*\)')
+        # get next heading skipping the word "(chair)", as it is often appended
+        # at the end of a program committee member's name to symbolize he's also
+        # a program chair.
+        for p in (HEADINGS + ['chair']):
+            nh = text[start:].lower().find(p)
+            chairs = re_chair.search(text[start+nh-10+9:start+nh+10].lower())
+            if (nh > -1 and not chairs):
+                next_headings.append(nh)
+
         next_heading = min(next_headings) if len(next_headings) else -1
         if next_heading > -1:
             end = text.rfind("\n", start, start+next_heading)
@@ -141,11 +151,12 @@ def extract_committee(program_sections, nlp):
         section_people = list()
         for i in range(offset, len(text_lines), step):
             name = regex.search(text_lines[i]).group(1).strip()
+            STRIP_CHARS = string.punctuation + " ()"
             if step == 1:
-                affiliation = text_lines[i].replace(name, "").strip(
-                    string.punctuation + " ")
+                affiliation = text_lines[i].replace(name, "").strip(STRIP_CHARS)
             else:
-                affiliation = ', '.join(text_lines[(i + 1):(i + step)])
+                affiliation = ', '.join([l.strip(STRIP_CHARS) for l
+                                        in text_lines[(i + 1):(i + step)]])
 
             affiliation_country = None
             # IMPROVE: names and affiliation could also be separated by "-"

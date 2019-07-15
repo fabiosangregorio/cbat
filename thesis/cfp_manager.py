@@ -41,8 +41,8 @@ def search_external_cfp(url, secondary=False):
     if not secondary:
         # if a link to the conference's program committee is present, extract the
         # committee from there, otherwise extract it from the main external page.
-        program_links = [tag for tag in html('a')
-                         if any(h in tag.text.lower() for h in HEADINGS)]
+        program_links = [tag for tag in html('a') if any(h in tag.text.lower()
+                         for h in HEADINGS + ["organization"])]
         if len(program_links):
             link = None
             for l in program_links:
@@ -65,16 +65,14 @@ def search_external_cfp(url, secondary=False):
     for tag in program_tags:
         # travel the DOM upwards until other text beside the one in program_tag
         # is found
-        parent = tag.parent
-        prev_len = -1
-        prev_tag = None
+        parent = tag
+        prev_len = len(tag.text)
         while True:
             parent = parent.parent
-            if not parent or (prev_len > -1 and len(parent.text) > prev_len + 10):
+            if not parent or len(parent.text) > prev_len + 10:
                 break
             prev_len = len(parent.text)
-            prev_tag = parent
-        parent_tags.append(prev_tag)
+        parent_tags.append(parent)
 
     for tag in list(set(parent_tags)):
         # get the text from the found tag and all the tags after it

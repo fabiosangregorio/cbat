@@ -9,7 +9,7 @@ from models import Conference
 def _add_conferences():
     nlp = spacy.load('en_core_web_sm')
 
-    confs = conference_manager.load_from_xlsx("./thesis/data/cini.xlsx")[1:10]
+    confs = conference_manager.load_from_xlsx("./thesis/data/cini.xlsx")[2:10]
     for conf in confs:
         conf_editions = conference_manager.search_conference(conf)
         for edition in conf_editions:
