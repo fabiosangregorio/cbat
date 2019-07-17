@@ -58,30 +58,43 @@ def search_external_cfp(url, secondary=False):
 
     regex = re.compile('.*(' + '|'.join(RE_P_PROGRAM_HEADINGS) + ').*', re.IGNORECASE)
     # tag.parent gets the tag
-    program_tags = [tag.parent for tag in html.body(text=regex)]
+    program_tags = [tag.parent for tag in html(text=regex)]
 
     cfp_text = ""
     parent_tags = []
+    tags = []
     for tag in program_tags:
         # travel the DOM upwards until other text beside the one in program_tag
         # is found
         parent = tag
+        prev_tag = tag
         prev_len = len(tag.text)
         while True:
             parent = parent.parent
             if not parent or len(parent.text) > prev_len + 10:
                 break
             prev_len = len(parent.text)
+            prev_tag = parent
         parent_tags.append(parent)
+        tags.append(prev_tag)
+
+    unique_tags = []
+    i = 0
+    for parent in parent_tags:
+        if i > 0 and parent in parent_tags[:i-1]:
+            continue
+        unique_tags.append(tags[i])
+        i += 1
 
     for tag in list(set(parent_tags)):
         # get the text from the found tag and all the tags after it
         # (using unique found tags)
-        strings = list(tag.stripped_strings) + [b for a in [
-            list(a.stripped_strings) for a in tag.next_siblings
-            if not isinstance(a, NavigableString)
-        ] for b in a]
-
+        strings = list(tag.stripped_strings)
+        for sibling in tag.next_siblings:
+            if isinstance(sibling, NavigableString):
+                strings.append(sibling)
+            else:
+                strings += list(sibling.stripped_strings)
         cfp_text += "\n".join(strings)
 
     if len(cfp_text) < len('\n'.join([t.text for t in program_tags])) + 10:
