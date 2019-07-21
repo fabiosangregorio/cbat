@@ -9,7 +9,7 @@ from models import Conference
 def _add_conferences():
     nlp = spacy.load('en_core_web_sm')
 
-    confs = conference_manager.load_from_xlsx("./thesis/data/cini.xlsx")[6:10]
+    confs = conference_manager.load_from_xlsx("./thesis/data/cini.xlsx")[0:20]
     for conf in confs:
         conf_editions = conference_manager.search_conference(conf)
         for edition in conf_editions:
@@ -28,6 +28,6 @@ def _add_authors_stats():
 connect('thesis')
 if __name__ == "__main__":
 
-    _add_conferences()
+    # _add_conferences()
     # stats_manager.plot_refs()
-    # _add_authors_stats()
+    _add_authors_stats()
