@@ -120,8 +120,6 @@ def add_conference(conf, nlp):
           .format(len(program_committee),
                   len([p for p in program_committee if len(p.affiliation) < 2])))
 
-    return
-
     # Find authors and save them to db
     authors, authors_not_found = author_manager.find_authors(program_committee)
     authors_list = list()
@@ -152,9 +150,10 @@ def add_conference(conf, nlp):
                 set__affiliation_country=db_author.affiliation_country,
                 set__eid_list=merged_list)
 
-            if unique_new_eids:
-                AuthorIndex.objects.insert(
-                    [AuthorIndex(eid=eid, author=db_author) for eid in unique_new_eids])
+            for eid in unique_new_eids:
+                AuthorIndex.objects.update(set_on_insert__eid=eid,
+                                           set__author=db_author,
+                                           upsert=True)
 
             authors_list.append(db_author)
         else:
@@ -204,7 +203,7 @@ def add_conference(conf, nlp):
     printl('Getting references from papers')
     # save references to db
     pool = Pool()
-    pool.map(_save_paper_refs, [(p, conf) for p in conf.papers])
+    pool.map(_save_paper_refs, [(p, conf) for p in papers_to_add])
     pool.close()
 
     print(' Done')

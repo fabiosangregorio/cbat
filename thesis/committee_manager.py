@@ -47,7 +47,7 @@ def extract_program_sections(text):
             if end == -1:
                 continue
         else:
-            end = len(text)
+            end = len(text) - 1
 
         if end - start > 5:
             # re-polish html to avoid misprints from the substring process
@@ -146,17 +146,20 @@ def extract_committee(program_sections, nlp):
         # run regex on the right `step` and offset set
         # the offset is the offset with more results in the second-to-last run
         offset = n_section_people[-2].index(max(n_section_people[-2]))
-        regex = re.compile(r"^\W*([\()\"\w\. '’-]+)", re.MULTILINE)
+        regex = re.compile(r"^\W*([\"\w\. '’]+)", re.MULTILINE)
 
         section_people = list()
         for i in range(offset, len(text_lines), step):
             name = regex.search(text_lines[i]).group(1).strip()
-            STRIP_CHARS = string.punctuation + " ()"
+            STRIP_CHARS = string.punctuation + " ()-–"
             if step == 1:
                 affiliation = text_lines[i].replace(name, "").strip(STRIP_CHARS)
             else:
                 affiliation = ', '.join([l.strip(STRIP_CHARS) for l
                                         in text_lines[(i + 1):(i + step)]])
+
+            affiliation = affiliation.replace('(','')
+            affiliation = affiliation.replace(')','')
 
             affiliation_country = None
             # IMPROVE: names and affiliation could also be separated by "-"
@@ -174,7 +177,7 @@ def extract_committee(program_sections, nlp):
             section_people.append(person)
 
         n_not_exact = len([True for p in section_people if not p.exact])
-        if n_not_exact / len(section_people) > 0.5:
+        if n_not_exact / len(section_people) >= 0.5:
             # if more than half of the people were not extracted correctly, it
             # means that the section probably didn't contain people names only,
             # so we keep only the ones we are sure that are real people (and not
@@ -185,4 +188,17 @@ def extract_committee(program_sections, nlp):
         else:
             program_committee += section_people
 
-    return program_committee
+    # return the program committee without duplicate authors
+    seen = set()
+    unique_committee = []
+    for a in program_committee:
+        compare = (a.getattr('fullname') + a.getattr('affiliation') +
+                   a.getattr('affiliation_country'))
+        if compare not in seen:
+            unique_committee.append(a)
+            seen.add(compare)
+
+    if len(unique_committee) < 5:
+        return []
+
+    return unique_committee
