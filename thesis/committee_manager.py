@@ -158,8 +158,8 @@ def extract_committee(program_sections, nlp):
                 affiliation = ', '.join([l.strip(STRIP_CHARS) for l
                                         in text_lines[(i + 1):(i + step)]])
 
-            affiliation = affiliation.replace('(','')
-            affiliation = affiliation.replace(')','')
+            affiliation = affiliation.replace('(', '')
+            affiliation = affiliation.replace(')', '')
 
             affiliation_country = None
             # IMPROVE: names and affiliation could also be separated by "-"

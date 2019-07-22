@@ -28,6 +28,6 @@ def _add_authors_stats():
 connect('thesis')
 if __name__ == "__main__":
 
-    # _add_conferences()
+    _add_conferences()
     # stats_manager.plot_refs()
-    _add_authors_stats()
+    # _add_authors_stats()

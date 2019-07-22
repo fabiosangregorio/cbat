@@ -6,6 +6,7 @@ import xlrd
 from fuzzywuzzy import fuzz
 from scopus import AbstractRetrieval
 
+from config import CONF_EDITIONS_LOWER_BOUNDARY
 import cfp_manager
 import committee_manager
 import author_manager
@@ -31,7 +32,7 @@ def load_from_xlsx(path):
     return conferences
 
 
-def search_conference(conf, lower_boundary=5, exclude_current_year=True):
+def search_conference(conf, lower_boundary=CONF_EDITIONS_LOWER_BOUNDARY, exclude_current_year=True):
     """
     Gets the conference editions from wikicfp.
 
