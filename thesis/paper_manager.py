@@ -1,4 +1,4 @@
-from scopus import AbstractRetrieval, ScopusSearch
+from pybliometrics.scopus import AbstractRetrieval, ScopusSearch
 
 from models import Paper
 
@@ -17,7 +17,10 @@ def get_papers(conference):
               AND PUBYEAR = {conference.getattr('year')}"
 
     documents = ScopusSearch(query, view="STANDARD")
-    papers = [Paper(scopus_id=sid) for sid in documents.get_eids()]
+    try:
+        papers = [Paper(scopus_id=sid) for sid in documents.get_eids()]
+    except Exception:
+        return []
 
     return papers
 

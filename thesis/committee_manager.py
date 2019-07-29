@@ -150,7 +150,8 @@ def extract_committee(program_sections, nlp):
 
         section_people = list()
         for i in range(offset, len(text_lines), step):
-            name = regex.search(text_lines[i]).group(1).strip()
+            results = regex.search(text_lines[i])
+            name = results.group(1).strip() if results else ""
             STRIP_CHARS = string.punctuation + " ()-–"
             if step == 1:
                 affiliation = text_lines[i].replace(name, "").strip(STRIP_CHARS)
@@ -160,6 +161,8 @@ def extract_committee(program_sections, nlp):
 
             affiliation = affiliation.replace('(', '')
             affiliation = affiliation.replace(')', '')
+            affiliation = affiliation.replace('"', '')
+            affiliation = ''.join(x for x in affiliation if x in string.printable)
 
             affiliation_country = None
             # IMPROVE: names and affiliation could also be separated by "-"

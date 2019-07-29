@@ -53,13 +53,21 @@ def search_external_cfp(url, secondary=False):
                     break
             if not link:
                 link = program_links[0]
-            full_url = requests.compat.urljoin(url, link['href'])
-            return search_external_cfp(full_url, secondary=True)
+
+            if link.has_attr('href'):
+                full_url = requests.compat.urljoin(url, link['href'])
+                return search_external_cfp(full_url, secondary=True)
+            else:
+                return
 
     regex = re.compile('.*(' + '|'.join(RE_P_PROGRAM_HEADINGS) + ').*', re.IGNORECASE)
 
     # tag.parent gets the tag
-    program_tags = [tag.parent for tag in html.body(text=regex)]
+    try:
+        program_tags = [tag.parent for tag in html.body(text=regex)]
+    except Exception:
+        return []
+
     # travel the DOM upwards until other text than the one in program_tag is found
     parent_tags = []
     for tag in program_tags:

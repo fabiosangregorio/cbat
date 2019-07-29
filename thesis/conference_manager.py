@@ -4,7 +4,7 @@ from multiprocessing import Pool, Lock
 
 import xlrd
 from fuzzywuzzy import fuzz
-from scopus import AbstractRetrieval
+from pybliometrics.scopus import AbstractRetrieval
 
 from config import CONF_EDITIONS_LOWER_BOUNDARY
 import cfp_manager
@@ -117,9 +117,16 @@ def add_conference(conf, nlp):
         return None
     print(' Done')
 
+    n_no_aff = len([p for p in program_committee if len(p.affiliation) < 2])
     print('Program committee extraction: found {0}, {1} without affiliation.'
-          .format(len(program_committee),
-                  len([p for p in program_committee if len(p.affiliation) < 2])))
+          .format(len(program_committee), n_no_aff))
+
+    DEBUG_RETURN = False
+    if DEBUG_RETURN:
+        return
+
+    if n_no_aff / len(program_committee) > 0.5:
+        return
 
     # Find authors and save them to db
     authors, authors_not_found = author_manager.find_authors(program_committee)

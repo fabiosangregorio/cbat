@@ -1,6 +1,6 @@
 from fuzzywuzzy import fuzz, process
 
-from scopus import AuthorSearch
+from pybliometrics.scopus import AuthorSearch
 
 from util.helpers import printl
 
@@ -27,14 +27,17 @@ def find_author(author):
     if not aff:
         return None
 
-    query = "AUTHFIRST({}) AND AUTHLASTNAME({}) {}".format(
+    query = 'AUTHFIRST("{}") AND AUTHLASTNAME("{}") {}'.format(
         author.getattr('firstname'),
         ' '.join(filter(None, [author.getattr('middlename'),
                  author.getattr('lastname')])),
-        f"AND AFFIL({aff})" if aff else '')
+        f'AND AFFIL("{aff}")' if aff else '')
 
     # IMPROVE: if FIRSTNAME AND LASTNAME yields no results, try switching names
-    possible_people = AuthorSearch(query).authors
+    try:
+        possible_people = AuthorSearch(query).authors
+    except Exception:
+        return
     if not possible_people or not aff:
         # if there is no affiliation we can't be sure if it's the right person.
         return None
