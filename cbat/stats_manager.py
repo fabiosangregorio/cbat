@@ -1,6 +1,8 @@
 from collections import namedtuple
 
 import matplotlib.pyplot as plt
+from scipy import polyfit
+import numpy
 
 from models import Paper, Conference
 
@@ -15,11 +17,16 @@ def plot_refs():
     }))
     x = [point['x'] for point in data]
     y = [point['y'] for point in data]
+
+    pl = polyfit(x, y, 1)
+
     plt.scatter(x, y)
+    plt.plot(x, numpy.polyval(pl, x), 'r-')
     plt.title('Refs distribution in papers')
     plt.ylabel('Refs to program committee')
     plt.xlabel('Total refs')
     plt.show()
+    print(numpy.corrcoef(x, y)[0, 1])
 
 
 def get_author_stats(author):

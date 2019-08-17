@@ -6,7 +6,7 @@ import xlrd
 from fuzzywuzzy import fuzz
 from pybliometrics.scopus import AbstractRetrieval
 
-from config import CONF_EDITIONS_LOWER_BOUNDARY
+from config import CONF_EDITIONS_LOWER_BOUNDARY, AUTH_NO_AFFILIATION_RATIO
 import cfp_manager
 import committee_manager
 import author_manager
@@ -121,11 +121,7 @@ def add_conference(conf, nlp):
     print('Program committee extraction: found {0}, {1} without affiliation.'
           .format(len(program_committee), n_no_aff))
 
-    DEBUG_RETURN = False
-    if DEBUG_RETURN:
-        return
-
-    if n_no_aff / len(program_committee) > 0.5:
+    if n_no_aff / len(program_committee) > AUTH_NO_AFFILIATION_RATIO:
         return
 
     # Find authors and save them to db
@@ -205,7 +201,6 @@ def add_conference(conf, nlp):
 
     # # get conference's subject areas
     # subject_areas = conference_manager.get_subject_areas(conf)
-    # api_calls += len(paper)
     # conf.modify(set__subject_areas=subject_areas)
 
     printl('Getting references from papers')
