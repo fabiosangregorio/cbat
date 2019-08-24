@@ -102,6 +102,23 @@ def _extract_person_name(name):
     return person
 
 
+def _extract_affiliation(affiliation):
+    affiliation = affiliation.replace('(', '')
+    affiliation = affiliation.replace(')', '')
+    affiliation = affiliation.replace('"', '')
+    affiliation = ''.join(x for x in affiliation if x in string.printable)
+
+    affiliation_country = None
+    # IMPROVE: names and affiliation could also be separated by "-"
+    # note: the names could contain a "-"
+    aff_splitted = affiliation.split(',')
+    if len(aff_splitted) > 1:
+        affiliation_country = aff_splitted.pop().strip()
+        affiliation = ", ".join(aff_splitted)
+
+    return affiliation, affiliation_country
+
+
 def extract_committee(program_sections, nlp):
     # FIXME: improve memory usage. Check how much RAM the model needs and figure
     # out which components are needed
@@ -159,24 +176,13 @@ def extract_committee(program_sections, nlp):
                 affiliation = ', '.join([l.strip(STRIP_CHARS) for l
                                         in text_lines[(i + 1):(i + step)]])
 
-            affiliation = affiliation.replace('(', '')
-            affiliation = affiliation.replace(')', '')
-            affiliation = affiliation.replace('"', '')
-            affiliation = ''.join(x for x in affiliation if x in string.printable)
-
-            affiliation_country = None
-            # IMPROVE: names and affiliation could also be separated by "-"
-            # note: the names could contain a "-"
-            aff_splitted = affiliation.split(',')
-            if len(aff_splitted) > 1:
-                affiliation_country = aff_splitted.pop().strip()
-                affiliation = ", ".join(aff_splitted)
-
+            affiliation, affiliation_country = _extract_affiliation(affiliation)
             person = _extract_person_name(name)
             if not person:
                 continue
             person.affiliation = affiliation
             person.affiliation_country = affiliation_country
+
             section_people.append(person)
 
         n_not_exact = len([True for p in section_people if not p.exact])
