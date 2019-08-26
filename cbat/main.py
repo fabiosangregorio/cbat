@@ -4,10 +4,11 @@ import spacy
 import conference_manager
 import stats_manager
 from models import Conference
+from config import SPACY_MODEL
 
 
 def _add_conferences():
-    nlp = spacy.load('en_core_web_sm')
+    nlp = spacy.load(SPACY_MODEL)
 
     confs = conference_manager.load_from_xlsx("./thesis/data/cini.xlsx")[88:100]
     for conf in confs:

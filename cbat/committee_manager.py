@@ -4,7 +4,7 @@ import string
 
 import probablepeople as pp
 
-from config import HEADINGS, P_PROGRAM_HEADINGS, NER_LOSS_THRESHOLD
+from config import HEADINGS, P_PROGRAM_HEADINGS, NER_LOSS_THRESHOLD, AUTH_NOT_EXACT_RATIO
 from util.helpers import findall, printl
 from util.webutil import polish_html
 from models import Author
@@ -180,7 +180,7 @@ def extract_committee(program_sections, nlp):
             section_people.append(person)
 
         n_not_exact = len([True for p in section_people if not p.exact])
-        if n_not_exact / len(section_people) >= 0.5:
+        if n_not_exact / len(section_people) >= AUTH_NOT_EXACT_RATIO:
             # if more than half of the people were not extracted correctly, it
             # means that the section probably didn't contain people names only,
             # so we keep only the ones we are sure that are real people (and not

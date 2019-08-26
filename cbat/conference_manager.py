@@ -6,7 +6,7 @@ import xlrd
 from fuzzywuzzy import fuzz
 from pybliometrics.scopus import AbstractRetrieval
 
-from config import CONF_EDITIONS_LOWER_BOUNDARY, AUTH_NO_AFFILIATION_RATIO
+from config import CONF_EDITIONS_LOWER_BOUNDARY, MIN_COMMITTEE_SIZE, AUTH_NO_AFFILIATION_RATIO
 import cfp_manager
 import committee_manager
 import author_manager
@@ -116,6 +116,9 @@ def add_conference(conf, nlp):
         print('Program committee not found. Skipping conference.')
         return None
     print(' Done')
+
+    if len(program_committee) < MIN_COMMITTEE_SIZE:
+        return
 
     n_no_aff = len([p for p in program_committee if len(p.affiliation) < 2])
     print('Program committee extraction: found {0}, {1} without affiliation.'
