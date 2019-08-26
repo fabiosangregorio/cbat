@@ -6,7 +6,8 @@ import xlrd
 from fuzzywuzzy import fuzz
 from pybliometrics.scopus import AbstractRetrieval
 
-from config import CONF_EDITIONS_LOWER_BOUNDARY, MIN_COMMITTEE_SIZE, AUTH_NO_AFFILIATION_RATIO
+from config import WIKICFP_BASE_URL, CONF_EDITIONS_LOWER_BOUNDARY, MIN_COMMITTEE_SIZE, CONF_EXCLUDE_CURR_YEAR, AUTH_NO_AFFILIATION_RATIO
+
 import cfp_manager
 import committee_manager
 import author_manager
@@ -16,7 +17,7 @@ from models import Conference, Author, Paper, AuthorIndex
 from util.helpers import printl
 
 
-base_url = 'http://www.wikicfp.com'
+base_url = WIKICFP_BASE_URL
 
 
 def load_from_xlsx(path):
@@ -32,7 +33,7 @@ def load_from_xlsx(path):
     return conferences
 
 
-def search_conference(conf, lower_boundary=CONF_EDITIONS_LOWER_BOUNDARY, exclude_current_year=True):
+def search_conference(conf, lower_boundary=CONF_EDITIONS_LOWER_BOUNDARY, exclude_current_year=CONF_EXCLUDE_CURR_YEAR):
     """
     Gets the conference editions from wikicfp.
 
