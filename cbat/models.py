@@ -17,6 +17,9 @@ class Author(Document):
     exact = BooleanField(default=True)
     committee_mentions_ratio = DecimalField()
     not_committee_mentions_ratio = DecimalField()
+    not_committee_mentions = IntField()
+    committee_mentions = IntField()
+    total_mentions = IntField() 
 
     def getattr(self, key, default=""):
         '''
