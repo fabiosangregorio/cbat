@@ -99,5 +99,7 @@ This code will add the conference "SIGCOMM" to the database, and then draw the s
     * References to program committee on Total references
     * References to program committee / Total references ratio on Papers (sorted by ratio)
 
+----
+
 ## Issues and questions
 Please open an issue on Github or reach out to me directly.
