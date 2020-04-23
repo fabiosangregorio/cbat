@@ -4,10 +4,10 @@ import string
 
 import probablepeople as pp
 
-from config import HEADINGS, P_PROGRAM_HEADINGS, NER_LOSS_THRESHOLD, AUTH_NOT_EXACT_RATIO
-from util.helpers import findall, printl
-from util.webutil import polish_html
-from models import Author
+from cbat.config import HEADINGS, P_PROGRAM_HEADINGS, NER_LOSS_THRESHOLD, AUTH_NOT_EXACT_RATIO
+from cbat.util.helpers import findall, printl
+from cbat.util.webutil import polish_html
+from cbat.models import Author
 
 
 def extract_program_sections(text):

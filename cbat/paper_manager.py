@@ -1,6 +1,6 @@
 from pybliometrics.scopus import AbstractRetrieval, ScopusSearch
 
-from models import Paper
+from cbat.models import Paper
 
 
 # IMPROVE: use API 'field' attribute to only return used fileds

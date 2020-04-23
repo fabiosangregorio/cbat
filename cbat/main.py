@@ -1,34 +1,37 @@
 from mongoengine import connect
 import spacy
 
-import conference_manager
-import stats_manager
-from models import Conference, Author
+import cbat.conference_manager as conference_manager
+import cbat.stats_manager as stats_manager
+from cbat.models import Author
 
-from config import SPACY_MODEL, DB_NAME
-
-
-def _add_conferences():
-    nlp = spacy.load(SPACY_MODEL)
-
-    confs = conference_manager.load_from_xlsx("./cbat/data/cini.xlsx")[88:100]
-    for conf in confs:
-        conf_editions = conference_manager.search_conference(conf)
-        for edition in conf_editions:
-            print(f'\n### BEGIN conference: {edition.acronym} {edition.year} ###')
-            conference_manager.add_conference(edition, nlp)
+from cbat.config import SPACY_MODEL, DB_NAME
 
 
-def _add_authors_stats():
-    authors = Author.objects()
+def add_conferences(conferences):
+    for conf in conferences:
+        add_conference(conf)
+
+
+def add_conference(conference):
+    connect(DB_NAME, host='localhost')
+    conf_editions = conference_manager.search_conference(conference)
+    for edition in conf_editions:
+        print(f'\n### BEGIN conference: {edition.acronym} {edition.year} ###')
+        conference_manager.add_conference(edition, nlp)
+
+
+def add_authors_stats(authors=None):
+    if authors is None:
+        authors = Author.objects()
     for author in authors:
         stats = stats_manager.get_author_stats(author)
         author.modify(committee_mentions=stats.committee_ratio,
                       total_mentions=stats.not_committee_ratio)
 
 
-connect(DB_NAME)
-if __name__ == "__main__":
-    # _add_conferences()
-    stats_manager.plot_refs()
-    # _add_authors_stats() 
+def plot_refs():
+    return stats_manager.plot_refs()
+
+
+nlp = spacy.load(SPACY_MODEL)

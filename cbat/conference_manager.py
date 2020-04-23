@@ -1,36 +1,23 @@
 import re
 from datetime import datetime
 from multiprocessing import Pool, Lock
+from mongoengine import connect
 
-import xlrd
 from fuzzywuzzy import fuzz
 from pybliometrics.scopus import AbstractRetrieval
 
-from config import WIKICFP_BASE_URL, CONF_EDITIONS_LOWER_BOUNDARY, MIN_COMMITTEE_SIZE, CONF_EXCLUDE_CURR_YEAR, AUTH_NO_AFFILIATION_RATIO
+from cbat.config import WIKICFP_BASE_URL,  DB_NAME, CONF_EDITIONS_LOWER_BOUNDARY, MIN_COMMITTEE_SIZE, CONF_EXCLUDE_CURR_YEAR, AUTH_NO_AFFILIATION_RATIO
 
-import cfp_manager
-import committee_manager
-import author_manager
-import paper_manager
-import util.webutil as webutil
-from models import Conference, Author, Paper, AuthorIndex
-from util.helpers import printl
+import cbat.cfp_manager as cfp_manager
+import cbat.committee_manager as committee_manager
+import cbat.author_manager as author_manager
+import cbat.paper_manager as paper_manager
+import cbat.util.webutil as webutil
+from cbat.models import Conference, Author, Paper, AuthorIndex
+from cbat.util.helpers import printl
 
 
 base_url = WIKICFP_BASE_URL
-
-
-def load_from_xlsx(path):
-    """Loads conference names from xlsx file"""
-    workbook = xlrd.open_workbook(path, "rb")
-    sheets = workbook.sheet_names()
-    conferences = []
-    for sheet_name in sheets:
-        sh = workbook.sheet_by_name(sheet_name)
-        for rownum in range(2, sh.nrows):
-            row = sh.row_values(rownum)
-            conferences.append(Conference(name=row[1], acronym=row[2]))
-    return conferences
 
 
 def search_conference(conf, lower_boundary=CONF_EDITIONS_LOWER_BOUNDARY, exclude_current_year=CONF_EXCLUDE_CURR_YEAR):
@@ -100,6 +87,7 @@ def get_subject_areas(conference):
 
 def add_conference(conf, nlp):
     if Conference.objects(wikicfp_id=conf.wikicfp_id):
+        print("Conference already in database. Skipping conference.")
         return
 
     # Get cfp and extract program committee
@@ -222,6 +210,7 @@ index_lock = Lock()
 
 
 def _save_paper_refs(data):
+    connect(DB_NAME, host='localhost')
     global index_lock
     paper, conf = data
     ref_eids = paper_manager.extract_references_from_paper(paper)
@@ -258,3 +247,4 @@ def _save_paper_refs(data):
 
     paper.save()
     printl('.')
+ 
