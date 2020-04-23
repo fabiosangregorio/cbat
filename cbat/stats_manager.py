@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy import polyfit
 import numpy
 
-from models import Paper, Conference
+from cbat.models import Paper, Conference
 
 
 def plot_refs():

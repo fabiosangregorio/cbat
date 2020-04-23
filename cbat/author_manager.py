@@ -2,7 +2,7 @@ from fuzzywuzzy import fuzz, process
 
 from pybliometrics.scopus import AuthorSearch
 
-from util.helpers import printl
+from cbat.util.helpers import printl
 
 
 # IMPROVE: use API 'field' attribute to only return used fileds

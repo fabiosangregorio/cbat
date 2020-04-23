@@ -4,8 +4,8 @@ import re
 
 from bs4 import NavigableString
 
-import util.webutil as webutil
-from config import HEADINGS, RE_P_PROGRAM_HEADINGS, P_PROGRAM_HEADINGS
+import cbat.util.webutil as webutil
+from cbat.config import HEADINGS, RE_P_PROGRAM_HEADINGS, P_PROGRAM_HEADINGS
 
 
 def get_cfp(url):
