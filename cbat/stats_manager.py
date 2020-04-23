@@ -36,7 +36,7 @@ def plot_refs():
 
     plt.show()
 
-    print(numpy.corrcoef(x, y)[0, 1])
+    return numpy.corrcoef(x, y)[0, 1]
 
 
 def get_author_stats(author):
